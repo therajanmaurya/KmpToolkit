@@ -1,4 +1,4 @@
-package com.mobilebytesensei.featurerequest.ui
+package com.mobilebytesensei.usertickets.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,8 +29,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.mobilebytesensei.featurerequest.model.TicketType
-import com.mobilebytesensei.featurerequest.model.UserTicket
+import com.mobilebytesensei.usertickets.model.TicketType
+import com.mobilebytesensei.usertickets.model.UserTicket
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

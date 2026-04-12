@@ -1,10 +1,10 @@
-package com.mobilebytesensei.featurerequest.ui
+package com.mobilebytesensei.usertickets.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mobilebytesensei.featurerequest.data.UserTicketsRepository
-import com.mobilebytesensei.featurerequest.model.TicketType
-import com.mobilebytesensei.featurerequest.model.UserTicket
+import com.mobilebytesensei.usertickets.data.UserTicketsRepository
+import com.mobilebytesensei.usertickets.model.TicketType
+import com.mobilebytesensei.usertickets.model.UserTicket
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

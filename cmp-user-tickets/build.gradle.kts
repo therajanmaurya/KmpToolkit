@@ -24,7 +24,7 @@ kotlin {
 
     // Android
     androidLibrary {
-        namespace = "com.mobilebytesensei.featurerequest"
+        namespace = "com.mobilebytesensei.usertickets"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
     }
@@ -106,10 +106,10 @@ mavenPublishing {
     publishToMavenCentral()
     signAllPublications()
 
-    coordinates(group.toString(), "kmptoolkit-feature-request", version.toString())
+    coordinates(group.toString(), "kmptoolkit-user-tickets", version.toString())
 
     pom {
-        name = "KMP Feature Request"
+        name = "KMP User Tickets"
         description = "Cross-platform feature request, bug report, and support ticket system for Compose Multiplatform"
         inceptionYear = "2025"
         url = "https://github.com/MobileByteLabs/KmpToolkit/"

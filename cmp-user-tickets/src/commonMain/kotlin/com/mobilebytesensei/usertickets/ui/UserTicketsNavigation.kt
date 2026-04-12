@@ -1,4 +1,4 @@
-package com.mobilebytesensei.featurerequest.ui
+package com.mobilebytesensei.usertickets.ui
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder

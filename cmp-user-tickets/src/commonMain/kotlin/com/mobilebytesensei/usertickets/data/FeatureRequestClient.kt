@@ -1,6 +1,6 @@
-package com.mobilebytesensei.featurerequest.data
+package com.mobilebytesensei.usertickets.data
 
-import com.mobilebytesensei.featurerequest.config.FeatureRequestConfig
+import com.mobilebytesensei.usertickets.config.FeatureRequestConfig
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest

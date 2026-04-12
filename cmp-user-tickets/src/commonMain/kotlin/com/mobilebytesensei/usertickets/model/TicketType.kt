@@ -1,4 +1,4 @@
-package com.mobilebytesensei.featurerequest.model
+package com.mobilebytesensei.usertickets.model
 
 enum class TicketType(
     val value: String,

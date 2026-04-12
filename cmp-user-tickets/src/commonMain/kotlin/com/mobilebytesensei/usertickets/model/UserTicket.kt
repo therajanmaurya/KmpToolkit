@@ -1,4 +1,4 @@
-package com.mobilebytesensei.featurerequest.model
+package com.mobilebytesensei.usertickets.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

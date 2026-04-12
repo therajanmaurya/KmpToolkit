@@ -1,4 +1,4 @@
-package com.mobilebytesensei.featurerequest.ui
+package com.mobilebytesensei.usertickets.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -44,9 +44,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mobilebytesensei.featurerequest.model.TicketStatus
-import com.mobilebytesensei.featurerequest.model.TicketType
-import com.mobilebytesensei.featurerequest.model.UserTicket
+import com.mobilebytesensei.usertickets.model.TicketStatus
+import com.mobilebytesensei.usertickets.model.TicketType
+import com.mobilebytesensei.usertickets.model.UserTicket
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)

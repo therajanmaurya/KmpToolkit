@@ -1,9 +1,9 @@
-package com.mobilebytesensei.featurerequest.data
+package com.mobilebytesensei.usertickets.data
 
 import co.touchlab.kermit.Logger
-import com.mobilebytesensei.featurerequest.config.FeatureRequestConfig
-import com.mobilebytesensei.featurerequest.model.UserTicket
-import com.mobilebytesensei.featurerequest.model.UserTicketInsert
+import com.mobilebytesensei.usertickets.config.FeatureRequestConfig
+import com.mobilebytesensei.usertickets.model.UserTicket
+import com.mobilebytesensei.usertickets.model.UserTicketInsert
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Order
 

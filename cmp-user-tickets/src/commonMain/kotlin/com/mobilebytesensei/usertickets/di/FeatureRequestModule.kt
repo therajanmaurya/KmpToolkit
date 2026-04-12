@@ -1,9 +1,9 @@
-package com.mobilebytesensei.featurerequest.di
+package com.mobilebytesensei.usertickets.di
 
-import com.mobilebytesensei.featurerequest.data.UserTicketsRepository
-import com.mobilebytesensei.featurerequest.data.UserTicketsService
-import com.mobilebytesensei.featurerequest.data.UserTicketsServiceImpl
-import com.mobilebytesensei.featurerequest.ui.UserTicketsViewModel
+import com.mobilebytesensei.usertickets.data.UserTicketsRepository
+import com.mobilebytesensei.usertickets.data.UserTicketsService
+import com.mobilebytesensei.usertickets.data.UserTicketsServiceImpl
+import com.mobilebytesensei.usertickets.ui.UserTicketsViewModel
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.bind

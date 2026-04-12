@@ -1,4 +1,4 @@
-package com.mobilebytesensei.featurerequest.config
+package com.mobilebytesensei.usertickets.config
 
 object FeatureRequestConfig {
     var supabaseUrl: String = ""
