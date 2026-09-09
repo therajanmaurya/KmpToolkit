@@ -205,7 +205,23 @@ GitLive 3.0.0 links the native Firebase iOS SDK via **SwiftPM** (not CocoaPods).
 > on an older Kotlin must either upgrade or provision the Firebase Apple frameworks themselves
 > (e.g. via CocoaPods), which is outside what this library supports.
 
-In your app's shared KMP module:
+**Recommended — apply the companion Gradle plugin** and skip steps 1 and 3 below. It forces
+`isStatic = true` on every Apple framework and fails the build with a real message if your Kotlin
+is below the floor, instead of leaving you with a linker error that names the wrong thing:
+
+```kotlin
+// settings.gradle.kts — mavenCentral() must be in pluginManagement (most KMP projects have it)
+pluginManagement { repositories { google(); mavenCentral(); gradlePluginPortal() } }
+
+// shared/build.gradle.kts — same version as cmp-firebase
+plugins { id("io.github.mobilebytelabs.kmptoolkit.firebase") version "<cmpFirebase>" }
+```
+
+The plugin is published to Maven Central alongside the library; no Gradle Plugin Portal setup is
+needed. Prefer it over hand-configuring — a dynamic framework links cleanly and only crashes at
+runtime, which is not a mistake you want to debug from the crash.
+
+Doing it by hand instead, in your app's shared KMP module:
 
 1. Build the shared framework **static** — Firebase's SwiftPM products are static libraries; a dynamic framework crashes at runtime:
    ```kotlin

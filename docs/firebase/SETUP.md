@@ -183,6 +183,9 @@ CocoaPods, and it flows across the Maven boundary automatically — do **not** r
   generated, nothing resolves the native SDK, and the build fails with
   `ld: framework 'FirebaseCore' not found` instead of a message naming the cause.
 
+- **Recommended:** apply `id("io.github.mobilebytelabs.kmptoolkit.firebase")` (same version as
+  cmp-firebase, published to Maven Central) — it forces static Apple frameworks and enforces the
+  Kotlin floor for you, so the two manual steps below are handled.
 - Build your shared framework **static**: `iosArm64().binaries.framework { isStatic = true }`
   (Firebase's SwiftPM products are static libraries; a dynamic framework crashes at runtime).
 - In Xcode use **direct integration** — add the `embedAndSignAppleFrameworkForXcode` run-script

@@ -65,6 +65,8 @@ detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", 
 
 # Dokka — gradle-plugin artifact consumed by build-logic/convention/ for DokkaConventionPlugin
 dokka-gradle = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka" }
+# Consumed compileOnly by :cmp-firebase-gradle-plugin (the consumer build already supplies KGP)
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 
 # AndroidX
 androidx-activity = { module = "androidx.activity:activity", version.ref = "androidx-activityKtx" }
