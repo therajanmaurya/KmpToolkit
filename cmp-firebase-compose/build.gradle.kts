@@ -23,7 +23,7 @@ kotlin {
 
     jvm()
 
-    androidLibrary {
+    android {
         namespace = "io.github.mobilebytelabs.kmptoolkit.firebase.compose"
         compileSdk =
             libs.versions.android.compileSdk

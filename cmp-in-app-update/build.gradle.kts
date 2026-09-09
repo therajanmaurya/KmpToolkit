@@ -30,7 +30,7 @@ kotlin {
     // ========================================================================
     // Android Target
     // ========================================================================
-    androidLibrary {
+    android {
         namespace = "io.github.mobilebytelabs.kmptoolkit.appupdate"
         compileSdk =
             libs.versions.android.compileSdk

@@ -9,7 +9,7 @@ plugins {
 }
 
 kotlin {
-    androidLibrary {
+    android {
         namespace = "io.github.mobilebytelabs.kmptoolkit.sample.clipboard.shared"
         compileSdk =
             libs.versions.android.compileSdk

@@ -32,7 +32,7 @@ kotlin {
     // ========================================================================
     // Android Target
     // ========================================================================
-    androidLibrary {
+    android {
         namespace = "io.github.mobilebytelabs.kmptoolkit.toast"
         compileSdk =
             libs.versions.android.compileSdk

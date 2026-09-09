@@ -30,7 +30,7 @@ kotlin {
     // ========================================================================
     // Android Target
     // ========================================================================
-    androidLibrary {
+    android {
         namespace = "io.github.mobilebytelabs.kmptoolkit.clipboard"
         compileSdk =
             libs.versions.android.compileSdk

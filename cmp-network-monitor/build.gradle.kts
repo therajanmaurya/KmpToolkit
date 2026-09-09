@@ -31,7 +31,7 @@ kotlin {
     // ========================================================================
     // Android Target
     // ========================================================================
-    androidLibrary {
+    android {
         namespace = "io.github.mobilebytelabs.kmptoolkit.networkmonitor"
         compileSdk =
             libs.versions.android.compileSdk

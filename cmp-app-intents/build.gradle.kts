@@ -51,7 +51,7 @@ kotlin {
 
     jvm()
 
-    androidLibrary {
+    android {
         namespace = "com.mobilebytelabs.kmptoolkit.appintents"
         compileSdk =
             libs.versions.android.compileSdk

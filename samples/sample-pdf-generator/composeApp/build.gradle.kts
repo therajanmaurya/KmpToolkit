@@ -11,7 +11,7 @@ plugins {
 }
 
 kotlin {
-    androidLibrary {
+    android {
         namespace = "io.github.mobilebytelabs.kmptoolkit.sample.pdfgenerator.shared"
         compileSdk =
             libs.versions.android.compileSdk

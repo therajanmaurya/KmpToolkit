@@ -26,7 +26,7 @@ kotlin {
     // ── All 21 KMP targets — interface + Stub/NoOp/Test live in commonMain ──
     jvm()
 
-    androidLibrary {
+    android {
         namespace = "io.github.mobilebytelabs.kmptoolkit.firebase"
         compileSdk =
             libs.versions.android.compileSdk

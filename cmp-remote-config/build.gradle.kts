@@ -20,7 +20,7 @@ version = providers.gradleProperty("kmptoolkit.version").get()
 kotlin {
     applyDefaultHierarchyTemplate()
 
-    androidLibrary {
+    android {
         namespace = "com.mobilebytesensei.featurerequest"
         compileSdk =
             libs.versions.android.compileSdk

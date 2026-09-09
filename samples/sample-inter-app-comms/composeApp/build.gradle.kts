@@ -11,7 +11,7 @@ plugins {
 }
 
 kotlin {
-    androidLibrary {
+    android {
         namespace = "com.mobilebytelabs.kmptoolkit.samples.interappcomms.shared"
         compileSdk =
             libs.versions.android.compileSdk
