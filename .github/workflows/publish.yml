@@ -57,4 +57,12 @@ jobs:
       java-distribution: 'zulu'
       sonatype-host: 'CENTRAL_PORTAL'
       create-github-release: true
+      # ── Gradle Plugin Portal mirror ───────────────────────────────────────
+      # Maven Central stays the SoT; the shared workflow's publish-plugin-portal
+      # job runs only after `publish` succeeds. It auto-discovers any cmp-* module
+      # whose build.gradle.kts declares `gradlePlugin` — currently
+      # :cmp-firebase-gradle-plugin — so no module list to keep in sync.
+      # Needs org-level GRADLE_PUBLISH_KEY / GRADLE_PUBLISH_SECRET (via secrets: inherit),
+      # the same ones kmp-product-flavors releases with.
+      publish-gradle-plugin-portal: true
     secrets: inherit
