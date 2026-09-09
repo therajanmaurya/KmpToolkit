@@ -16,40 +16,58 @@ import org.jetbrains.kotlin.gradle.plugin.getKotlinPluginVersion
 import org.jetbrains.kotlin.gradle.plugin.mpp.Framework
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
+/** Configuration for the `cmp-firebase` Gradle plugin. */
+public open class CmpFirebaseExtension {
+    /**
+     * Whether the plugin adds the `cmp-firebase` dependency to `commonMain` at its own
+     * version. Set `false` when the dependency is declared by hand or supplied by a
+     * platform/BOM.
+     */
+    public var addDependency: Boolean = true
+}
+
 /**
- * Applies the build-side setup that `cmp-firebase` requires but a library artifact
- * cannot enforce on its own.
+ * Applies everything a `cmp-firebase` consumer needs, so one plugin line replaces a
+ * dependency declaration plus build setup that is easy to get silently wrong.
  *
  * A published Maven artifact's `build.gradle.kts` runs only when building THAT artifact —
- * never in the consumer's build — so `cmp-firebase` has no way to check how a consumer
- * configures their Apple frameworks. A Gradle plugin does run there, which is the whole
- * reason this module exists.
+ * never in the consumer's build — so `cmp-firebase` cannot check how a consumer configures
+ * their Apple frameworks. A Gradle plugin does run there, which is the whole reason this
+ * module exists.
  *
- * What it enforces:
+ * What it does:
  *
- * 1. **`isStatic = true` on every Apple framework.** Firebase's SwiftPM products are static
- *    libraries; embedding them in a *dynamic* framework compiles and links, then crashes at
- *    runtime. This is the one requirement `cmp-firebase` genuinely imposes on a consumer's
- *    build that a plain KMP app would not have, so the plugin sets it rather than asking
- *    the consumer to remember it.
- * 2. **Kotlin >= [MIN_KOTLIN_VERSION].** The transitive SwiftPM resolution that pulls
- *    `firebase-ios-sdk` across the Maven boundary is a Kotlin 2.4 feature. Below it no
+ * 1. **Adds `cmp-firebase`** to `commonMain` at [CMP_FIREBASE_VERSION] — this plugin's own
+ *    version, so the library and the contract enforced for it can never drift apart. Skipped
+ *    when the project already declares it, so a hand-pinned version is never overridden.
+ *    Opt out entirely with `cmpFirebase { addDependency = false }`.
+ * 2. **Forces `isStatic = true` on every Apple framework.** Firebase's SwiftPM products are
+ *    static libraries; embedding them in a *dynamic* framework compiles and links, then
+ *    crashes at runtime. This is the one requirement `cmp-firebase` genuinely imposes on a
+ *    consumer's build that a plain KMP app would not have.
+ * 3. **Requires Kotlin >= [MIN_KOTLIN_VERSION].** The transitive SwiftPM resolution that
+ *    pulls `firebase-ios-sdk` across the Maven boundary is a Kotlin 2.4 feature. Below it no
  *    SwiftPM package is generated and the build fails at link time with
- *    `ld: framework 'FirebaseCore' not found`, which names nothing useful. Failing at
- *    configuration time with the real reason is strictly better than that.
+ *    `ld: framework 'FirebaseCore' not found`, which names nothing useful.
  *
- * Both checks are advisory-free: they either fix the build or fail it with an actionable
- * message. Nothing here is silent.
+ * The plugin is published independently to Maven Central and the Gradle Plugin Portal, so it
+ * is usable on its own; in practice it is how `cmp-firebase` is consumed.
  */
 public class CmpFirebasePlugin : Plugin<Project> {
 
     override fun apply(target: Project) {
-        // Both checks hang off the Kotlin plugin: the version accessor needs it applied, and
-        // there are no Apple frameworks without it. withId fires whether this plugin is
-        // applied before or after the Kotlin plugin, so consumer ordering does not matter.
+        val extension = target.extensions.create("cmpFirebase", CmpFirebaseExtension::class.java)
+
+        // Everything hangs off the Kotlin plugin: the version accessor needs it applied, and
+        // there are no Apple frameworks or source sets without it. withId fires whether this
+        // plugin is applied before or after Kotlin, so consumer ordering does not matter.
         target.plugins.withId(KOTLIN_MULTIPLATFORM_ID) {
             verifyKotlinVersion(target)
             forceStaticAppleFrameworks(target)
+            // afterEvaluate so the consumer's `cmpFirebase { }` block has been read first.
+            target.afterEvaluate {
+                if (extension.addDependency) addCmpFirebaseDependency(target)
+            }
         }
     }
 
@@ -57,8 +75,8 @@ public class CmpFirebasePlugin : Plugin<Project> {
      * Fails configuration when the consumer's Kotlin is older than [MIN_KOTLIN_VERSION].
      *
      * Deliberately a hard failure, not a warning: on an older Kotlin the SwiftPM machinery
-     * does not exist at all, so the build cannot succeed on Apple targets — it just fails
-     * later with a linker error that points at the wrong thing.
+     * does not exist at all, so the Apple build cannot succeed — it just fails later with a
+     * linker error that points at the wrong thing.
      */
     private fun verifyKotlinVersion(project: Project) {
         val actual = runCatching { project.getKotlinPluginVersion() }.getOrNull() ?: return
@@ -104,9 +122,41 @@ public class CmpFirebasePlugin : Plugin<Project> {
         }
     }
 
+    /**
+     * Adds `cmp-firebase` to `commonMain` at this plugin's own version, so the library and
+     * the build contract enforced for it always match.
+     */
+    private fun addCmpFirebaseDependency(project: Project) {
+        val kotlin = project.extensions.findByType(KotlinMultiplatformExtension::class.java) ?: return
+        val commonMain = kotlin.sourceSets.findByName("commonMain") ?: return
+        val configurationName = commonMain.implementationConfigurationName
+
+        val alreadyDeclared = project.configurations.findByName(configurationName)
+            ?.allDependencies
+            ?.any { it.group == CMP_FIREBASE_GROUP && it.name == CMP_FIREBASE_ARTIFACT }
+            ?: false
+
+        if (alreadyDeclared) {
+            project.logger.info(
+                "cmp-firebase: dependency already declared by the project — plugin will not add it.",
+            )
+            return
+        }
+
+        project.dependencies.add(
+            configurationName,
+            "$CMP_FIREBASE_GROUP:$CMP_FIREBASE_ARTIFACT:$CMP_FIREBASE_VERSION",
+        )
+        project.logger.info(
+            "cmp-firebase: added $CMP_FIREBASE_ARTIFACT:$CMP_FIREBASE_VERSION to commonMain.",
+        )
+    }
+
     internal companion object {
         const val MIN_KOTLIN_VERSION: String = "2.4.20"
         const val KOTLIN_MULTIPLATFORM_ID: String = "org.jetbrains.kotlin.multiplatform"
+        const val CMP_FIREBASE_GROUP: String = "io.github.mobilebytelabs"
+        const val CMP_FIREBASE_ARTIFACT: String = "cmp-firebase"
 
         /**
          * Compares dotted version strings numerically, ignoring any pre-release suffix

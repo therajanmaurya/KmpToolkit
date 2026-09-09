@@ -1,0 +1,108 @@
+# Gradle Plugin Portal publish — the Portal half of the dual release.
+#
+# Maven Central is the SOURCE OF TRUTH for every kmptoolkit artifact, including the Gradle
+# plugin: `publish.yml` (module-pattern 'cmp-') releases it there with the same
+# kmptoolkit.version as the library it is locked to. This workflow MIRRORS that release to
+# the Gradle Plugin Portal.
+#
+# Why mirror at all, when the Maven marker artifact already makes `plugins { id(...) }` work?
+#   Because it only works if the consumer has mavenCentral() in pluginManagement.repositories.
+#   gradlePluginPortal() is in Gradle's DEFAULT set and mavenCentral() is not, so Portal
+#   publication is what lets someone apply the plugin with zero repository setup — and it
+#   provides a discoverable listing page.
+#
+# Ordering: Central first (SoT), Portal after. Never the reverse — a Portal release that
+# Central lacks would be unreproducible from the artifact of record.
+#
+# Required repository secrets:
+#   GRADLE_PUBLISH_KEY     — from https://plugins.gradle.org/u/<account>/api-keys
+#   GRADLE_PUBLISH_SECRET
+name: Publish Gradle Plugin (Portal)
+
+on:
+  # Chained after a successful Maven Central publish so Central always leads.
+  workflow_run:
+    workflows: ["Publish"]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: 'Validate the publication without uploading'
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  publish-portal:
+    name: Publish to Gradle Plugin Portal
+    runs-on: ubuntu-latest
+    # workflow_run fires regardless of outcome — only mirror a Central release that succeeded.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'zulu'
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Resolve version
+        id: version
+        run: |
+          VERSION=$(grep '^kmptoolkit.version=' gradle.properties | cut -d= -f2 | tr -d '[:space:]')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Publishing plugin version $VERSION"
+
+      - name: Fail fast when Portal credentials are absent
+        # Without this the publish task silently no-ops or fails deep in Gradle, which is how
+        # a "dual publish" ends up Maven-only without anyone noticing (see kmp-product-flavors,
+        # which declares com.gradle.plugin-publish but never invokes publishPlugins).
+        env:
+          GRADLE_PUBLISH_KEY: ${{ secrets.GRADLE_PUBLISH_KEY }}
+          GRADLE_PUBLISH_SECRET: ${{ secrets.GRADLE_PUBLISH_SECRET }}
+        run: |
+          if [ -z "$GRADLE_PUBLISH_KEY" ] || [ -z "$GRADLE_PUBLISH_SECRET" ]; then
+            echo "::error::GRADLE_PUBLISH_KEY / GRADLE_PUBLISH_SECRET are not set."
+            echo "::error::Create an API key at https://plugins.gradle.org/u/<account>/api-keys"
+            echo "::error::and add both as repository secrets."
+            exit 1
+          fi
+
+      - name: Validate publication (always)
+        # --validate-only still authenticates, so it needs the same credentials.
+        # --no-configuration-cache: com.gradle.plugin-publish is not CC-compatible
+        # (publishPlugins reports 8 CC problems), and a discarded entry is noise at best.
+        env:
+          GRADLE_PUBLISH_KEY: ${{ secrets.GRADLE_PUBLISH_KEY }}
+          GRADLE_PUBLISH_SECRET: ${{ secrets.GRADLE_PUBLISH_SECRET }}
+        run: >-
+          ./gradlew :cmp-firebase-gradle-plugin:publishPlugins
+          --validate-only --no-daemon --no-configuration-cache
+
+      - name: Publish to Gradle Plugin Portal
+        if: github.event_name == 'workflow_run' || inputs.dry-run == false
+        env:
+          GRADLE_PUBLISH_KEY: ${{ secrets.GRADLE_PUBLISH_KEY }}
+          GRADLE_PUBLISH_SECRET: ${{ secrets.GRADLE_PUBLISH_SECRET }}
+        run: >-
+          ./gradlew :cmp-firebase-gradle-plugin:publishPlugins
+          --no-daemon --no-configuration-cache
+
+      - name: Summary
+        run: |
+          {
+            echo "### Gradle Plugin Portal"
+            echo ""
+            echo "| Field | Value |"
+            echo "|---|---|"
+            echo "| Plugin id | \`io.github.mobilebytelabs.kmptoolkit.firebase\` |"
+            echo "| Version | \`${{ steps.version.outputs.version }}\` |"
+            echo "| Maven Central (SoT) | \`io.github.mobilebytelabs:cmp-firebase-gradle-plugin\` |"
+          } >> "$GITHUB_STEP_SUMMARY"
