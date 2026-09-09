@@ -83,9 +83,12 @@ kotlin {
     macosArm64()
     // No `binaries.framework { baseName = "CmpObserve" }` block — that triggers
     // the iOS Framework link step which fails on `ld: framework 'FirebaseCore'
-    // not found` because GitLive Firebase relies on CocoaPods-provisioned Firebase
-    // Apple frameworks at link time. Consumer apps add the Firebase CocoaPods +
-    // build the Framework on their side. Following the cmp-firebase
+    // not found`. GitLive Firebase 3.x links the native Apple SDK via SwiftPM,
+    // and that resolution only happens in the CONSUMING app's build (the
+    // `embedAndSignAppleFrameworkForXcode` phase resolves `firebase-ios-sdk` and
+    // generates the synthetic Swift package). A library module linking its own
+    // Framework has no such step, so FirebaseCore is not on the linker path.
+    // Consumer apps build the Framework on their side. Following the cmp-firebase
     // pattern (klib-only publication for iOS).
 
     js(IR) {

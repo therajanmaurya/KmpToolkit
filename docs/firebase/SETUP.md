@@ -178,6 +178,11 @@ Use the no-arg `FirebaseKit.initialize()` and let the platform read its own conf
 **No Podfile.** From GitLive `3.0.0` the native `firebase-ios-sdk` is linked via **SwiftPM**, not
 CocoaPods, and it flows across the Maven boundary automatically — do **not** re-declare it.
 
+- **Requires Kotlin 2.4.20+** (the version this library is built and verified against). The
+  transitive SwiftPM resolution is a Kotlin 2.4 feature. On an older Kotlin no SwiftPM package is
+  generated, nothing resolves the native SDK, and the build fails with
+  `ld: framework 'FirebaseCore' not found` instead of a message naming the cause.
+
 - Build your shared framework **static**: `iosArm64().binaries.framework { isStatic = true }`
   (Firebase's SwiftPM products are static libraries; a dynamic framework crashes at runtime).
 - In Xcode use **direct integration** — add the `embedAndSignAppleFrameworkForXcode` run-script
