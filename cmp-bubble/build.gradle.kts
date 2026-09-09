@@ -23,7 +23,7 @@ kotlin {
 
     jvm()
 
-    androidLibrary {
+    android {
         namespace = "io.github.mobilebytelabs.kmptoolkit.bubble"
         compileSdk =
             libs.versions.android.compileSdk

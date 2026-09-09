@@ -8,7 +8,7 @@ plugins {
 }
 
 kotlin {
-    androidLibrary {
+    android {
         namespace = "io.github.mobilebytelabs.kmptoolkit.sample.networkmonitor.shared"
         compileSdk =
             libs.versions.android.compileSdk

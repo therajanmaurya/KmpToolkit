@@ -49,7 +49,7 @@ kotlin {
 
     jvm()
 
-    androidLibrary {
+    android {
         namespace = "com.mobilebytelabs.kmptoolkit.share"
         compileSdk =
             libs.versions.android.compileSdk

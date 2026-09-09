@@ -39,7 +39,7 @@ kotlin {
 
     jvm()
 
-    androidLibrary {
+    android {
         namespace = "io.github.mobilebytelabs.kmptoolkit.pdfgenerator"
         compileSdk =
             libs.versions.android.compileSdk

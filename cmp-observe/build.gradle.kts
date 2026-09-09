@@ -64,7 +64,7 @@ kotlin {
 
     jvm()
 
-    androidLibrary {
+    android {
         namespace = "com.mobilebytelabs.kmptoolkit.observe"
         compileSdk =
             libs.versions.android.compileSdk

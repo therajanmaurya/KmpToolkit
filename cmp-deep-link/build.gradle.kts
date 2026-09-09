@@ -31,7 +31,7 @@ kotlin {
     // ========================================================================
     // Android Target
     // ========================================================================
-    androidLibrary {
+    android {
         namespace = "io.github.mobilebytelabs.kmptoolkit.deeplink"
         compileSdk =
             libs.versions.android.compileSdk

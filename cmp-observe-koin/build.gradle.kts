@@ -42,7 +42,7 @@ kotlin {
 
     jvm()
 
-    androidLibrary {
+    android {
         namespace = "com.mobilebytelabs.kmptoolkit.observe.koin"
         compileSdk =
             libs.versions.android.compileSdk
