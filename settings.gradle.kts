@@ -33,6 +33,9 @@ include(":cmp-observe")
 include(":cmp-observe-koin") // Zero-config Koin companion for cmp-observe
 // Firebase Analytics — 21/21 KMP targets (GitLive on 11, Measurement Protocol HTTP on 10)
 include(":cmp-firebase") // Firebase — Analytics + Crashlytics (unified, in-library setup)
+// Gradle plugin enforcing cmp-firebase's build-side setup (static Apple frameworks + Kotlin floor).
+// A published library artifact cannot check the consumer's build; a plugin can.
+include(":cmp-firebase-gradle-plugin")
 include(":cmp-firebase-compose") // Firebase Compose — auto screen/click/lifecycle tracking
 // PDF Generator — cross-platform PDF generation (HTML / Markdown / DSL input; multi-output)
 include(":cmp-pdf-generator")

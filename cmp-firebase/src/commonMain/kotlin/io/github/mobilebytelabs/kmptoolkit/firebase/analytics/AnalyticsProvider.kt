@@ -18,8 +18,12 @@ package io.github.mobilebytelabs.kmptoolkit.firebase.analytics
  *
  * | Tier | Targets | Returns |
  * |---|---|---|
- * | **firebaseMain** (GitLive) | Android, iOS (×3), macOS (×2), tvOS (×3), JS | `FirebaseAnalyticsHelper(Firebase.analytics)` |
- * | **nonFirebaseMain** | JVM, Linux (×2), mingwX64, wasmJs | [MeasurementProtocolAnalyticsHelper] when an [io.github.mobilebytelabs.kmptoolkit.firebase.analytics.mp.MpConfig] is configured, else [NoOpAnalyticsHelper] |
+ * | **firebaseMain** (GitLive) | Android, iOS (×3), macOS (×2), tvOS (×3), JS, wasmJs | `FirebaseAnalyticsHelper(Firebase.analytics)` |
+ * | **nonFirebaseMain** | JVM, Linux (×2), mingwX64 | [MeasurementProtocolAnalyticsHelper] when an [io.github.mobilebytelabs.kmptoolkit.firebase.analytics.mp.MpConfig] is configured, else [NoOpAnalyticsHelper] |
+ *
+ * Note: wasmJs moved from **nonFirebaseMain** to **firebaseMain** in GitLive `3.0.0-alpha02`
+ * (upstream PR #832 brought wasmJs to full JS parity). A wasmJs consumer therefore supplies
+ * `FirebaseConfig.web` — an `MpConfig` no longer routes wasmJs analytics.
  *
  * Note: JVM/desktop is on the **nonFirebaseMain** tier — GitLive Firebase Analytics
  * does NOT ship for JVM. Desktop analytics (and the desktop crash→GA4 mirror) requires

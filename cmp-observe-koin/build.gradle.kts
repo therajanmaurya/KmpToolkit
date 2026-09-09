@@ -61,9 +61,9 @@ kotlin {
     macosArm64()
     // No `binaries.framework { baseName = "CmpObserveKoin" }` block — would
     // transitively trigger the cmp-observe Framework link step which fails on
-    // `ld: framework 'FirebaseCore' not found` (Firebase Apple SDK is provisioned
-    // via CocoaPods at consumer integration time). Following the cmp-observe +
-    // cmp-firebase pattern (klib-only publication for iOS).
+    // `ld: framework 'FirebaseCore' not found` (the native Firebase Apple SDK is
+    // resolved via SwiftPM in the consuming app's build, not in a library build).
+    // Following the cmp-observe + cmp-firebase pattern (klib-only publication for iOS).
 
     js(IR) {
         browser()

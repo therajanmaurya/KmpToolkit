@@ -8,7 +8,7 @@ Firebase for **Kotlin Multiplatform** — **Analytics + Crashlytics** in one mod
 > Renamed from `cmp-firebase-analytics` (the module now covers Crashlytics too). Package root: `io.github.mobilebytelabs.kmptoolkit.firebase`.
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.mobilebytelabs/cmp-firebase)](https://central.sonatype.com/artifact/io.github.mobilebytelabs/cmp-firebase)
-[![Kotlin](https://img.shields.io/badge/Kotlin-2.4.0-blue.svg?logo=kotlin)](https://kotlinlang.org)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.4.20-blue.svg?logo=kotlin)](https://kotlinlang.org)
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
 ## What's in the box
@@ -143,7 +143,7 @@ The entire Firebase setup for **every platform** can be a single `commonMain`
 call — no `google-services.json`, no `GoogleService-Info.plist`, no Swift
 `FirebaseApp.configure()` line. Pass one `FirebaseConfig` holding each platform's
 keys; the library selects the running platform, initializes Firebase
-programmatically on the GitLive-native tier (Android/iOS/macOS/tvOS/JS) and wires
+programmatically on the GitLive-native tier (Android/iOS/macOS/tvOS/JS/wasmJs) and wires
 the Measurement-Protocol transport on the fallback tier (JVM/Linux/Windows/wasm):
 
 ```kotlin
@@ -176,8 +176,8 @@ Each consuming app supplies **its own** Firebase identity — these are not shar
 |---|---|
 | Android | `google-services.json` (app directory) + `com.google.gms.google-services` Gradle plugin |
 | Apple (iOS/macOS/tvOS) | `GoogleService-Info.plist` (app target) + `FirebaseApp.configure()` in `@main init` |
-| JS / Web | `FirebaseOptions(apiKey=…, authDomain=…, …)` passed to `FirebaseConfig.builder().web(…)` |
-| JVM/Linux/mingwX64/wasmJs | `MpConfig(measurementId = "G-XXXX", apiSecret = <MP API secret>)` |
+| JS / Web / wasmJs | `FirebaseOptions(apiKey=…, authDomain=…, …)` passed to `FirebaseConfig.builder().web(…)` — wasmJs joined this tier in GitLive `3.0.0-alpha02` |
+| JVM/Linux/mingwX64 | `MpConfig(measurementId = "G-XXXX", apiSecret = <MP API secret>)` |
 
 The **Measurement Protocol `apiSecret`** is the only value that is a real secret. Generate it at: Firebase Console → Project settings → Integrations → GA4 → Data Streams → {your stream} → Measurement Protocol API secrets → Create. **Never hard-code it** — load from a secrets store (`/secrets pull` in the framework, or your platform's secure store). All other Firebase values (`apiKey`, `applicationId`, `projectId`) are client identifiers and safe in source.
 
@@ -193,7 +193,35 @@ The **Measurement Protocol `apiSecret`** is the only value that is a real secret
 
 ### iOS / macOS / tvOS (SwiftPM — GitLive 3.x)
 
-GitLive 3.0.0 links the native Firebase iOS SDK via **SwiftPM** (not CocoaPods). `firebase-ios-sdk` flows across the Maven boundary automatically — **do not re-declare it**. In your app's shared KMP module:
+GitLive 3.0.0 links the native Firebase iOS SDK via **SwiftPM** (not CocoaPods). `firebase-ios-sdk` flows across the Maven boundary automatically — **do not re-declare it**.
+
+> **Requires Kotlin 2.4.20 or newer** (the version this library is built and verified against).
+> The transitive SwiftPM resolution is a Kotlin 2.4 feature:
+> GitLive publishes a `swiftPMDependenciesMetadata` Gradle variant plus a
+> `…Cinterop-swiftPMImportMain` klib, and the Kotlin plugin turns those into a generated SwiftPM
+> package that pulls `firebase-ios-sdk`. **On Kotlin < 2.4 that machinery does not exist** — no
+> package is generated, nothing resolves the native SDK, and the build fails at link time with
+> `ld: framework 'FirebaseCore' not found` rather than a message naming the real cause. Consumers
+> on an older Kotlin must either upgrade or provision the Firebase Apple frameworks themselves
+> (e.g. via CocoaPods), which is outside what this library supports.
+
+**Recommended — apply the companion Gradle plugin** and skip steps 1 and 3 below. It forces
+`isStatic = true` on every Apple framework and fails the build with a real message if your Kotlin
+is below the floor, instead of leaving you with a linker error that names the wrong thing:
+
+```kotlin
+// settings.gradle.kts — mavenCentral() must be in pluginManagement (most KMP projects have it)
+pluginManagement { repositories { google(); mavenCentral(); gradlePluginPortal() } }
+
+// shared/build.gradle.kts — same version as cmp-firebase
+plugins { id("io.github.mobilebytelabs.firebase") version "<cmpFirebase>" }
+```
+
+The plugin is published to Maven Central alongside the library; no Gradle Plugin Portal setup is
+needed. Prefer it over hand-configuring — a dynamic framework links cleanly and only crashes at
+runtime, which is not a mistake you want to debug from the crash.
+
+Doing it by hand instead, in your app's shared KMP module:
 
 1. Build the shared framework **static** — Firebase's SwiftPM products are static libraries; a dynamic framework crashes at runtime:
    ```kotlin
@@ -351,7 +379,7 @@ import io.github.mobilebytelabs.kmptoolkit.firebase.analytics.FirebaseAnalyticsH
 val helper = FirebaseAnalyticsHelper(Firebase.analytics)
 ```
 
-`FirebaseAnalyticsHelper` is only available on firebaseMain (Android/iOS/macOS/tvOS/JS). JVM is on the nonFirebase tier — cross-platform code should call `provideAnalyticsHelper()` instead, which returns the appropriate helper per platform and `NoOpAnalyticsHelper` on unconfigured nonFirebase targets.
+`FirebaseAnalyticsHelper` is only available on firebaseMain (Android/iOS/macOS/tvOS/JS/wasmJs). JVM is on the nonFirebase tier — cross-platform code should call `provideAnalyticsHelper()` instead, which returns the appropriate helper per platform and `NoOpAnalyticsHelper` on unconfigured nonFirebase targets.
 
 ## Auto-injected `kmp_platform` param
 
