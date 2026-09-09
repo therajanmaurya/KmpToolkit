@@ -214,7 +214,7 @@ is below the floor, instead of leaving you with a linker error that names the wr
 pluginManagement { repositories { google(); mavenCentral(); gradlePluginPortal() } }
 
 // shared/build.gradle.kts — same version as cmp-firebase
-plugins { id("io.github.mobilebytelabs.kmptoolkit.firebase") version "<cmpFirebase>" }
+plugins { id("io.github.mobilebytelabs.firebase") version "<cmpFirebase>" }
 ```
 
 The plugin is published to Maven Central alongside the library; no Gradle Plugin Portal setup is

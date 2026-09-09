@@ -96,7 +96,7 @@ gradlePlugin {
 
     plugins {
         register("cmpFirebase") {
-            id = "io.github.mobilebytelabs.kmptoolkit.firebase"
+            id = "io.github.mobilebytelabs.firebase"
             implementationClass =
                 "io.github.mobilebytelabs.kmptoolkit.firebase.gradle.CmpFirebasePlugin"
             displayName = "cmp-firebase build setup"
@@ -115,7 +115,7 @@ gradlePlugin {
 // MAVEN CENTRAL PUBLISHING CONFIGURATION
 // ============================================================================
 // GradlePlugin() also publishes the plugin MARKER artifact
-// (io.github.mobilebytelabs.kmptoolkit.firebase:…gradle.plugin), which is what lets a
+// (io.github.mobilebytelabs.firebase:…gradle.plugin), which is what lets a
 // consumer resolve `plugins { id("…") version "…" }` from Maven Central. No Gradle Plugin
 // Portal account or release step is required — consumers only need mavenCentral() in their
 // settings.gradle.kts `pluginManagement.repositories`, which nearly every KMP project has.
