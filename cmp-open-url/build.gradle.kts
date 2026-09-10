@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.android.kotlin.multiplatform.library)
     alias(libs.plugins.vanniktech.mavenPublish)
     id("io.github.mobilebytelabs.kmptoolkit.dokka")
+    id("io.github.mobilebytelabs.kmptoolkit.kover")
 }
 
 group = "io.github.mobilebytelabs"
@@ -40,7 +41,15 @@ kotlin {
 
         withJava()
 
-        withHostTestBuilder {}.configure {}
+        withHostTestBuilder {}.configure {
+            // android.jar in a JVM host test is a stub whose methods THROW by default, so a
+            // framework call aborts a test even when the code under test handled the situation
+            // correctly. Returning defaults lets the real behaviour be asserted instead.
+            isReturnDefaultValues = true
+
+            // Robolectric reads the merged manifest/resources.
+            isIncludeAndroidResources = true
+        }
 
         withDeviceTestBuilder {
             sourceSetTreeName = "test"
@@ -127,6 +136,12 @@ kotlin {
             // No external dependencies — uses only platform APIs
         }
 
+        // getByName: the KMP android library plugin generates no typed androidHostTest accessor.
+        getByName("androidHostTest").dependencies {
+            implementation(libs.robolectric)
+            implementation(libs.junit)
+        }
+
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
@@ -183,3 +198,40 @@ mavenPublishing {
 
 // Library Runtime Observability — auto-generate CmpMetadata.kt for cmp-observe hooks (epic 2026-05-30)
 apply(from = "$rootDir/cmp-observe-metadata.gradle.kts")
+
+// ── Android host-test exclusions (method-level) ─────────────────────────────────────────────
+// Each entry below reaches a real Android framework service that a JVM host test cannot
+// provide — ConnectivityManager, ProcessLifecycleOwner, Context.startActivity, or the init
+// ContentProvider. android.jar is a stub here and no provider ever runs, so these cannot pass;
+// injecting a Context does not help, because the services themselves must actually work.
+//
+// Excluded per METHOD, not per class: the same classes contain tests that pass on the host, and
+// excluding whole classes silently dropped them from this tier. Listed literally rather than by
+// wildcard so a newly-broken test fails loudly instead of being swallowed.
+//
+// Nothing is skipped overall — these are commonTest, so they still run on jvmTest, the native
+// targets, jsTest and wasmJsTest, and the Android actual is covered on-device via
+// `withDeviceTestBuilder`.
+tasks.withType<Test>().configureEach {
+    if (name == "testAndroidHostTest") {
+        filter {
+            // SEMANTIC exclusion, not an environmental one: the test's own name says
+            // "onNonAndroid" — it asserts the behaviour of the NON-Android actuals and was never
+            // meant to run here. It lives in commonTest (so it covers jvm/native/js) and this
+            // filter is what scopes it away from the Android target. Nothing to "fix": running it
+            // on Android would be asserting the wrong contract.
+            excludeTestsMatching(
+                "com.mobilebytelabs.kmptoolkit.openurl.OpenUrlTest.openWithApp_CustomHint_onNonAndroid_returnsSuccessOrNoHandler",
+            )
+            isFailOnNoMatchingTests = false
+        }
+    }
+}
+
+// Robolectric host-test config — emulated SDK comes from `robolectricSdk` in the version
+// catalog and is code-generated into androidHostTest as `robolectric.ROBOLECTRIC_SDK`, so no
+// test hardcodes an API level.
+apply(from = "$rootDir/robolectric-host-test.gradle.kts")
+kotlin.sourceSets.getByName("androidHostTest").kotlin.srcDir(
+    tasks.named("generateRobolectricSdkConstant"),
+)

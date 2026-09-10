@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.vanniktech.mavenPublish)
     alias(libs.plugins.binaryCompatibilityValidator)
     id("io.github.mobilebytelabs.kmptoolkit.dokka")
+    id("io.github.mobilebytelabs.kmptoolkit.kover")
 }
 
 // ============================================================================
@@ -46,7 +47,17 @@ kotlin {
 
         withJava()
 
-        withHostTestBuilder {}.configure {}
+        withHostTestBuilder {}.configure {
+            // android.jar in a JVM host test is a stub whose methods THROW by default, so a
+            // framework call aborts a test even when the code under test handled the situation
+            // correctly. Returning defaults lets the real behaviour be asserted instead.
+            isReturnDefaultValues = true
+
+            // Robolectric reads the MERGED manifest/resources; without this the
+            // ui-test-manifest activity that Compose's ActivityScenario launches is invisible
+            // and every UI test dies with "Unable to resolve activity for Intent { MAIN }".
+            isIncludeAndroidResources = true
+        }
 
         withDeviceTestBuilder {
             sourceSetTreeName = "test"
@@ -104,7 +115,44 @@ kotlin {
 
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+            // Real composition testing: renders the composables and asserts what a user sees,
+            // rather than only asserting that the CompositionLocal object is non-null.
+            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+            implementation(compose.uiTest)
             implementation(libs.kotlinx.coroutines.test)
+        }
+
+        // getByName: the new com.android.kotlin.multiplatform.library plugin does not generate a
+        // typed `androidHostTest` accessor the way it does for commonTest/jvmTest.
+        getByName("androidHostTest").dependencies {
+            implementation(libs.robolectric)
+            implementation(libs.junit)
+            implementation(libs.androidx.compose.ui.test.manifest)
+        }
+
+        jvmTest.dependencies {
+            // Skiko's native backend, required for runComposeUiTest on the JVM/desktop target —
+            // without it every composition fails with
+            // "NoClassDefFoundError: Could not initialize class org.jetbrains.skia.Surface".
+            // JVM-only on purpose: the other targets bring their own renderer.
+            implementation(compose.desktop.currentOs)
+            implementation(libs.kotlinx.coroutines.test)
+        }
+
+        // getByName: the new com.android.kotlin.multiplatform.library plugin does not generate a
+        // typed `androidHostTest` accessor the way it does for commonTest/jvmTest.
+        getByName("androidHostTest").dependencies {
+            implementation(libs.robolectric)
+            implementation(libs.junit)
+            implementation(libs.androidx.compose.ui.test.manifest)
+        }
+
+        jvmTest.dependencies {
+            // Skiko's native backend, required for runComposeUiTest on the JVM/desktop target —
+            // without it every composition fails with
+            // "NoClassDefFoundError: Could not initialize class org.jetbrains.skia.Surface".
+            // JVM-only on purpose: the other targets bring their own renderer.
+            implementation(compose.desktop.currentOs)
             implementation(libs.app.cash.turbine)
         }
     }
@@ -159,3 +207,11 @@ mavenPublishing {
 
 // Library Runtime Observability — auto-generate CmpMetadata.kt for cmp-observe hooks (epic 2026-05-30)
 apply(from = "$rootDir/cmp-observe-metadata.gradle.kts")
+
+// Robolectric host-test config — emulated SDK comes from `robolectricSdk` in the version
+// catalog and is code-generated into androidHostTest as `robolectric.ROBOLECTRIC_SDK`, so no
+// test hardcodes an API level.
+apply(from = "$rootDir/robolectric-host-test.gradle.kts")
+kotlin.sourceSets.getByName("androidHostTest").kotlin.srcDir(
+    tasks.named("generateRobolectricSdkConstant"),
+)

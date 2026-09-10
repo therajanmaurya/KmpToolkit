@@ -21,6 +21,13 @@ ktlint = "1.8.0"
 
 # Testing
 junit = "4.13.2"
+robolectric = "4.14.1"
+# Emulated API level for Robolectric host tests. Pinned BELOW android-compileSdk on purpose:
+# Robolectric 4.14.1 ships images only to 35 and hard-fails on a higher targetSdk. Consumed by
+# robolectric-host-test.gradle.kts, which generates robolectric.properties from it — raise here
+# and every module follows. See that file for the full rationale.
+robolectricSdk = "35"
+androidxComposeUiTest = "1.12.0"
 turbine = "1.2.0"
 coroutines = "1.11.0"
 supabase = "3.2.6"
@@ -68,6 +75,16 @@ detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", 
 dokka-gradle = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka" }
 # Consumed compileOnly by :cmp-firebase-gradle-plugin (the consumer build already supplies KGP)
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+# Consumed compileOnly by build-logic for KoverConventionPlugin. NOT `implementation`:
+# kover-gradle-plugin on build-logic's runtime classpath transitively conflicts with
+# AGP's kotlin-gradle-plugin (kover issue #135).
+kover-gradlePlugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
+# Android host-test runtime — supplies a real android.os.Build (incl. FINGERPRINT), which
+# androidx.compose.ui.test's AndroidComposeUiTestEnvironment requires to select an idling strategy.
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+# Supplies the AndroidManifest entry for the ComponentActivity that Compose's Android UI-test
+# ActivityScenario launches; without it Robolectric reports "Unable to resolve activity for Intent".
+androidx-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "androidxComposeUiTest" }
 
 # AndroidX
 androidx-activity = { module = "androidx.activity:activity", version.ref = "androidx-activityKtx" }
@@ -84,6 +101,8 @@ compose-materialIconsExtended = { module = "org.jetbrains.compose.material:mater
 compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose-multiplatform" }
 compose-ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "compose-multiplatform" }
 compose-ui-tooling-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "compose-multiplatform" }
+# Multiplatform Compose UI test harness (runComposeUiTest) — first used by cmp-network-monitor-compose.
+compose-ui-test = { module = "org.jetbrains.compose.ui:ui-test", version.ref = "compose-multiplatform" }
 compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose-multiplatform" }
 
 # Play Services

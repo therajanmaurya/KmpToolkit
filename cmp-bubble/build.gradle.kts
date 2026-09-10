@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.android.kotlin.multiplatform.library)
     alias(libs.plugins.vanniktech.mavenPublish)
     id("io.github.mobilebytelabs.kmptoolkit.dokka")
+    id("io.github.mobilebytelabs.kmptoolkit.kover")
 }
 
 // ============================================================================
@@ -36,7 +37,14 @@ kotlin {
 
         withJava()
 
-        withHostTestBuilder {}.configure {}
+        withHostTestBuilder {}.configure {
+            // android.jar in a JVM host test is a stub whose methods THROW by default, so a
+            // plain Log.w() aborts a test even when the code under test already handled the
+            // situation correctly (e.g. Bubble.android.kt logs "No app context" and returns).
+            // Returning defaults lets the real behaviour be asserted instead of dying on the
+            // logging call.
+            isReturnDefaultValues = true
+        }
 
         withDeviceTestBuilder {
             sourceSetTreeName = "test"

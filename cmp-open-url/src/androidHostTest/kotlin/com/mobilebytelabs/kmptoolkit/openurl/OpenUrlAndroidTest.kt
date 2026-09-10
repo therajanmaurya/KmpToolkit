@@ -1,13 +1,31 @@
 package com.mobilebytelabs.kmptoolkit.openurl
 
+import org.junit.Before
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
+import org.robolectric.annotation.Config
+import robolectric.ROBOLECTRIC_SDK
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
 /**
  * Android-hosted (JVM-based) tests for the Android actual implementation.
- * These run on the JVM using Robolectric or a real device/emulator.
+ *
+ * Now actually running under Robolectric, as this file always claimed. Without it there is no
+ * init ContentProvider, so `OpenUrlContext.context` threw
+ * "OpenUrlInitProvider was not initialised" and `openWithApp` returned Error instead of the
+ * documented Success/NoHandler. Robolectric supplies a real Application, injected below through
+ * the same seam the ContentProvider uses on a device.
  */
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [ROBOLECTRIC_SDK])
 class OpenUrlAndroidTest {
+
+    @Before
+    fun installApplicationContext() {
+        OpenUrlContext.init(RuntimeEnvironment.getApplication())
+    }
 
     @Test
     fun openUrl_withHttpsUrl_doesNotThrow() {

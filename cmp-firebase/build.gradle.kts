@@ -11,6 +11,7 @@ plugins {
     alias(libs.plugins.vanniktech.mavenPublish)
     alias(libs.plugins.binaryCompatibilityValidator)
     id("io.github.mobilebytelabs.kmptoolkit.dokka")
+    id("io.github.mobilebytelabs.kmptoolkit.kover")
 }
 
 // ============================================================================
@@ -135,19 +136,21 @@ kotlin {
         }
 
         // ── Firebase tier — GitLive ships on these 11 targets ───────────────
-        val firebaseMain by creating {
-            dependsOn(commonMain.get())
-            dependencies {
-                api(libs.gitlive.firebase.app)
-                api(libs.gitlive.firebase.analytics)
+        val firebaseMain =
+            create("firebaseMain") {
+                dependsOn(commonMain.get())
+                dependencies {
+                    api(libs.gitlive.firebase.app)
+                    api(libs.gitlive.firebase.analytics)
+                }
             }
-        }
         // ── Non-Firebase tier — 9 targets where GitLive does NOT ship ───────
         // Get Firebase Measurement Protocol via HTTP. Same Firebase property,
         // same BigQuery dataset, just no native SDK features.
-        val nonFirebaseMain by creating {
-            dependsOn(commonMain.get())
-        }
+        val nonFirebaseMain =
+            create("nonFirebaseMain") {
+                dependsOn(commonMain.get())
+            }
 
         // GitLive-supported native analytics + programmatic init → firebaseMain
         androidMain.get().dependsOn(firebaseMain)
@@ -193,15 +196,17 @@ kotlin {
         // analytics.
         // Crashlytics also has no ingestion REST API, so the fallback is a structured
         // Kermit-logged CrashReport (AI-feedable), not a Measurement-Protocol HTTP.
-        val crashlyticsFirebaseMain by creating {
-            dependsOn(commonMain.get())
-            dependencies {
-                api(libs.gitlive.firebase.crashlytics)
+        val crashlyticsFirebaseMain =
+            create("crashlyticsFirebaseMain") {
+                dependsOn(commonMain.get())
+                dependencies {
+                    api(libs.gitlive.firebase.crashlytics)
+                }
             }
-        }
-        val crashlyticsFallbackMain by creating {
-            dependsOn(commonMain.get())
-        }
+        val crashlyticsFallbackMain =
+            create("crashlyticsFallbackMain") {
+                dependsOn(commonMain.get())
+            }
         // GitLive Crashlytics-supported → crashlyticsFirebaseMain
         androidMain.get().dependsOn(crashlyticsFirebaseMain)
         iosMain.get().dependsOn(crashlyticsFirebaseMain)

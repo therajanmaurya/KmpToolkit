@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.android.kotlin.multiplatform.library)
     alias(libs.plugins.vanniktech.mavenPublish)
     id("io.github.mobilebytelabs.kmptoolkit.dokka")
+    id("io.github.mobilebytelabs.kmptoolkit.kover")
 }
 
 // ============================================================================
@@ -43,7 +44,15 @@ kotlin {
 
         withJava()
 
-        withHostTestBuilder {}.configure {}
+        withHostTestBuilder {}.configure {
+            // android.jar in a JVM host test is a stub whose methods THROW by default, so a
+            // framework call aborts a test even when the code under test handled the situation
+            // correctly. Returning defaults lets the real behaviour be asserted instead.
+            isReturnDefaultValues = true
+
+            // Robolectric reads the merged manifest/resources.
+            isIncludeAndroidResources = true
+        }
 
         withDeviceTestBuilder {
             sourceSetTreeName = "test"
@@ -133,6 +142,12 @@ kotlin {
             implementation(libs.kotlinx.datetime)
         }
 
+        // getByName: the KMP android library plugin generates no typed androidHostTest accessor.
+        getByName("androidHostTest").dependencies {
+            implementation(libs.robolectric)
+            implementation(libs.junit)
+        }
+
         commonTest.dependencies {
             implementation(libs.kotlin.test)
             implementation(libs.kotlinx.coroutines.test)
@@ -195,3 +210,89 @@ mavenPublishing {
 
 // Library Runtime Observability — auto-generate CmpMetadata.kt for cmp-observe hooks (epic 2026-05-30)
 apply(from = "$rootDir/cmp-observe-metadata.gradle.kts")
+
+// ── Android host-test exclusions (method-level) ─────────────────────────────────────────────
+// Each entry below reaches a real Android framework service that a JVM host test cannot
+// provide — ConnectivityManager, ProcessLifecycleOwner, Context.startActivity, or the init
+// ContentProvider. android.jar is a stub here and no provider ever runs, so these cannot pass;
+// injecting a Context does not help, because the services themselves must actually work.
+//
+// Excluded per METHOD, not per class: the same classes contain tests that pass on the host, and
+// excluding whole classes silently dropped them from this tier. Listed literally rather than by
+// wildcard so a newly-broken test fails loudly instead of being swallowed.
+//
+// Nothing is skipped overall — these are commonTest, so they still run on jvmTest, the native
+// targets, jsTest and wasmJsTest, and the Android actual is covered on-device via
+// `withDeviceTestBuilder`.
+tasks.withType<Test>().configureEach {
+    if (name == "testAndroidHostTest") {
+        filter {
+            excludeTestsMatching(
+                "com.mobilebytelabs.kmptoolkit.clipboard.ClipboardHistoryTest.history_doubleStartIsIdempotent",
+            )
+            excludeTestsMatching(
+                "com.mobilebytelabs.kmptoolkit.clipboard.ClipboardHistoryTest.history_doubleStopIsIdempotent",
+            )
+            excludeTestsMatching("com.mobilebytelabs.kmptoolkit.clipboard.ClipboardHistoryTest.history_startCapturing")
+            excludeTestsMatching("com.mobilebytelabs.kmptoolkit.clipboard.ClipboardHistoryTest.history_stopCapturing")
+            excludeTestsMatching(
+                "com.mobilebytelabs.kmptoolkit.clipboard.ClipboardManagerTest.doubleStart_isIdempotent",
+            )
+            excludeTestsMatching("com.mobilebytelabs.kmptoolkit.clipboard.ClipboardManagerTest.doubleStop_isIdempotent")
+            excludeTestsMatching("com.mobilebytelabs.kmptoolkit.clipboard.ClipboardManagerTest.fullLifecycle")
+            excludeTestsMatching(
+                "com.mobilebytelabs.kmptoolkit.clipboard.ClipboardManagerTest.pauseResume_doesNotThrow",
+            )
+            excludeTestsMatching("com.mobilebytelabs.kmptoolkit.clipboard.ClipboardManagerTest.start_setsActive")
+            excludeTestsMatching("com.mobilebytelabs.kmptoolkit.clipboard.ClipboardManagerTest.stop_setsInactive")
+            excludeTestsMatching(
+                "com.mobilebytelabs.kmptoolkit.clipboard.ClipboardMonitorIntegrationTest.e2e_monitorWithMatchersAndFilters",
+            )
+            excludeTestsMatching(
+                "com.mobilebytelabs.kmptoolkit.clipboard.ClipboardMonitorIntegrationTest.monitor_canRestartAfterStop",
+            )
+            excludeTestsMatching(
+                "com.mobilebytelabs.kmptoolkit.clipboard.ClipboardMonitorIntegrationTest.multipleMonitors_canCoexist",
+            )
+            excludeTestsMatching(
+                "com.mobilebytelabs.kmptoolkit.clipboard.ClipboardMonitorTest.monitor_addFilterBeforeStart",
+            )
+            excludeTestsMatching(
+                "com.mobilebytelabs.kmptoolkit.clipboard.ClipboardMonitorTest.monitor_addUrlMatcherAfterStart",
+            )
+            excludeTestsMatching(
+                "com.mobilebytelabs.kmptoolkit.clipboard.ClipboardMonitorTest.monitor_addUrlMatcherBeforeStart",
+            )
+            excludeTestsMatching(
+                "com.mobilebytelabs.kmptoolkit.clipboard.ClipboardMonitorTest.monitor_doubleStartIsIdempotent",
+            )
+            excludeTestsMatching("com.mobilebytelabs.kmptoolkit.clipboard.ClipboardMonitorTest.monitor_fullLifecycle")
+            excludeTestsMatching(
+                "com.mobilebytelabs.kmptoolkit.clipboard.ClipboardMonitorTest.monitor_pauseTransitionsToPaused",
+            )
+            excludeTestsMatching(
+                "com.mobilebytelabs.kmptoolkit.clipboard.ClipboardMonitorTest.monitor_resumeTransitionsBackToMonitoring",
+            )
+            excludeTestsMatching(
+                "com.mobilebytelabs.kmptoolkit.clipboard.ClipboardMonitorTest.monitor_resumeWhileMonitoringDoesNothing",
+            )
+            excludeTestsMatching(
+                "com.mobilebytelabs.kmptoolkit.clipboard.ClipboardMonitorTest.monitor_startTransitionsToMonitoring",
+            )
+            excludeTestsMatching(
+                "com.mobilebytelabs.kmptoolkit.clipboard.ClipboardMonitorTest.monitor_startWithCustomConfig",
+            )
+            excludeTestsMatching(
+                "com.mobilebytelabs.kmptoolkit.clipboard.ClipboardMonitorTest.monitor_startWithSocialMediaConfig",
+            )
+            isFailOnNoMatchingTests = false
+        }
+    }
+}
+
+// Robolectric host-test config — emulated SDK comes from `robolectricSdk` in the version
+// catalog and is code-generated into androidHostTest as `robolectric.ROBOLECTRIC_SDK`.
+apply(from = "$rootDir/robolectric-host-test.gradle.kts")
+kotlin.sourceSets.getByName("androidHostTest").kotlin.srcDir(
+    tasks.named("generateRobolectricSdkConstant"),
+)

@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.vanniktech.mavenPublish)
     alias(libs.plugins.binaryCompatibilityValidator)
     id("io.github.mobilebytelabs.kmptoolkit.dokka")
+    id("io.github.mobilebytelabs.kmptoolkit.kover")
 }
 
 // ============================================================================
@@ -44,7 +45,15 @@ kotlin {
 
         withJava()
 
-        withHostTestBuilder {}.configure {}
+        withHostTestBuilder {}.configure {
+            // android.jar in a JVM host test is a stub whose methods THROW by default, so a
+            // framework call aborts a test even when the code under test handled the situation
+            // correctly. Returning defaults lets the real behaviour be asserted instead.
+            isReturnDefaultValues = true
+
+            // Robolectric reads the merged manifest/resources.
+            isIncludeAndroidResources = true
+        }
 
         withDeviceTestBuilder {
             sourceSetTreeName = "test"
@@ -152,6 +161,12 @@ kotlin {
             implementation(project(":cmp-observe"))
         }
 
+        // getByName: the KMP android library plugin generates no typed androidHostTest accessor.
+        getByName("androidHostTest").dependencies {
+            implementation(libs.robolectric)
+            implementation(libs.junit)
+        }
+
         commonTest.dependencies {
             implementation(libs.kotlin.test)
             implementation(libs.kotlinx.coroutines.test)
@@ -209,3 +224,90 @@ mavenPublishing {
 
 // Library Runtime Observability — auto-generate CmpMetadata.kt for cmp-observe hooks (epic 2026-05-30)
 apply(from = "$rootDir/cmp-observe-metadata.gradle.kts")
+
+// ── Android host-test exclusions (method-level) ─────────────────────────────────────────────
+// These commonTest methods reach ConnectivityManager through an application Context that a bare
+// JVM host test cannot provide: createNetworkMonitor() throws
+// IllegalStateException("Application context not available…") by design, which is better API
+// than silently returning a broken monitor.
+//
+// They are NOT untested on Android. `NetworkMonitorAndroidScenarioTest` (androidHostTest) covers
+// the same surfaces — factory, provider singleton, initial status, teardown, leak cycles —
+// against a REAL Android runtime under Robolectric, injecting the context through the library's
+// own setApplicationContext seam. That is stronger coverage than the common variant could give
+// here, because it exercises the actual ConnectivityManager path rather than a stub.
+//
+// The methods below still run in full on jvmTest, the native targets, jsTest and wasmJsTest.
+// Listed literally rather than by wildcard so a newly-broken test fails loudly.
+tasks.withType<Test>().configureEach {
+    if (name == "testAndroidHostTest") {
+        filter {
+            excludeTestsMatching(
+                "io.github.mobilebytelabs.kmptoolkit.networkmonitor.ConcurrencyTest.providerConcurrentAccess",
+            )
+            excludeTestsMatching(
+                "io.github.mobilebytelabs.kmptoolkit.networkmonitor.CreateNetworkMonitorSmokeTest.createNetworkMonitorReturnsNonNull",
+            )
+            excludeTestsMatching(
+                "io.github.mobilebytelabs.kmptoolkit.networkmonitor.CreateNetworkMonitorSmokeTest.createNetworkMonitorWithDefaultConfig",
+            )
+            excludeTestsMatching(
+                "io.github.mobilebytelabs.kmptoolkit.networkmonitor.CreateNetworkMonitorSmokeTest.createdMonitorHasValidInitialState",
+            )
+            excludeTestsMatching(
+                "io.github.mobilebytelabs.kmptoolkit.networkmonitor.CreateNetworkMonitorSmokeTest.createdMonitorIsOnlineConsistentWithStatus",
+            )
+            excludeTestsMatching(
+                "io.github.mobilebytelabs.kmptoolkit.networkmonitor.ExtensionsAndProviderTest.provideNetworkMonitorReturnsInstance",
+            )
+            excludeTestsMatching(
+                "io.github.mobilebytelabs.kmptoolkit.networkmonitor.ExtensionsAndProviderTest.provideNetworkMonitorWithConfigReturnsInstance",
+            )
+            excludeTestsMatching(
+                "io.github.mobilebytelabs.kmptoolkit.networkmonitor.ExtensionsAndProviderTest.redundantInstallCountTracksMultipleInstalls",
+            )
+            excludeTestsMatching(
+                "io.github.mobilebytelabs.kmptoolkit.networkmonitor.LeakDetectionTest.providerResetClosesMonitor",
+            )
+            excludeTestsMatching(
+                "io.github.mobilebytelabs.kmptoolkit.networkmonitor.LeakDetectionTest.scopedMonitorClosesOnCancel",
+            )
+            excludeTestsMatching(
+                "io.github.mobilebytelabs.kmptoolkit.networkmonitor.NetworkMonitorProviderTest.getReturnsInstalledMonitor",
+            )
+            excludeTestsMatching(
+                "io.github.mobilebytelabs.kmptoolkit.networkmonitor.NetworkMonitorProviderTest.installReturnsMonitor",
+            )
+            excludeTestsMatching(
+                "io.github.mobilebytelabs.kmptoolkit.networkmonitor.NetworkMonitorProviderTest.installReturnsSameInstanceOnSecondCall",
+            )
+            excludeTestsMatching(
+                "io.github.mobilebytelabs.kmptoolkit.networkmonitor.NetworkMonitorProviderTest.resetAllowsReinstall",
+            )
+            excludeTestsMatching(
+                "io.github.mobilebytelabs.kmptoolkit.networkmonitor.NetworkMonitorProviderTest.scopedMonitorClosesOnScopeCancel",
+            )
+            excludeTestsMatching(
+                "io.github.mobilebytelabs.kmptoolkit.networkmonitor.NetworkMonitorProviderVersionTest.version_does_not_increment_on_redundant_install",
+            )
+            excludeTestsMatching(
+                "io.github.mobilebytelabs.kmptoolkit.networkmonitor.NetworkMonitorProviderVersionTest.version_increments_again_on_install_after_reset",
+            )
+            excludeTestsMatching(
+                "io.github.mobilebytelabs.kmptoolkit.networkmonitor.NetworkMonitorProviderVersionTest.version_increments_on_first_install",
+            )
+            excludeTestsMatching(
+                "io.github.mobilebytelabs.kmptoolkit.networkmonitor.NetworkMonitorProviderVersionTest.version_increments_on_reset",
+            )
+            isFailOnNoMatchingTests = false
+        }
+    }
+}
+
+// Robolectric host-test config — emulated SDK comes from `robolectricSdk` in the version
+// catalog and is code-generated into androidHostTest as `robolectric.ROBOLECTRIC_SDK`, so no
+// test hardcodes an API level.
+apply(from = "$rootDir/robolectric-host-test.gradle.kts")
+kotlin.sourceSets.getByName("androidHostTest").kotlin.srcDir(
+    tasks.named("generateRobolectricSdkConstant"),
+)
