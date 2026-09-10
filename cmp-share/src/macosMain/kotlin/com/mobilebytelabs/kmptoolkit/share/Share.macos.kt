@@ -41,7 +41,6 @@ private const val NS_MIN_Y_EDGE: ULong = 1uL
  * successful popover present; for richer completion tracking, consumers should set
  * `NSSharingServicePickerDelegate` themselves (out of v0.1 scope).
  */
-@ExperimentalShareApi
 public actual object Share {
 
     @OptIn(ExperimentalForeignApi::class)

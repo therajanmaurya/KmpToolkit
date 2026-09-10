@@ -9,51 +9,224 @@ Cross-platform native share sheet for Kotlin Multiplatform — one API, every ta
 ## What It Does
 
 `cmp-share` exposes a single suspending `Share` object that invokes the native share sheet
-on Android/iOS/macOS, falls back to `navigator.share` on JS/wasmJs, and provides a JVM
-best-effort implementation (opens system file manager / mailto).  Share text, URLs, images,
-arbitrary files, or a mixed multi-payload — all through one unified API.
+on Android/iOS/macOS, `navigator.share` on JS/wasmJs, `xdg-open`/`xclip` on Linux, `ShellExecuteW`
+on Windows, and `UIPasteboard` on tvOS. Share text, URLs, images, arbitrary files, or a mixed
+multi-payload — through one unified API, imperatively via `Share` or injected via `ShareManager`.
 
-> **Experimental API**: annotated with `@ExperimentalShareApi`. Opt in with
-> `@OptIn(ExperimentalShareApi::class)` or the compiler flag below.
+> **Stable API.** `@ExperimentalShareApi` is retained as a deprecated no-op so existing
+> `@OptIn(...)` call sites keep compiling; both the annotation and the `-opt-in` compiler flag are
+> now redundant and can be deleted.
 
 ---
 
 ## Platform Support
 
-| Platform | Real impl | `onUnsupported` | Notes |
-|----------|:---------:|:---------------:|-------|
-| Android  | ✅        | —               | ACTION_SEND / ACTION_SEND_MULTIPLE via Chooser |
-| iOS      | ✅        | —               | UIActivityViewController |
-| macOS    | ✅        | —               | NSSharingServicePicker |
-| JVM      | ✅ best-effort | —          | Desktop.open() / mailto for URLs; file-manager for files |
-| JS       | ✅        | —               | `navigator.share()` (HTTPS + user gesture required) |
-| wasmJs   | ✅        | —               | `navigator.share()` (same constraints as JS) |
-| tvOS     | ⚠ UnsupportedPlatform | ✅ | tvOS lacks UIActivityViewController; K/N bindings also omit UIPasteboard (v3.3.0 limitation) |
-| watchOS  | ⚠ UnsupportedPlatform | ✅ | No share-sheet surface; handoff-to-iPhone via WCSession is v0.3 candidate |
-| Linux    | ✅ URL/file via xdg-open | ✅ | Requires `xdg-utils`. Text/image/multi onUnsupported |
-| mingw    | ✅ URL/file via `cmd /c start` | ✅ | Default Windows handler resolution. Text/image/multi onUnsupported |
-| wasmWasi | ⛔ out-of-scope | —          | No DOM, no clipboard, no UI gesture surface — server-side WASM only |
+**21 targets — the full KMP matrix.** This table is mirrored in code as
+`platformShareCapabilities`, so it cannot drift from behaviour:
 
-> **v0.2 update (v3.3.0):** tier-3 targets are no longer hard-excluded. Linux + mingw
-> ship real URL-share implementations; tvOS/watchOS ship documented `UnsupportedPlatform`
-> fallbacks (the same `onUnsupported { }` hook callers already use on JS/wasmJs is honored).
-> `wasmWasi` stays out-of-scope — the constraint is genuine, not effort-based.
+| Target | text | url | image | file | multi | How |
+|---|:--:|:--:|:--:|:--:|:--:|---|
+| Android | ✅ | ✅ | ✅ | ✅ | ✅ | `ACTION_SEND` / `ACTION_SEND_MULTIPLE` chooser; FileProvider grants the URI |
+| iOS ×3 | ✅ | ✅ | ✅ | ✅ | ✅ | `UIActivityViewController` |
+| macOS ×2 | ✅ | ✅ | ✅ | ✅ | ✅ | `NSSharingServicePicker` |
+| JVM | ✅ | ✅ | ✅ | ✅ | ✅ | Native `open`/`xdg-open`/`cmd /c start`, else AWT clipboard + save dialog |
+| Linux ×2 | ✅ | ✅ | ✅ | ✅ | ✅ | `xdg-open` for links/files, `xclip` for text, temp file for images |
+| Windows | ✅ | ✅ | ✅¹ | ✅¹ | ✅ | `ShellExecuteW` for links; clipboard for text, file paths and temp-written images |
+| JS / wasmJs | ✅ | ✅ | ✅² | ✅¹ | ✅ | `navigator.share`; clipboard fallback carries text, links and file URIs |
+| watchOS ×5 | ✅³ | ✅³ | ❌ | ❌ | ✅ | `WCSession` handoff — the paired iPhone raises the real share sheet |
+| tvOS ×3 | ⚙️ | ⚙️ | ⚙️ | ⚙️ | ⚙️ | App-supplied `TvosShare.handler` — see below |
+| wasmWasi | ✅ | ✅ | ✅ | ✅ | ✅ | `WasiShare` host bridge, stdout by default — see below |
+
+¹ Degrades to the clipboard: the path or URI is copied so you can paste it anywhere. Windows
+images are written to `%TEMP%` first.
+² Web Share Level 2, checked with `canShare` per call; older browsers report `NoHandler`.
+³ Delivered to the paired iPhone; `NoHandler` when `WCSession` is unreachable.
+⚙️ Depends on registration — `None` until the app sets a handler, then `Full`.
+
+### The rule this table follows
+
+**A missing OS API is a design problem, not a verdict.** Where a platform has no share sheet, the
+library degrades to the best real mechanism it has — clipboard, temp file, host bridge — and says
+which. What it never does is silently succeed while doing nothing.
+
+That rule caught a live bug: tvOS used to probe for an Objective-C bridge class and return
+`Completed` **without dispatching anything**, so callers were told the share worked while nothing
+happened. It now routes to a handler whose return value is the truth.
+
+### tvOS — you decide what sharing means
+
+tvOS ships **no** `UIActivityViewController` and **no** `UIPasteboard`. That is not a
+Kotlin/Native binding gap; Apple does not include them in the tvOS SDK (verified by compiling
+against it). There is no OS-level "hand this to another app" on tvOS at all.
+
+What a tvOS app *can* do is act on the content: show a QR code, display a pairing code, push to a
+companion phone app, call a backend. So cmp-share hands it to you:
+
+```kotlin
+TvosShare.handler = { item ->
+    when (item.kind) {
+        "url", "text" -> { showQrCodeOverlay(item.value!!); true }
+        else -> false                     // -> ShareResult.Failed(NoHandler)
+    }
+}
+```
+
+Capabilities are **dynamic** here: `None` until a handler is registered, `Full` after — so
+`supports()` is honest and a UI can hide its share button until the app can actually honour it.
+
+### wasmWasi — the host is the destination
+
+WASI is a sandboxed, headless system interface: no DOM, no clipboard, no window manager, no user
+to present a chooser to. It does not follow that sharing is impossible, only that **the sandbox is
+not the destination**. The one reachable "somewhere else" is whatever embedded the module, and
+WASI can always reach that.
+
+Register a handler, or use the zero-config default — every item is buffered in `outbox` and echoed
+to stdout as one parseable line, so a host that only reads process output still receives it:
+
+```kotlin
+WasiShare.handler = { item -> hostQueue.publish(item.kind, item.value, item.bytes); true }
+
+// or, with no setup at all:
+Share.text("hello")
+WasiShare.drain().single().value          // "hello"
+```
+
+Both tvOS and wasmWasi deliver `HostShareItem`s — bundles arrive flattened, so a host never
+unpacks a nested structure.
+
+### watchOS
+
+All five architectures build. Text and links are handed to the paired iPhone via
+`WCSession.transferUserInfo`; your companion iOS app reads the `{kind, type, value}` dictionary and
+presents `UIActivityViewController`.
+
+Binary payloads are not carried. The temp-file write that binary handoff needs goes through
+`NSData`/`fwrite` signatures whose bit width differs between 32-bit `watchosArm32` and the 64-bit
+watch targets, and Kotlin/Native will not compile one source set spanning both. Dropping
+`watchosArm32` would unblock it — a trade against legacy Apple Watch support, not an oversight.
+
+### One DI caveat
+
+`shareModule` ships on **20 of 21** targets: koin-core publishes no wasmWasi variant.
+`ShareManager`, `ShareManagerImpl` and `ShareCapabilities` are on all 21 — only the Koin binding is
+absent there, and you can construct `ShareManagerImpl()` directly.
 
 ---
 
 ## Quick Start
 
+No opt-in required — cmp-share is a stable API.
+
 ```kotlin
-@OptIn(ExperimentalShareApi::class)
 suspend fun onShareClicked() {
-    val result = Share.text("Check out KMP Toolkit!")
-    when (result) {
-        is ShareResult.Completed -> println("Shared successfully")
+    when (val result = Share.text("Check out KMP Toolkit!")) {
+        is ShareResult.Completed -> println("Shared")
         is ShareResult.Cancelled -> println("User cancelled")
-        is ShareResult.Failed    -> println("Error: ${result.cause}")
+        is ShareResult.Failed -> println("Error: ${result.cause}")
     }
 }
 ```
+
+---
+
+## Injecting it — `ShareManager`
+
+`Share` is an `expect object`, which means code calling it directly cannot be tested without a real
+share sheet and cannot be decorated. `ShareManager` is the same capability behind an injectable
+type:
+
+```kotlin
+class ReportViewModel(private val share: ShareManager) : ViewModel() {
+    fun export(uri: String) = viewModelScope.launch {
+        share.shareFile(uri, "application/pdf", message = "Latest report")
+    }
+}
+```
+
+`shareFile(..., message = ...)` is the call that used to force callers to assemble a
+`SharePayload.Multi` by hand.
+
+### With Koin
+
+```kotlin
+startKoin { modules(shareModule, appModule) }
+```
+
+`shareModule` binds `ShareManager` to `ShareManagerImpl` as a `single` — it is stateless.
+
+### With anything else
+
+Nothing in cmp-share requires Koin except `di/ShareModule.kt`. Construct `ShareManagerImpl()` and
+register it against `ShareManager` in Hilt, Kodein or your own container.
+
+---
+
+## Compose — `cmp-share-compose`
+
+```kotlin
+val share = rememberShareManager()
+val scope = rememberCoroutineScope()
+
+Button(onClick = { scope.launch { share.shareUrl(article.url) } }) { Text("Share") }
+```
+
+`rememberShareManager()` works with **no setup** — unlike `LocalNetworkMonitor`, reading
+`LocalShareManager` without a provider returns a real `ShareManagerImpl` rather than throwing,
+because sharing is stateless and zero-config everywhere. Provide your own to substitute one:
+
+```kotlin
+val share: ShareManager = koinInject()
+ProvideShareManager(share) { App() }
+```
+
+### Sharing what is on screen
+
+```kotlin
+val graphicsLayer = rememberGraphicsLayer()
+scope.launch { share.shareImage("sales-q3", graphicsLayer.toImageBitmap()) }
+```
+
+`ImageBitmap` encoding lives here rather than in the headless artifact — Android uses its own PNG
+codec, every other Compose target goes through Skia.
+
+---
+
+## Asking before you offer
+
+Rendering a share button that fails once tapped is worse than not rendering it:
+
+```kotlin
+if (rememberShareCapabilities().file) {
+    IconButton(onClick = ::exportPdf) { Icon(Icons.Default.Share, null) }
+}
+```
+
+Outside Compose, `manager.supports(payload)` answers the same question for a specific payload,
+including bundles — a `SharePayload.Multi` is supported only when bundling *and* every item in it
+is.
+
+---
+
+## Testing
+
+`FakeShareManager` ships in the main artifact, so no extra test dependency is needed:
+
+```kotlin
+val share = FakeShareManager()
+ReportViewModel(share).export("file:///report.pdf")
+
+assertIs<SharePayload.Multi>(share.recorded.single().payload)
+```
+
+Pin the platform to assert capability-dependent UI without running on that platform:
+
+```kotlin
+val tv = FakeShareManager(capabilities = ShareCapabilities.TextAndUrlOnly)
+assertFalse(tv.supports(SharePayload.File("file:///a.pdf", "application/pdf")))
+```
+
+Drive failure paths with `scriptError(ShareError.UserGestureMissing)`.
 
 ---
 
@@ -62,7 +235,6 @@ suspend fun onShareClicked() {
 ### `Share` expect object
 
 ```kotlin
-@ExperimentalShareApi
 expect object Share {
     suspend fun share(
         payload: SharePayload,

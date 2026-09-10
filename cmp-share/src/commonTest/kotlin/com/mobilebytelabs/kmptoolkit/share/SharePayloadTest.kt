@@ -19,7 +19,6 @@ import kotlin.test.assertTrue
  * commonMain DSL + payload-shape tests. Per-platform `share()` invocations are
  * tested via instrumentation in sub-plan 07.
  */
-@OptIn(ExperimentalShareApi::class)
 class SharePayloadTest {
 
     @Test

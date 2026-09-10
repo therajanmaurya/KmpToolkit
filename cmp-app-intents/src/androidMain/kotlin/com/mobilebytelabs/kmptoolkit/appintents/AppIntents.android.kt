@@ -22,7 +22,6 @@ package com.mobilebytelabs.kmptoolkit.appintents
  * full receiver impl lands in sub-plan 06 follow-up; v0.1 here covers the runtime registry
  * + invokeForTesting helper.)
  */
-@ExperimentalAppIntentsApi
 public actual object AppIntents {
     public actual fun register(config: AppIntentsConfig) {
         AppIntentsRuntime.register(config)

@@ -24,7 +24,6 @@ import kotlin.test.assertNotNull
  * JVM JFileChooser, JS showSaveFilePicker) is exercised by per-platform test source
  * sets — see [SystemIntentsJvmTest] for the headless-JVM smoke check.
  */
-@OptIn(ExperimentalIntentLauncherApi::class)
 class SystemIntentsContractTest {
 
     @Test

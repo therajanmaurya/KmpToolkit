@@ -33,4 +33,9 @@ internal class WasmWasiClipboardMonitor : ClipboardMonitor {
     override fun addFilter(filter: ClipboardFilter) {}
 }
 
-actual fun createClipboardMonitor(): ClipboardMonitor = WasmWasiClipboardMonitor()
+/**
+ * There is no system clipboard on this target, so the monitor watches [InAppClipboard] instead —
+ * see [InAppClipboardMonitor]. The previous implementation's `start()` did nothing, leaving the
+ * state machine stuck on Idle and failing the shared monitor tests in commonTest.
+ */
+actual fun createClipboardMonitor(): ClipboardMonitor = InAppClipboardMonitor()

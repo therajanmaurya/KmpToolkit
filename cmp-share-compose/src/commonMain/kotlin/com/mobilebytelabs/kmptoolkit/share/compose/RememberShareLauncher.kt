@@ -11,7 +11,6 @@ package com.mobilebytelabs.kmptoolkit.share.compose
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.mobilebytelabs.kmptoolkit.share.ExperimentalShareApi
 import com.mobilebytelabs.kmptoolkit.share.Share
 
 /**
@@ -37,5 +36,4 @@ import com.mobilebytelabs.kmptoolkit.share.Share
  * imperative `Share` object directly (Compose Multiplatform doesn't support those targets).
  */
 @Composable
-@ExperimentalShareApi
 public fun rememberShareLauncher(): Share = remember { Share }

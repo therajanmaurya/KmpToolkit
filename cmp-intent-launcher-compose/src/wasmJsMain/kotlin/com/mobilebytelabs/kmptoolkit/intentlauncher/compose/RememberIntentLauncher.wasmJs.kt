@@ -11,9 +11,7 @@ package com.mobilebytelabs.kmptoolkit.intentlauncher.compose
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.mobilebytelabs.kmptoolkit.intentlauncher.ExperimentalIntentLauncherApi
 import com.mobilebytelabs.kmptoolkit.intentlauncher.IntentLauncher
 
-@ExperimentalIntentLauncherApi
 @Composable
 public actual fun rememberIntentLauncher(): IntentLauncher = remember { IntentLauncher() }

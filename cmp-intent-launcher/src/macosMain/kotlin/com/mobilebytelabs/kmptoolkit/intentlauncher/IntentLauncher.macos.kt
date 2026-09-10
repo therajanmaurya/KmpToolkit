@@ -24,7 +24,6 @@ import platform.Foundation.NSURL
  * - Arbitrary http/https/file URI → `NSWorkspace.sharedWorkspace.openURL`
  */
 @OptIn(kotlinx.cinterop.ExperimentalForeignApi::class)
-@ExperimentalIntentLauncherApi
 public actual class IntentLauncher public constructor() {
     public actual suspend fun launch(block: IntentBuilder.() -> Unit): IntentResult {
         val builder = IntentBuilder().apply(block)

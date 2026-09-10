@@ -27,7 +27,6 @@ import kotlin.test.assertNotNull
  * assert the return type is `IntentResult` — the per-environment exit code is
  * non-deterministic.
  */
-@OptIn(ExperimentalIntentLauncherApi::class)
 class SystemIntentsJvmTest {
 
     @Test

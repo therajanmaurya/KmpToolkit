@@ -58,7 +58,16 @@ kotlin {
 
         withJava()
 
-        withHostTestBuilder {}.configure {}
+        withHostTestBuilder {}.configure {
+            // android.jar in a JVM host test is a stub whose methods THROW by default, so a
+            // framework call aborts a test even when the code under test handled it correctly.
+            isReturnDefaultValues = true
+
+            // Robolectric reads the MERGED manifest/resources; without this the ui-test-manifest
+            // activity Compose's ActivityScenario launches is invisible and every UI test dies
+            // with "Unable to resolve activity for Intent { MAIN }".
+            isIncludeAndroidResources = true
+        }
 
         withDeviceTestBuilder {
             sourceSetTreeName = "test"
@@ -99,11 +108,28 @@ kotlin {
 
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+            // Real composition testing — the CompositionLocal defaults and overrides asserted
+            // here are unobservable from a direct function call.
+            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+            implementation(compose.uiTest)
             implementation(libs.kotlinx.coroutines.test)
+        }
+
+        jvmTest.dependencies {
+            // Skiko's renderer, required for runComposeUiTest on JVM/desktop.
+            implementation(compose.desktop.currentOs)
         }
 
         androidMain.dependencies {
             implementation(libs.androidx.activity.compose)
+        }
+
+        // getByName: the com.android.kotlin.multiplatform.library plugin does not generate a
+        // typed `androidHostTest` accessor the way it does for commonTest/jvmTest.
+        getByName("androidHostTest").dependencies {
+            implementation(libs.robolectric)
+            implementation(libs.junit)
+            implementation(libs.androidx.compose.ui.test.manifest)
         }
     }
 }
@@ -159,3 +185,9 @@ mavenPublishing {
 
 // Library Runtime Observability — auto-generate CmpMetadata.kt for cmp-observe hooks (epic 2026-05-30)
 apply(from = "$rootDir/cmp-observe-metadata.gradle.kts")
+
+// Generates robolectric.ROBOLECTRIC_SDK from the version catalog for androidHostTest.
+apply(from = "$rootDir/robolectric-host-test.gradle.kts")
+kotlin.sourceSets.getByName("androidHostTest").kotlin.srcDir(
+    tasks.named("generateRobolectricSdkConstant"),
+)

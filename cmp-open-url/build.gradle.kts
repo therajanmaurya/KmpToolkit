@@ -80,6 +80,15 @@ kotlin {
     tvosArm64()
     tvosSimulatorArm64()
 
+    // watchOS — `WKExtension.openSystemURL` routes http/https to the paired iPhone and handles
+    // tel/sms/mailto on the watch. The actual existed in src/watchosMain but no target was
+    // declared, so it had never been compiled.
+    watchosX64()
+    watchosArm32()
+    watchosArm64()
+    watchosSimulatorArm64()
+    watchosDeviceArm64()
+
     // ========================================================================
     // watchOS Targets
     // ========================================================================
@@ -132,6 +141,19 @@ kotlin {
     // Source Sets Configuration
     // ========================================================================
     sourceSets {
+        // koin-core publishes every target this module builds EXCEPT wasmWasi, so the Koin
+        // binding lives in an intermediate source set spanning the other 20. Same as cmp-share.
+        val koinMain = create("koinMain").apply { dependsOn(getByName("commonMain")) }
+        val koinTest = create("koinTest").apply { dependsOn(getByName("commonTest")) }
+        listOf("jvmMain", "androidMain", "appleMain", "linuxMain", "mingwMain", "jsMain", "wasmJsMain")
+            .forEach { getByName(it).dependsOn(koinMain) }
+        listOf("jvmTest", "appleTest", "linuxTest", "mingwTest", "jsTest", "wasmJsTest")
+            .forEach { getByName(it).dependsOn(koinTest) }
+
+        koinMain.dependencies {
+            implementation(libs.koin.core)
+        }
+
         commonMain.dependencies {
             // No external dependencies — uses only platform APIs
         }

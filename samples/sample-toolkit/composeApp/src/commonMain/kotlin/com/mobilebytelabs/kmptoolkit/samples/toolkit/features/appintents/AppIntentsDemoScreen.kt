@@ -1,7 +1,6 @@
 /*
  * Copyright 2026 MobileByteLabs · Apache 2.0
  */
-@file:OptIn(com.mobilebytelabs.kmptoolkit.appintents.ExperimentalAppIntentsApi::class)
 
 package com.mobilebytelabs.kmptoolkit.samples.toolkit.features.appintents
 

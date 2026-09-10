@@ -28,7 +28,6 @@ import kotlin.js.json
  * handler. Browsers reject `navigator.share()` outside a user-activation call stack.
  * Returns [ShareError.UserGestureMissing] on `NotAllowedError` from the browser.
  */
-@ExperimentalShareApi
 public actual object Share {
 
     public actual suspend fun share(payload: SharePayload, options: ShareOptions): ShareResult {
@@ -113,7 +112,8 @@ public actual object Share {
                     when (item) {
                         is SharePayload.Text -> parts.add(item.content)
                         is SharePayload.Url -> parts.add(item.href)
-                        else -> { /* skip image/file in Multi for v0.1 */ }
+                        is SharePayload.File -> parts.add(item.uri)
+                        else -> { /* image bytes have no text form */ }
                     }
                 }
                 if (parts.isNotEmpty()) {
@@ -130,7 +130,14 @@ public actual object Share {
 
         is SharePayload.Url -> payload.href
 
-        is SharePayload.Image, is SharePayload.File -> null
+        // A File cannot go through the Web Share API (it wants File objects, and fetching the
+        // URI needs CORS permission the library cannot assume) — but the URI itself is text, so
+        // it goes on the clipboard and the user can paste it anywhere. That beats refusing.
+        is SharePayload.File -> payload.uri
+
+        // Image is bytes; there is no text form worth pasting. The Web Share Level 2 path above
+        // is the only route, and it reports NoHandler when the browser lacks it.
+        is SharePayload.Image -> null
 
         is SharePayload.Multi -> payload.items.mapNotNull { payloadAsText(it) }
             .takeIf { it.isNotEmpty() }?.joinToString("\n")

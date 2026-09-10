@@ -19,7 +19,6 @@ import kotlin.test.assertNull
  * commonMain DSL builder + ResultContracts tests.
  * Per-platform `.launch()` invocations tested via instrumentation in sub-plan 07.
  */
-@OptIn(ExperimentalIntentLauncherApi::class)
 class IntentBuilderTest {
 
     @Test

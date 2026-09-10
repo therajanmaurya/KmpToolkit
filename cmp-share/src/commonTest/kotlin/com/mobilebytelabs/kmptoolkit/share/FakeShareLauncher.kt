@@ -12,7 +12,6 @@ package com.mobilebytelabs.kmptoolkit.share
 /**
  * Captured share() call (payload + options snapshot).
  */
-@ExperimentalShareApi
 public data class ShareAttempt(val payload: SharePayload, val options: ShareOptions)
 
 /**
@@ -44,7 +43,6 @@ public data class ShareAttempt(val payload: SharePayload, val options: ShareOpti
  *
  * Authored 2026-06-01 by cmp-intent-share-coverage-trueup sub-plan 03.
  */
-@ExperimentalShareApi
 public class FakeShareLauncher {
     public val shareHistory: MutableList<ShareAttempt> = mutableListOf()
     private val scriptQueue: ArrayDeque<ShareResult> = ArrayDeque()

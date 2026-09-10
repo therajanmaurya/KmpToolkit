@@ -74,6 +74,24 @@ kotlin {
     macosX64()
     macosArm64()
 
+    // tvOS / watchOS / Linux / Windows / WASI — no HTML renderer exists on any of them, which is
+    // why this module shipped on 9 targets while the rest of the toolkit reached 21. They share a
+    // single `fallbackMain` actual built on TextPdfWriter: PDF is a file format, so emitting one
+    // needs no OS service, only the absence of HTML layout.
+    tvosX64()
+    tvosArm64()
+    tvosSimulatorArm64()
+
+    watchosX64()
+    watchosArm32()
+    watchosArm64()
+    watchosSimulatorArm64()
+    watchosDeviceArm64()
+
+    linuxX64()
+    linuxArm64()
+    mingwX64()
+
     js {
         browser {
             testTask {
@@ -88,16 +106,99 @@ kotlin {
         nodejs()
     }
 
+    wasmWasi {
+        nodejs()
+    }
+
     compilerOptions {
         freeCompilerArgs.add("-Xexpect-actual-classes")
     }
 
     sourceSets {
+        // One actual for every target with no HTML renderer. tvOS and watchOS also sit under
+        // appleMain (from the default hierarchy), which is fine — a source set may depend on more
+        // than one parent.
+        val fallbackMain = create("fallbackMain").apply { dependsOn(getByName("commonMain")) }
+        listOf(
+            "tvosMain",
+            "watchosMain",
+            "linuxMain",
+            "mingwMain",
+            "wasmWasiMain",
+        ).forEach { getByName(it).dependsOn(fallbackMain) }
+
+        // NSData <-> ByteArray helpers, for the two Apple targets whose renderers need them.
+        // They CANNOT live in appleMain: `NSData.length` is NSUInteger, which is 32-bit on
+        // watchOS (arm64_32 is an ILP32 ABI) and 64-bit on iOS/macOS, and Kotlin/Native rejects a
+        // source set spanning both widths. Scoping them here is what lets watchOS join the matrix
+        // at all — it reaches PDF generation through fallbackMain, which touches no NSData.
+        val darwinDocMain = create("darwinDocMain").apply { dependsOn(getByName("commonMain")) }
+        listOf("iosMain", "macosMain").forEach { getByName(it).dependsOn(darwinDocMain) }
+
+        // `kotlinx-html` does not publish for wasmWasi, and the HTML compiler / templates are the
+        // only things that use it. Moving them here keeps wasmWasi in the matrix with the parts
+        // that ARE portable — the PdfDocument DSL and TextPdfWriter — which is the combination a
+        // server-side WASI report generator actually needs.
+        val htmlMain = create("htmlMain").apply { dependsOn(getByName("commonMain")) }
+        val htmlTest = create("htmlTest").apply { dependsOn(getByName("commonTest")) }
+        listOf(
+            "androidMain",
+            "appleMain",
+            "jsMain",
+            "jvmMain",
+            "linuxMain",
+            "mingwMain",
+            "wasmJsMain",
+        ).forEach { getByName(it).dependsOn(htmlMain) }
+        listOf(
+            "iosTest",
+            "jsTest",
+            "jvmTest",
+            "linuxTest",
+            "macosTest",
+            "mingwTest",
+            "wasmJsTest",
+        ).forEach { getByName(it).dependsOn(htmlTest) }
+
+        htmlMain.dependencies {
+            implementation(libs.kotlinx.html)
+        }
+
+        // `org.jetbrains:markdown` does not publish for tvOS device/x64, watchOS or wasmWasi, so
+        // the Markdown adapter lives in a source set covering only the targets it can reach.
+        // Moving the dependency rather than dropping the targets keeps Markdown->PDF available
+        // everywhere it was before and adds plain PDF generation everywhere else.
+        // Depends on htmlMain, not commonMain: the Markdown adapter renders through
+        // HtmlTemplateGenerator, and markdown's target set is a subset of kotlinx-html's.
+        val markdownMain = create("markdownMain").apply { dependsOn(htmlMain) }
+        val markdownTest = create("markdownTest").apply { dependsOn(htmlTest) }
+        listOf(
+            "androidMain",
+            "iosMain",
+            "jsMain",
+            "jvmMain",
+            "linuxMain",
+            "macosMain",
+            "mingwMain",
+            "wasmJsMain",
+        ).forEach { getByName(it).dependsOn(markdownMain) }
+        listOf(
+            "iosTest",
+            "jsTest",
+            "jvmTest",
+            "linuxTest",
+            "macosTest",
+            "mingwTest",
+            "wasmJsTest",
+        ).forEach { getByName(it).dependsOn(markdownTest) }
+
+        markdownMain.dependencies {
+            implementation(libs.markdown)
+        }
+
         commonMain.dependencies {
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.datetime)
-            implementation(libs.kotlinx.html)
-            implementation(libs.markdown)
         }
 
         commonTest.dependencies {

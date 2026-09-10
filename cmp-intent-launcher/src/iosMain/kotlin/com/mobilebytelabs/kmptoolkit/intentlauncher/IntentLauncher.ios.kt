@@ -55,7 +55,6 @@ import kotlin.coroutines.resume
  * provide an explicit `presentingController` extra (deferred to v0.3 — same hook the
  * cmp-share API exposes today via `ShareOptions.presentingController`).
  */
-@ExperimentalIntentLauncherApi
 public actual class IntentLauncher public constructor() {
 
     public actual suspend fun launch(block: IntentBuilder.() -> Unit): IntentResult {

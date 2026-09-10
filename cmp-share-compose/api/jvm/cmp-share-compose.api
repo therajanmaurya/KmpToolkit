@@ -4,12 +4,24 @@ public final class com/mobilebytelabs/kmptoolkit/share/compose/ComposableSinglet
 	public final fun getLambda$2116196175$io_github_mobilebytelabs_cmp_share_compose ()Lkotlin/jvm/functions/Function3;
 }
 
+public final class com/mobilebytelabs/kmptoolkit/share/compose/LocalShareManagerKt {
+	public static final fun ProvideShareManager (Lcom/mobilebytelabs/kmptoolkit/share/ShareManager;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;I)V
+	public static final fun getLocalShareManager ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+	public static final fun rememberShareCapabilities (Landroidx/compose/runtime/Composer;I)Lcom/mobilebytelabs/kmptoolkit/share/ShareCapabilities;
+	public static final fun rememberShareManager (Landroidx/compose/runtime/Composer;I)Lcom/mobilebytelabs/kmptoolkit/share/ShareManager;
+}
+
 public final class com/mobilebytelabs/kmptoolkit/share/compose/RememberShareLauncherKt {
 	public static final fun rememberShareLauncher (Landroidx/compose/runtime/Composer;I)Lcom/mobilebytelabs/kmptoolkit/share/Share;
 }
 
 public final class com/mobilebytelabs/kmptoolkit/share/compose/ShareButtonKt {
 	public static final fun ShareButton (Lcom/mobilebytelabs/kmptoolkit/share/SharePayload;Landroidx/compose/ui/Modifier;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/jvm/functions/Function1;Ljava/lang/String;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class com/mobilebytelabs/kmptoolkit/share/compose/ShareImageBitmapKt {
+	public static final fun shareImage (Lcom/mobilebytelabs/kmptoolkit/share/ShareManager;Ljava/lang/String;Landroidx/compose/ui/graphics/ImageBitmap;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun shareImage$default (Lcom/mobilebytelabs/kmptoolkit/share/ShareManager;Ljava/lang/String;Landroidx/compose/ui/graphics/ImageBitmap;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 }
 
 public final class com/mobilebytelabs/kmptoolkit/share/compose/ShareSheetKt {

@@ -29,31 +29,31 @@ commonMain.dependencies {
 
 ---
 
-## Step 2 — Opt in to the Experimental Marker
+## Step 2 — Register your intents
 
-### Per call-site (recommended)
+No opt-in is required — cmp-app-intents is stable. `@ExperimentalAppIntentsApi` survives as a
+deprecated no-op so older call sites still compile; delete any `@OptIn(...)` and any
+`-opt-in=...ExperimentalAppIntentsApi` compiler flag you already have.
 
-```kotlin
-@OptIn(ExperimentalAppIntentsApi::class)
-fun initIntents() {
-    AppIntents.register(appIntents { /* ... */ })
-}
-```
-
-### Project-wide (all modules)
+Depend on `AppIntentsManager` rather than the `AppIntents` object, so the registration is fakeable
+and you can read how far it reaches:
 
 ```kotlin
-// shared/build.gradle.kts
-kotlin {
-    compilerOptions {
-        freeCompilerArgs.addAll(
-            "-opt-in=com.mobilebytelabs.kmptoolkit.appintents.ExperimentalAppIntentsApi"
-        )
+startKoin { modules(appIntentsModule, appModule) }
+
+class AppStartup(private val intents: AppIntentsManager) {
+    fun onCreate() {
+        intents.register {
+            intent("add_task") {
+                title = "Add task"
+                parameter("text", ParamType.Text)
+                perform { p -> repo.add(p["text"] as String); AppIntentResult.Done }
+            }
+        }
+        if (intents.reachesOs()) showVoiceOnboarding()
     }
 }
 ```
-
----
 
 ## Step 3 — Register Intents at App Startup
 
@@ -61,7 +61,6 @@ Call `AppIntents.register(...)` from your shared `App()` init path (e.g. in
 `application {}` block or `App.kt` `init` block):
 
 ```kotlin
-@OptIn(ExperimentalAppIntentsApi::class)
 fun initApp() {
     AppIntents.register(
         appIntents {
@@ -93,7 +92,6 @@ fun initApp() {
 ### Testing intents without a device
 
 ```kotlin
-@OptIn(ExperimentalAppIntentsApi::class)
 suspend fun testIntent() {
     val result = AppIntents.invokeForTesting(
         id = "get_balance",

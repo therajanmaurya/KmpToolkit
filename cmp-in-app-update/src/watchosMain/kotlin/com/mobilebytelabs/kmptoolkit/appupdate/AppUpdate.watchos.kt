@@ -1,6 +1,8 @@
 package com.mobilebytelabs.kmptoolkit.appupdate
 
 import platform.Foundation.NSBundle
+import platform.Foundation.NSURL
+import platform.WatchKit.WKExtension
 
 /**
  * watchOS implementation of AppUpdate.
@@ -56,9 +58,21 @@ actual object AppUpdate {
     }
 
     /**
-     * Returns false as watchOS doesn't support opening App Store for updates.
+     * Hand this app's App Store page to the paired iPhone.
+     *
+     * watchOS cannot show the App Store itself, but `WKExtension.openSystemURL` routes an
+     * `https://` link to the paired phone, which opens it — so the user still lands on the right
+     * page. Returning `false` unconditionally, as this used to, gave an app that had detected an
+     * update nowhere to send them.
+     *
+     * A watchOS app shares its iOS App Store listing, so [AppUpdateConfig.iosAppStoreId] is the id.
      */
-    actual fun openStoreForUpdate(config: AppUpdateConfig): Boolean = false
+    actual fun openStoreForUpdate(config: AppUpdateConfig): Boolean {
+        val appId = config.iosAppStoreId?.takeIf { it.isNotBlank() } ?: return false
+        val url = NSURL.URLWithString("https://apps.apple.com/app/id$appId") ?: return false
+        WKExtension.sharedExtension().openSystemURL(url)
+        return true
+    }
 
     /**
      * In-app updates are not supported on watchOS.

@@ -1,10 +1,52 @@
 public abstract interface annotation class com/mobilebytelabs/kmptoolkit/share/ExperimentalShareApi : java/lang/annotation/Annotation {
 }
 
+public final class com/mobilebytelabs/kmptoolkit/share/HostShareItem {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;[BLjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun encode ()Ljava/lang/String;
+	public final fun getBytes ()[B
+	public final fun getFilename ()Ljava/lang/String;
+	public final fun getKind ()Ljava/lang/String;
+	public final fun getMimeType ()Ljava/lang/String;
+	public final fun getTitle ()Ljava/lang/String;
+	public final fun getValue ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class com/mobilebytelabs/kmptoolkit/share/Share {
 	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/share/Share;
 	public final fun share (Lcom/mobilebytelabs/kmptoolkit/share/SharePayload;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun share$default (Lcom/mobilebytelabs/kmptoolkit/share/Share;Lcom/mobilebytelabs/kmptoolkit/share/SharePayload;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/share/ShareCapabilities {
+	public static final field Companion Lcom/mobilebytelabs/kmptoolkit/share/ShareCapabilities$Companion;
+	public fun <init> (ZZZZZ)V
+	public final fun component1 ()Z
+	public final fun component2 ()Z
+	public final fun component3 ()Z
+	public final fun component4 ()Z
+	public final fun component5 ()Z
+	public final fun copy (ZZZZZ)Lcom/mobilebytelabs/kmptoolkit/share/ShareCapabilities;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/share/ShareCapabilities;ZZZZZILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/share/ShareCapabilities;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFile ()Z
+	public final fun getImage ()Z
+	public final fun getMulti ()Z
+	public final fun getText ()Z
+	public final fun getUrl ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/share/ShareCapabilities$Companion {
+	public final fun getFull ()Lcom/mobilebytelabs/kmptoolkit/share/ShareCapabilities;
+	public final fun getNone ()Lcom/mobilebytelabs/kmptoolkit/share/ShareCapabilities;
+	public final fun getTextAndUrlOnly ()Lcom/mobilebytelabs/kmptoolkit/share/ShareCapabilities;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/share/ShareCapabilities_jvmKt {
+	public static final fun getPlatformShareCapabilities ()Lcom/mobilebytelabs/kmptoolkit/share/ShareCapabilities;
 }
 
 public abstract class com/mobilebytelabs/kmptoolkit/share/ShareError {
@@ -44,6 +86,45 @@ public final class com/mobilebytelabs/kmptoolkit/share/ShareKt {
 	public static synthetic fun text$default (Lcom/mobilebytelabs/kmptoolkit/share/Share;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun url (Lcom/mobilebytelabs/kmptoolkit/share/Share;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun url$default (Lcom/mobilebytelabs/kmptoolkit/share/Share;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
+public abstract interface class com/mobilebytelabs/kmptoolkit/share/ShareManager {
+	public abstract fun getCapabilities ()Lcom/mobilebytelabs/kmptoolkit/share/ShareCapabilities;
+	public abstract fun share (Lcom/mobilebytelabs/kmptoolkit/share/SharePayload;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun share$default (Lcom/mobilebytelabs/kmptoolkit/share/ShareManager;Lcom/mobilebytelabs/kmptoolkit/share/SharePayload;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public fun shareFile (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun shareFile$default (Lcom/mobilebytelabs/kmptoolkit/share/ShareManager;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public fun shareImage ([BLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun shareImage$default (Lcom/mobilebytelabs/kmptoolkit/share/ShareManager;[BLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public fun shareText (Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun shareText$default (Lcom/mobilebytelabs/kmptoolkit/share/ShareManager;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public fun shareUrl (Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun shareUrl$default (Lcom/mobilebytelabs/kmptoolkit/share/ShareManager;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public fun supports (Lcom/mobilebytelabs/kmptoolkit/share/SharePayload;)Z
+}
+
+public final class com/mobilebytelabs/kmptoolkit/share/ShareManager$DefaultImpls {
+	public static synthetic fun share$default (Lcom/mobilebytelabs/kmptoolkit/share/ShareManager;Lcom/mobilebytelabs/kmptoolkit/share/SharePayload;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static fun shareFile (Lcom/mobilebytelabs/kmptoolkit/share/ShareManager;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun shareFile$default (Lcom/mobilebytelabs/kmptoolkit/share/ShareManager;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static fun shareImage (Lcom/mobilebytelabs/kmptoolkit/share/ShareManager;[BLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun shareImage$default (Lcom/mobilebytelabs/kmptoolkit/share/ShareManager;[BLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static fun shareText (Lcom/mobilebytelabs/kmptoolkit/share/ShareManager;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun shareText$default (Lcom/mobilebytelabs/kmptoolkit/share/ShareManager;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static fun shareUrl (Lcom/mobilebytelabs/kmptoolkit/share/ShareManager;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun shareUrl$default (Lcom/mobilebytelabs/kmptoolkit/share/ShareManager;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static fun supports (Lcom/mobilebytelabs/kmptoolkit/share/ShareManager;Lcom/mobilebytelabs/kmptoolkit/share/SharePayload;)Z
+}
+
+public final class com/mobilebytelabs/kmptoolkit/share/ShareManagerImpl : com/mobilebytelabs/kmptoolkit/share/ShareManager {
+	public fun <init> ()V
+	public fun getCapabilities ()Lcom/mobilebytelabs/kmptoolkit/share/ShareCapabilities;
+	public fun share (Lcom/mobilebytelabs/kmptoolkit/share/SharePayload;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun shareFile (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun shareImage ([BLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun shareText (Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun shareUrl (Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun supports (Lcom/mobilebytelabs/kmptoolkit/share/SharePayload;)Z
 }
 
 public final class com/mobilebytelabs/kmptoolkit/share/ShareOptions {
@@ -149,6 +230,40 @@ public final class com/mobilebytelabs/kmptoolkit/share/ShareResult$Failed : com/
 	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/share/ShareResult$Failed;Lcom/mobilebytelabs/kmptoolkit/share/ShareError;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/share/ShareResult$Failed;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getCause ()Lcom/mobilebytelabs/kmptoolkit/share/ShareError;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/share/di/ShareModuleKt {
+	public static final fun getShareModule ()Lorg/koin/core/module/Module;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/share/testing/FakeShareManager : com/mobilebytelabs/kmptoolkit/share/ShareManager {
+	public fun <init> ()V
+	public fun <init> (Lcom/mobilebytelabs/kmptoolkit/share/ShareCapabilities;)V
+	public synthetic fun <init> (Lcom/mobilebytelabs/kmptoolkit/share/ShareCapabilities;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getCapabilities ()Lcom/mobilebytelabs/kmptoolkit/share/ShareCapabilities;
+	public final fun getRecorded ()Ljava/util/List;
+	public final fun reset ()V
+	public final fun scriptError (Lcom/mobilebytelabs/kmptoolkit/share/ShareError;)V
+	public final fun scriptResult (Lcom/mobilebytelabs/kmptoolkit/share/ShareResult;)V
+	public fun share (Lcom/mobilebytelabs/kmptoolkit/share/SharePayload;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun shareFile (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun shareImage ([BLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun shareText (Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun shareUrl (Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun supports (Lcom/mobilebytelabs/kmptoolkit/share/SharePayload;)Z
+}
+
+public final class com/mobilebytelabs/kmptoolkit/share/testing/RecordedShare {
+	public fun <init> (Lcom/mobilebytelabs/kmptoolkit/share/SharePayload;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;)V
+	public final fun component1 ()Lcom/mobilebytelabs/kmptoolkit/share/SharePayload;
+	public final fun component2 ()Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;
+	public final fun copy (Lcom/mobilebytelabs/kmptoolkit/share/SharePayload;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;)Lcom/mobilebytelabs/kmptoolkit/share/testing/RecordedShare;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/share/testing/RecordedShare;Lcom/mobilebytelabs/kmptoolkit/share/SharePayload;Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/share/testing/RecordedShare;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getOptions ()Lcom/mobilebytelabs/kmptoolkit/share/ShareOptions;
+	public final fun getPayload ()Lcom/mobilebytelabs/kmptoolkit/share/SharePayload;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }

@@ -9,37 +9,45 @@
  */
 package com.mobilebytelabs.kmptoolkit.intentlauncher
 
+import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.allocArray
+import kotlinx.cinterop.memScoped
+import kotlinx.cinterop.toKString
+import platform.posix._pclose
+import platform.posix._popen
+import platform.posix.fgets
 import platform.posix.system
 
 /**
- * mingw (Windows) `IntentLauncher` — v0.4 status: **UnsupportedPlatform for picker
- * contracts** + arbitrary URL dispatch via `cmd /c start`.
+ * mingw (Windows) `IntentLauncher` — real file pickers plus arbitrary URL dispatch.
  *
- * The `win32-pickers.def` cinterop (Phase 0 S1.B PROVISIONAL PASS) compiles the .def
- * → klib successfully on macOS-arm64 K/N hosts but the generated bindings do NOT
- * expose `OPENFILENAMEW` / `GetOpenFileNameW` as Kotlin types under the `win32pickers`
- * package — the K/N cinterop parser drops Win32 SDK struct types when run on a
- * non-Windows host (only the `static inline` helper functions are exposed, not the
- * underlying Win32 types they manipulate).
+ * Pickers run through PowerShell's `System.Windows.Forms.OpenFileDialog` over `_popen`, the same
+ * subprocess-dialog approach the Linux actual uses with `zenity` and this module's
+ * [SystemIntents.createDocument] uses for saving. PowerShell ships with Windows, so it needs no
+ * install and, unlike the cinterop route, no Windows build host.
  *
- * The real `GetOpenFileNameW` round-trip requires either:
- * 1. A Windows CI host running the cinterop step (where `windows.h` resolves natively)
- * 2. A cinterop wrapper layer that exposes the OPENFILENAMEW state through helper
- *    functions only, never as a struct (rewrite the .def to be Win32-SDK-opaque)
+ * That cinterop route stayed blocked indefinitely: `win32-pickers.def` compiles to a klib on a
+ * macOS K/N host, but the generated bindings never expose `OPENFILENAMEW` / `GetOpenFileNameW` —
+ * K/N's cinterop parser drops Win32 SDK struct types when `windows.h` is not resolving natively.
+ * Waiting for a Windows CI host meant shipping `UnsupportedPlatform` in the meantime, which is
+ * exactly the outcome worth avoiding when a working mechanism is already at hand.
  *
- * Both deferred to post-v0.4. ADR-09 #8 audit-log updated to reflect: WONTFIX-PROVISIONAL
- * remains in effect; `win32-pickers.def` ships as a future-use artifact.
+ * `PickContact` remains unsupported — Windows has no ambient contact-picker surface to shell out
+ * to, so there is nothing to degrade to.
  */
-@ExperimentalIntentLauncherApi
+@OptIn(ExperimentalForeignApi::class)
 public actual class IntentLauncher public constructor() {
     public actual suspend fun launch(block: IntentBuilder.() -> Unit): IntentResult {
         val builder = IntentBuilder().apply(block)
         return when (val contract = builder.resultContract) {
-            ResultContracts.PickImage,
-            ResultContracts.PickMultipleImages,
-            ResultContracts.PickDocument,
-            ResultContracts.PickContact,
-            -> IntentResult.Failed(IntentError.UnsupportedPlatform)
+            ResultContracts.PickImage -> psOpenDialog(IMAGE_FILTER, multiple = false)
+
+            ResultContracts.PickMultipleImages -> psOpenDialog(IMAGE_FILTER, multiple = true)
+
+            ResultContracts.PickDocument -> psOpenDialog(filterFor(builder.type), multiple = false)
+
+            // No ambient contact picker on Windows — nothing to shell out to.
+            ResultContracts.PickContact -> IntentResult.Failed(IntentError.UnsupportedPlatform)
 
             null -> arbitraryUrl(builder)
 
@@ -62,5 +70,54 @@ public actual class IntentLauncher public constructor() {
         } else {
             IntentResult.Failed(IntentError.Unknown("cmd start exit=$rc"))
         }
+    }
+
+    /**
+     * Show a Windows open-file dialog via PowerShell and return the chosen path(s).
+     *
+     * `$` is escaped throughout — these are PowerShell variables, not Kotlin templates. `-STA`
+     * is required: WinForms dialogs refuse to run on a multi-threaded apartment.
+     */
+    private fun psOpenDialog(filter: String, multiple: Boolean): IntentResult {
+        val script = buildString {
+            append("Add-Type -AssemblyName System.Windows.Forms; ")
+            append("\$d = New-Object System.Windows.Forms.OpenFileDialog; ")
+            append("\$d.Filter = '").append(filter).append("'; ")
+            append("\$d.Multiselect = \$").append(if (multiple) "true" else "false").append("; ")
+            append("if (\$d.ShowDialog() -eq 'OK') { \$d.FileNames -join '|' }")
+        }
+        val cmd = "powershell -NoProfile -NonInteractive -STA -Command \"$script\" 2>NUL"
+
+        val pipe = _popen(cmd, "r") ?: return IntentResult.Failed(IntentError.Unknown("_popen failed"))
+        val line = memScoped {
+            val buf = allocArray<kotlinx.cinterop.ByteVar>(8192)
+            fgets(buf, 8192, pipe)?.toKString()?.trim()
+        }
+        _pclose(pipe)
+
+        if (line.isNullOrEmpty()) return IntentResult.Cancelled
+
+        val uris = line.split('|').filter { it.isNotBlank() }.map { "file:///" + it.replace('\\', '/') }
+        return if (multiple) {
+            IntentResult.Ok(IntentData(uri = uris.firstOrNull(), extras = mapOf("uris" to uris)))
+        } else {
+            IntentResult.Ok(IntentData(uri = uris.firstOrNull()))
+        }
+    }
+
+    /** OpenFileDialog filter for a MIME type, defaulting to "All files". */
+    private fun filterFor(mimeType: String?): String = when (mimeType?.lowercase()) {
+        null, "*/*" -> "All files (*.*)|*.*"
+        "application/pdf" -> "PDF document (*.pdf)|*.pdf|All files (*.*)|*.*"
+        "text/plain" -> "Text file (*.txt)|*.txt|All files (*.*)|*.*"
+        "text/csv" -> "CSV file (*.csv)|*.csv|All files (*.*)|*.*"
+        "application/json" -> "JSON file (*.json)|*.json|All files (*.*)|*.*"
+        else -> if (mimeType.startsWith("image/")) IMAGE_FILTER else "All files (*.*)|*.*"
+    }
+
+    private companion object {
+        const val IMAGE_FILTER: String =
+            "Image files (*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.webp)|*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.webp|" +
+                "All files (*.*)|*.*"
     }
 }

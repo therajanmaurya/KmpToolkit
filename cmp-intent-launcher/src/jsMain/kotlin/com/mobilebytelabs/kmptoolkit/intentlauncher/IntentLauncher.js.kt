@@ -19,7 +19,6 @@ import kotlin.coroutines.resume
  * call stack. Browsers reject programmatic `<input>.click()` outside a user-activation
  * context. Returns `IntentResult.Failed(IntentError.UserGestureMissing)` on browser block.
  */
-@ExperimentalIntentLauncherApi
 public actual class IntentLauncher public constructor() {
     public actual suspend fun launch(block: IntentBuilder.() -> Unit): IntentResult {
         val builder = IntentBuilder().apply(block)
@@ -36,7 +35,28 @@ public actual class IntentLauncher public constructor() {
                 contract == ResultContracts.PickMultipleImages,
             )
 
+            // A plain launch with a URI is the commonest intent there is, and a browser can
+            // obviously honour it — this used to fall through to UnsupportedPlatform.
+            null -> openUri(builder)
+
             else -> builder.onUnsupportedHandler?.invoke() ?: IntentResult.Failed(IntentError.UnsupportedPlatform)
+        }
+    }
+
+    /**
+     * Open [IntentBuilder.data] in a new tab.
+     *
+     * `window.open` returns `null` when a popup blocker intervenes, which happens outside a user
+     * gesture — reported as [IntentError.UserGestureMissing] to match how the file picker
+     * classifies the same condition, rather than as a generic failure.
+     */
+    private fun openUri(builder: IntentBuilder): IntentResult {
+        val uri = builder.data ?: return IntentResult.Failed(IntentError.NoHandler)
+        val opened = kotlinx.browser.window.open(uri, "_blank")
+        return if (opened != null) {
+            IntentResult.Ok(IntentData(uri = uri))
+        } else {
+            IntentResult.Failed(IntentError.UserGestureMissing)
         }
     }
 

@@ -25,7 +25,6 @@ import kotlin.test.assertTrue
  *
  * Authored 2026-06-01 by cmp-intent-share-coverage-trueup sub-plan 03.
  */
-@OptIn(ExperimentalIntentLauncherApi::class)
 class IntentLauncherContractTest {
 
     // ---- launch() result-typing contract ---------------------------------------------------

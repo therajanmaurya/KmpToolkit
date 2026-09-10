@@ -11,7 +11,6 @@ package com.mobilebytelabs.kmptoolkit.appintents.compose
 
 import com.mobilebytelabs.kmptoolkit.appintents.AppIntentResult
 import com.mobilebytelabs.kmptoolkit.appintents.AppIntents
-import com.mobilebytelabs.kmptoolkit.appintents.ExperimentalAppIntentsApi
 import com.mobilebytelabs.kmptoolkit.appintents.appIntents
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -30,7 +29,6 @@ import kotlin.test.assertNotNull
  * Full Composable-rendering tests require `compose-multiplatform-test` setup —
  * deferred to a post-v0.4 CI run.
  */
-@OptIn(ExperimentalAppIntentsApi::class)
 class AppIntentsComposeApiSmokeTest {
 
     @Test

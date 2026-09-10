@@ -13,7 +13,6 @@ package com.mobilebytelabs.kmptoolkit.intentlauncher
  * Snapshot of an [IntentBuilder] state captured at the moment of a launch() call.
  * Tests can inspect this to assert that the consumer code built the expected intent.
  */
-@ExperimentalIntentLauncherApi
 public data class LaunchAttempt(
     val action: String?,
     val data: String?,
@@ -52,7 +51,6 @@ public data class LaunchAttempt(
  *
  * Authored 2026-06-01 by cmp-intent-share-coverage-trueup sub-plan 03.
  */
-@ExperimentalIntentLauncherApi
 public class FakeIntentLauncher {
     public val launchHistory: MutableList<LaunchAttempt> = mutableListOf()
     public val systemIntentsCallHistory: MutableList<String> = mutableListOf()

@@ -47,7 +47,6 @@ import kotlin.random.Random
  * deletion would race the launched GUI app's file read.
  */
 @OptIn(ExperimentalForeignApi::class)
-@ExperimentalShareApi
 public actual object Share {
     public actual suspend fun share(payload: SharePayload, options: ShareOptions): ShareResult = when (payload) {
         is SharePayload.Text -> xclipText(payload.content)

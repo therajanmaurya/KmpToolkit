@@ -34,7 +34,6 @@ import java.net.URI
  * 2026-06-01 — Added `Desktop.browse()` branch for ACTION_VIEW URLs
  * (per cmp-intent-share-coverage-trueup sub-plan 02 T1).
  */
-@ExperimentalIntentLauncherApi
 public actual class IntentLauncher public constructor() {
     public actual suspend fun launch(block: IntentBuilder.() -> Unit): IntentResult {
         val builder = IntentBuilder().apply(block)

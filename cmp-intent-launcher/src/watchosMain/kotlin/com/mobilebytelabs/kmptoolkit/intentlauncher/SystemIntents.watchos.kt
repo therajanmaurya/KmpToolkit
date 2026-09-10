@@ -13,7 +13,6 @@ package com.mobilebytelabs.kmptoolkit.intentlauncher
  * watchOS `SystemIntents` actual — `UnsupportedPlatform` for both entry points.
  * No programmatic settings deep-link; no document picker on watchOS. ADR-09 architectural.
  */
-@ExperimentalIntentLauncherApi
 public actual object SystemIntents {
     public actual suspend fun openAppSettings(): IntentResult = IntentResult.Failed(IntentError.UnsupportedPlatform)
     public actual suspend fun createDocument(suggestedName: String, mimeType: String): IntentResult =

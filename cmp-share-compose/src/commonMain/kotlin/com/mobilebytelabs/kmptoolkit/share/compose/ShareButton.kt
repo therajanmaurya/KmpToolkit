@@ -16,7 +16,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import com.mobilebytelabs.kmptoolkit.share.ExperimentalShareApi
 import com.mobilebytelabs.kmptoolkit.share.Share
 import com.mobilebytelabs.kmptoolkit.share.ShareOptions
 import com.mobilebytelabs.kmptoolkit.share.SharePayload
@@ -42,7 +41,6 @@ import kotlinx.coroutines.launch
  * @param content slot for the icon — defaults to [Icons.Filled.Share]
  */
 @Composable
-@ExperimentalShareApi
 public fun ShareButton(
     payload: SharePayload,
     modifier: Modifier = Modifier,

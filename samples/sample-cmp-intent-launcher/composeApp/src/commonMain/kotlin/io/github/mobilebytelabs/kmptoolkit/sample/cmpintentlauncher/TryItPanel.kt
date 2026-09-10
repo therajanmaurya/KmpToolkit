@@ -26,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mobilebytelabs.kmptoolkit.intentlauncher.ExperimentalIntentLauncherApi
 import com.mobilebytelabs.kmptoolkit.intentlauncher.IntentResult
 import com.mobilebytelabs.kmptoolkit.intentlauncher.ResultContracts
 import com.mobilebytelabs.kmptoolkit.intentlauncher.SystemIntents
@@ -42,7 +41,6 @@ import kotlinx.coroutines.launch
  * Decision D3 ("DoD = compile + Fake test + sample demonstrates it"), this panel
  * is the manual smoke-test surface for the per-platform `IntentLauncher` impls.
  */
-@OptIn(ExperimentalIntentLauncherApi::class)
 @Composable
 fun TryItPanel() {
     val launcher = rememberIntentLauncher()
@@ -122,7 +120,6 @@ fun TryItPanel() {
     }
 }
 
-@OptIn(ExperimentalIntentLauncherApi::class)
 private fun formatResult(r: IntentResult?): String = when (r) {
     null -> "(no call yet)"
     is IntentResult.Ok -> "Ok(${r.data?.uri ?: "null"})"

@@ -33,9 +33,11 @@ import kotlin.coroutines.resume
  * ToastHost(hostState = toastState)
  * ```
  *
- * @since 0.1.0
+ * @since 0.1.0 *
+ * Implements [ToastDispatcher], so a ViewModel can depend on that interface rather than on this
+ * class — the API here was already Compose-free, it simply had no type to substitute.
  */
-class ToastHostState {
+class ToastHostState : ToastDispatcher {
     private val mutex = Mutex()
     private var currentContinuation: CancellableContinuation<ToastResult>? = null
     private var idCounter = 0L
@@ -63,12 +65,15 @@ class ToastHostState {
      * @param style Visual style of the toast
      * @return The result indicating how the toast was dismissed
      */
-    suspend fun showToast(
+    // No default values here: an override may not restate them. They live on ToastDispatcher,
+    // and call sites — including `toastHostState.showToast("hi")` on the concrete type — still
+    // inherit them from the interface declaration.
+    override suspend fun showToast(
         message: String,
-        actionLabel: String? = null,
-        duration: ToastDuration = ToastDuration.SHORT,
-        position: ToastPosition = ToastPosition.BOTTOM,
-        style: ToastStyle = ToastStyle.DEFAULT,
+        actionLabel: String?,
+        duration: ToastDuration,
+        position: ToastPosition,
+        style: ToastStyle,
     ): ToastResult = mutex.withLock {
         try {
             suspendCancellableCoroutine { continuation ->

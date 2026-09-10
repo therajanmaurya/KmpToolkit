@@ -14,13 +14,17 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 /**
- * Opt-in marker for the experimental cmp-app-intents API.
+ * Retained no-op marker. **cmp-app-intents graduated to a stable API — no opt-in is required.**
  *
- * Per ADR-08 — per-module marker; not a shared `@ExperimentalInterAppCommsApi`.
+ * This annotation no longer carries [RequiresOptIn], so it neither warns nor demands `@OptIn`. It
+ * is kept only so source written against the experimental era keeps compiling; both it and any
+ * `-opt-in=...ExperimentalAppIntentsApi` flag are now redundant.
+ *
+ * Scheduled for removal in the next major version.
  */
-@RequiresOptIn(
-    message = "cmp-app-intents is experimental until v1.0; API may evolve without major-version bumps.",
-    level = RequiresOptIn.Level.WARNING,
+@Deprecated(
+    message = "cmp-app-intents is stable; the opt-in is no longer required. Remove the @OptIn / annotation.",
+    level = DeprecationLevel.WARNING,
 )
 @Retention(AnnotationRetention.BINARY)
 public annotation class ExperimentalAppIntentsApi
@@ -29,7 +33,6 @@ public annotation class ExperimentalAppIntentsApi
 // Parameter type model
 // -----------------------------------------------------------------------------
 
-@ExperimentalAppIntentsApi
 public sealed class ParamType {
     public object Text : ParamType()
     public object Integer : ParamType()
@@ -42,7 +45,6 @@ public sealed class ParamType {
 // Intent result
 // -----------------------------------------------------------------------------
 
-@ExperimentalAppIntentsApi
 public sealed class AppIntentResult {
     public data class Dialog(val message: String) : AppIntentResult()
     public data class Snippet(val markdown: String) : AppIntentResult()
@@ -54,7 +56,6 @@ public sealed class AppIntentResult {
 // Builders
 // -----------------------------------------------------------------------------
 
-@ExperimentalAppIntentsApi
 public class AppIntentBuilder internal constructor(internal val id: String) {
     public var title: String = ""
     public var description: String = ""
@@ -86,7 +87,6 @@ public class AppIntentBuilder internal constructor(internal val id: String) {
     }
 }
 
-@ExperimentalAppIntentsApi
 public class AppIntentsBuilder internal constructor() {
     internal val intents: MutableList<AppIntentDef> = mutableListOf()
 
@@ -107,7 +107,6 @@ public class AppIntentsBuilder internal constructor() {
     }
 }
 
-@ExperimentalAppIntentsApi
 public fun appIntents(block: AppIntentsBuilder.() -> Unit): AppIntentsConfig =
     AppIntentsConfig(AppIntentsBuilder().apply(block).intents.toList())
 
@@ -115,10 +114,8 @@ public fun appIntents(block: AppIntentsBuilder.() -> Unit): AppIntentsConfig =
 // Config + def types
 // -----------------------------------------------------------------------------
 
-@ExperimentalAppIntentsApi
 public class AppIntentsConfig internal constructor(public val intents: List<AppIntentDef>)
 
-@ExperimentalAppIntentsApi
 public class AppIntentDef internal constructor(
     public val id: String,
     public val title: String,
@@ -131,7 +128,16 @@ public class AppIntentDef internal constructor(
     internal val perform: suspend (Map<String, Any>) -> AppIntentResult,
 )
 
-@ExperimentalAppIntentsApi
+/**
+ * Run this definition's `perform` block directly.
+ *
+ * The lambda is `internal` so it cannot be swapped from outside the library; this exposes only the
+ * ability to CALL it, which a test double needs to serve `invoke` without touching the
+ * process-wide registry.
+ */
+public suspend fun AppIntentDef.performForTesting(params: Map<String, Any> = emptyMap()): AppIntentResult =
+    perform.invoke(params)
+
 public data class ParamDef(val name: String, val type: ParamType, val isRequired: Boolean)
 
 // -----------------------------------------------------------------------------
@@ -139,7 +145,6 @@ public data class ParamDef(val name: String, val type: ParamType, val isRequired
 // invoked from per-platform callback receivers
 // -----------------------------------------------------------------------------
 
-@ExperimentalAppIntentsApi
 public object AppIntentsRuntime {
     private var registered: AppIntentsConfig? = null
     private val handlers: MutableMap<String, suspend (Map<String, Any>) -> AppIntentResult> = mutableMapOf()
@@ -179,7 +184,6 @@ internal data class ManifestParam(
     val isRequired: Boolean,
 )
 
-@ExperimentalAppIntentsApi
 internal fun AppIntentsConfig.serializeManifest(): String {
     val entries = intents.map { def ->
         ManifestEntry(
@@ -207,7 +211,6 @@ internal fun AppIntentsConfig.serializeManifest(): String {
 // Public registration entry point
 // -----------------------------------------------------------------------------
 
-@ExperimentalAppIntentsApi
 public expect object AppIntents {
     public fun register(config: AppIntentsConfig)
     public suspend fun invokeForTesting(id: String, params: Map<String, Any> = emptyMap()): AppIntentResult?

@@ -25,7 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.mobilebytelabs.kmptoolkit.intentlauncher.ExperimentalIntentLauncherApi
 import com.mobilebytelabs.kmptoolkit.intentlauncher.IntentBuilder
 import com.mobilebytelabs.kmptoolkit.intentlauncher.IntentResult
 import com.mobilebytelabs.kmptoolkit.intentlauncher.ResultContract
@@ -60,7 +59,6 @@ import kotlinx.coroutines.launch
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@ExperimentalIntentLauncherApi
 public fun <R> IntentPickerSheet(
     contract: ResultContract<R>,
     onResult: (R) -> Unit,

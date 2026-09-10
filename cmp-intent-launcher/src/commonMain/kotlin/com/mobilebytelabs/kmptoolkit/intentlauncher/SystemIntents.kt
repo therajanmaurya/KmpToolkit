@@ -23,7 +23,6 @@ package com.mobilebytelabs.kmptoolkit.intentlauncher
  *
  * Added in v0.4 (inter-app-comms-compose-completeness post-implementation follow-up).
  */
-@ExperimentalIntentLauncherApi
 public expect object SystemIntents {
     /**
      * Opens the host application's settings screen.

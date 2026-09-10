@@ -22,7 +22,6 @@ import kotlinx.coroutines.CompletableDeferred
  * - `createDocument()` — starts [CreateDocumentProxyActivity], awaits its
  *   `CompletableDeferred<IntentResult>` for the SAF callback.
  */
-@ExperimentalIntentLauncherApi
 public actual object SystemIntents {
 
     public actual suspend fun openAppSettings(): IntentResult {

@@ -31,7 +31,6 @@ import com.mobilebytelabs.kmptoolkit.appintents.AppIntentDef
 import com.mobilebytelabs.kmptoolkit.appintents.AppIntentResult
 import com.mobilebytelabs.kmptoolkit.appintents.AppIntents
 import com.mobilebytelabs.kmptoolkit.appintents.AppIntentsRuntime
-import com.mobilebytelabs.kmptoolkit.appintents.ExperimentalAppIntentsApi
 import kotlinx.coroutines.launch
 
 /**
@@ -54,7 +53,6 @@ import kotlinx.coroutines.launch
  * ```
  */
 @Composable
-@ExperimentalAppIntentsApi
 public fun AppIntentsRegistry(
     modifier: Modifier = Modifier,
     onInvokeResult: (intentId: String, result: AppIntentResult?) -> Unit = { _, _ -> },
@@ -92,7 +90,6 @@ public fun AppIntentsRegistry(
 }
 
 @Composable
-@ExperimentalAppIntentsApi
 private fun IntentRow(intent: AppIntentDef, onInvoke: () -> Unit) {
     var lastResultLabel by remember { mutableStateOf<String?>(null) }
     ListItem(

@@ -1,6 +1,8 @@
 package com.mobilebytelabs.kmptoolkit.appupdate
 
 import platform.Foundation.NSBundle
+import platform.Foundation.NSURL
+import platform.UIKit.UIApplication
 
 /**
  * tvOS implementation of AppUpdate.
@@ -56,9 +58,23 @@ actual object AppUpdate {
     }
 
     /**
-     * Returns false as tvOS doesn't support opening App Store for updates.
+     * Open this app's App Store page.
+     *
+     * tvOS has no Play-Core-style in-app update flow, but it does have an App Store and
+     * `UIApplication.openURL` works there — so "we found a newer version, take me to the store"
+     * is perfectly serviceable. This returned `false` unconditionally before, which left an app
+     * that had already detected an update with nowhere to send the user.
+     *
+     * A tvOS app shares its iOS App Store listing, so [AppUpdateConfig.iosAppStoreId] is the id.
      */
-    actual fun openStoreForUpdate(config: AppUpdateConfig): Boolean = false
+    actual fun openStoreForUpdate(config: AppUpdateConfig): Boolean {
+        val appId = config.iosAppStoreId?.takeIf { it.isNotBlank() } ?: return false
+        val url = NSURL.URLWithString("https://apps.apple.com/app/id$appId") ?: return false
+        val app = UIApplication.sharedApplication
+        if (!app.canOpenURL(url)) return false
+        app.openURL(url, emptyMap<Any?, Any?>(), null)
+        return true
+    }
 
     /**
      * In-app updates are not supported on tvOS.

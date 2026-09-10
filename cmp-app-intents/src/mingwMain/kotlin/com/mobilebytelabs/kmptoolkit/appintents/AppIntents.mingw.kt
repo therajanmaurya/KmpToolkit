@@ -34,7 +34,6 @@ import platform.posix.mkdir
  * `register()` is best-effort — file-system + COM errors are swallowed so registration
  * never throws.
  */
-@ExperimentalAppIntentsApi
 public actual object AppIntents {
     public actual fun register(config: AppIntentsConfig) {
         AppIntentsRuntime.register(config)

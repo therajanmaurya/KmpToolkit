@@ -66,6 +66,13 @@ kotlin {
     tvosArm64()
     tvosSimulatorArm64()
 
+    // watchOS — the actuals existed in src/watchosMain but no target was declared.
+    watchosX64()
+    watchosArm32()
+    watchosArm64()
+    watchosSimulatorArm64()
+    watchosDeviceArm64()
+
     linuxX64()
     linuxArm64()
 
@@ -96,6 +103,19 @@ kotlin {
     }
 
     sourceSets {
+        // koin-core publishes every target this module builds EXCEPT wasmWasi, so the Koin
+        // binding lives in an intermediate source set spanning the other 20. Same as cmp-share.
+        val koinMain = create("koinMain").apply { dependsOn(getByName("commonMain")) }
+        val koinTest = create("koinTest").apply { dependsOn(getByName("commonTest")) }
+        listOf("jvmMain", "androidMain", "appleMain", "linuxMain", "mingwMain", "jsMain", "wasmJsMain")
+            .forEach { getByName(it).dependsOn(koinMain) }
+        listOf("jvmTest", "appleTest", "linuxTest", "mingwTest", "jsTest", "wasmJsTest")
+            .forEach { getByName(it).dependsOn(koinTest) }
+
+        koinMain.dependencies {
+            implementation(libs.koin.core)
+        }
+
         commonMain.dependencies {
             implementation(libs.kotlinx.coroutines.core)
         }

@@ -1,6 +1,29 @@
 public abstract interface annotation class com/mobilebytelabs/kmptoolkit/intentlauncher/ExperimentalIntentLauncherApi : java/lang/annotation/Annotation {
 }
 
+public final class com/mobilebytelabs/kmptoolkit/intentlauncher/HostIntentRequest {
+	public static final field ACTION_APP_SETTINGS Ljava/lang/String;
+	public static final field ACTION_CREATE_DOCUMENT Ljava/lang/String;
+	public static final field Companion Lcom/mobilebytelabs/kmptoolkit/intentlauncher/HostIntentRequest$Companion;
+	public static final field EXTRA_SUGGESTED_NAME Ljava/lang/String;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/util/Map;Ljava/lang/String;Z)V
+	public final fun getAction ()Ljava/lang/String;
+	public final fun getCategories ()Ljava/util/List;
+	public final fun getData ()Ljava/lang/String;
+	public final fun getExpectsResult ()Z
+	public final fun getExtras ()Ljava/util/Map;
+	public final fun getPackageName ()Ljava/lang/String;
+	public final fun getType ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/intentlauncher/HostIntentRequest$Companion {
+}
+
+public final class com/mobilebytelabs/kmptoolkit/intentlauncher/HostIntentRequestKt {
+	public static final fun snapshotOf (Lkotlin/jvm/functions/Function1;)Lcom/mobilebytelabs/kmptoolkit/intentlauncher/HostIntentRequest;
+}
+
 public final class com/mobilebytelabs/kmptoolkit/intentlauncher/IntentBuilder {
 	public final fun action (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentBuilder;
 	public final fun category (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentBuilder;
@@ -11,6 +34,41 @@ public final class com/mobilebytelabs/kmptoolkit/intentlauncher/IntentBuilder {
 	public final fun packageName (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentBuilder;
 	public final fun result (Lcom/mobilebytelabs/kmptoolkit/intentlauncher/ResultContract;)Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentBuilder;
 	public final fun type (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentBuilder;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/intentlauncher/IntentCapabilities {
+	public static final field Companion Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentCapabilities$Companion;
+	public fun <init> (ZZZZZZZ)V
+	public final fun component1 ()Z
+	public final fun component2 ()Z
+	public final fun component3 ()Z
+	public final fun component4 ()Z
+	public final fun component5 ()Z
+	public final fun component6 ()Z
+	public final fun component7 ()Z
+	public final fun contains (Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentOperation;)Z
+	public final fun copy (ZZZZZZZ)Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentCapabilities;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentCapabilities;ZZZZZZZILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentCapabilities;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCreateDocument ()Z
+	public final fun getOpenAppSettings ()Z
+	public final fun getPickContact ()Z
+	public final fun getPickDocument ()Z
+	public final fun getPickImage ()Z
+	public final fun getPickMultipleImages ()Z
+	public final fun getViewUri ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/intentlauncher/IntentCapabilities$Companion {
+	public final fun desktop (Z)Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentCapabilities;
+	public final fun getFull ()Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentCapabilities;
+	public final fun getNone ()Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentCapabilities;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/intentlauncher/IntentCapabilities_jvmKt {
+	public static final fun getPlatformIntentCapabilities ()Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentCapabilities;
 }
 
 public final class com/mobilebytelabs/kmptoolkit/intentlauncher/IntentData {
@@ -59,6 +117,61 @@ public final class com/mobilebytelabs/kmptoolkit/intentlauncher/IntentError$User
 public final class com/mobilebytelabs/kmptoolkit/intentlauncher/IntentLauncher {
 	public fun <init> ()V
 	public final fun launch (Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class com/mobilebytelabs/kmptoolkit/intentlauncher/IntentManager {
+	public fun createDocument (Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun getCapabilities ()Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentCapabilities;
+	public abstract fun launch (Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun openAppSettings (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun pickContact (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun pickDocument (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun pickDocument$default (Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentManager;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public fun pickImage (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun pickMultipleImages (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun supports (Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentOperation;)Z
+	public fun viewUri (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/intentlauncher/IntentManager$DefaultImpls {
+	public static fun createDocument (Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentManager;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static fun openAppSettings (Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentManager;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static fun pickContact (Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentManager;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static fun pickDocument (Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentManager;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun pickDocument$default (Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentManager;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static fun pickImage (Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentManager;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static fun pickMultipleImages (Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentManager;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static fun supports (Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentManager;Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentOperation;)Z
+	public static fun viewUri (Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentManager;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/intentlauncher/IntentManagerImpl : com/mobilebytelabs/kmptoolkit/intentlauncher/IntentManager {
+	public fun <init> ()V
+	public fun <init> (Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentLauncher;)V
+	public synthetic fun <init> (Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentLauncher;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun createDocument (Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun getCapabilities ()Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentCapabilities;
+	public fun launch (Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun openAppSettings (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun pickContact (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun pickDocument (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun pickImage (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun pickMultipleImages (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun supports (Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentOperation;)Z
+	public fun viewUri (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/intentlauncher/IntentOperation : java/lang/Enum {
+	public static final field CreateDocument Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentOperation;
+	public static final field OpenAppSettings Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentOperation;
+	public static final field PickContact Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentOperation;
+	public static final field PickDocument Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentOperation;
+	public static final field PickImage Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentOperation;
+	public static final field PickMultipleImages Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentOperation;
+	public static final field ViewUri Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentOperation;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentOperation;
+	public static fun values ()[Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentOperation;
 }
 
 public abstract class com/mobilebytelabs/kmptoolkit/intentlauncher/IntentResult {
@@ -137,5 +250,28 @@ public final class com/mobilebytelabs/kmptoolkit/intentlauncher/SystemIntents {
 	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/intentlauncher/SystemIntents;
 	public final fun createDocument (Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun openAppSettings (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/intentlauncher/di/IntentLauncherModuleKt {
+	public static final fun getIntentLauncherModule ()Lorg/koin/core/module/Module;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/intentlauncher/testing/FakeIntentManager : com/mobilebytelabs/kmptoolkit/intentlauncher/IntentManager {
+	public fun <init> ()V
+	public fun <init> (Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentCapabilities;)V
+	public synthetic fun <init> (Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentCapabilities;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun createDocument (Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun getCapabilities ()Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentCapabilities;
+	public final fun getRecorded ()Ljava/util/List;
+	public fun launch (Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun openAppSettings (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun pickContact (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun pickDocument (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun pickImage (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun pickMultipleImages (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun reset ()V
+	public final fun scriptResult (Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentResult;)V
+	public fun supports (Lcom/mobilebytelabs/kmptoolkit/intentlauncher/IntentOperation;)Z
+	public fun viewUri (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 

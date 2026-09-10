@@ -50,37 +50,71 @@ public fun rememberShareLauncher(): Share = remember { Share }
 
 ## §4 Spec Snapshot (authored — LLM-seeded)
 
-<!-- AUTHOR: WIP — initial draft from 2026-05-30 -->
-
-**Problem this module solves:** _TBD by author._
+**Problem this module solves:** `cmp-share` is headless and ships to 15 targets, six of which
+(tvOS, Linux ×2, Windows, and the two extra Apple architectures) have no Compose at all. Anything
+typed in `androidx.compose.*` therefore cannot live there. This module is where the Compose-shaped
+half goes: the `CompositionLocal`, the `remember*` accessors, the drop-in `ShareSheet` /
+`ShareButton`, and `ImageBitmap` encoding.
 
 **Core invariants:**
-- _TBD by author._
+- **Compose types never leak downward.** If a declaration mentions `androidx.compose.*` it belongs
+  here, not in `cmp-share`. This is what keeps the headless artifact's 15-target matrix possible.
+- **Reading `LocalShareManager` without a provider must not throw.** It falls back to a real
+  `ShareManagerImpl`. This is a deliberate divergence from `LocalNetworkMonitor`, which *does*
+  throw — a network monitor needs configuration and a lifecycle, whereas sharing is stateless and
+  zero-config on every target, so failing the common case would buy nothing.
+- **Composition scenarios are asserted by rendering.** Claims about defaults, overrides and nested
+  providers are unobservable from a direct function call; they run through `runComposeUiTest` on
+  both JVM and the Android host.
+- **The 7-target Compose matrix is a fact of Compose Multiplatform, not a choice.** CMP has no
+  tvOS/Linux/mingw target. Do not "add" them.
 
 **Out of scope (by design):**
-- _TBD by author._
+- Any payload or platform logic — that is `cmp-share`'s `Share` engine. This module composes, it
+  does not implement sharing.
+- A Koin module. DI binding lives in `cmp-share` (`shareModule`) so non-Compose consumers get it
+  too; here you `koinInject()` the `ShareManager` and hand it to `ProvideShareManager`.
 
 ---
 
 ## §5 Extension Recipes (authored — LLM-seeded)
 
-<!-- AUTHOR: WIP — initial draft from 2026-05-30 -->
-
 ### Recipe: Add a new platform actual
 
-1. _TBD by author._
-2. _TBD by author._
-3. _TBD by author._
+Almost nothing here needs one — Compose is the abstraction. The single existing `expect` is
+`encodeImageAsPng`, and it splits exactly one way:
+
+1. Prefer the `nonAndroidMain` source set. Android has its own bitmap codec; JVM, iOS, macOS, JS and
+   wasmJs all render through Skia, so one `actual` covers five targets. `nonAndroidMain` is created
+   explicitly in `build.gradle.kts` (`create("nonAndroidMain")`, not `by creating`, which is a
+   Gradle-10 deprecation this repo has cleared) and every non-Android source set `dependsOn` it.
+2. Only add a per-target `actual` when a target genuinely diverges from Skia. If you find yourself
+   copying the same Skia call into five files, the source set wiring is what needs fixing.
+3. Wrap platform codec calls in `runCatching { }.getOrNull()` and return `null` on failure. The
+   caller turns that into a typed `ShareResult.Failed`, so a chooser is never raised for content
+   that cannot be encoded.
 
 ### Recipe: Extend the public API
 
-1. _TBD by author._
-2. _TBD by author._
+1. Decide the module first: does the declaration mention `androidx.compose.*`? If not, it belongs in
+   `cmp-share`, where it reaches all 15 targets instead of 7.
+2. Prefer an extension on `ShareManager` over a new top-level function, so it composes with whatever
+   instance is in scope (real, injected, or faked) rather than reaching for the `Share` object.
+3. Add scenarios to `ShareManagerCompositionScenarios` in `commonTest` — the abstract base, never a
+   subclass. Both the JVM and Android-host subclasses inherit them automatically, which is the point
+   of the split.
+4. Refresh BCV: `./gradlew :cmp-share-compose:apiDump`.
 
-### Recipe: Add a new variant under an existing platform (e.g. tvosArm64)
+### Recipe: Add a new variant under an existing platform
 
-1. _TBD by author._
-2. _TBD by author._
+1. Check Compose Multiplatform actually supports the target before anything else. CMP ships no
+   tvOS, Linux or mingw target — the headless `cmp-share` covers those consumers.
+2. Declare it in `build.gradle.kts`, then add it to the `nonAndroidMain` wiring list if it is not
+   Android. Forgetting that second step is silent: the source set is simply never created, and the
+   `actual` you wrote compiles nowhere. That is exactly how nine modules in this repo ended up with
+   an orphan `src/watchosMain/`.
+3. Confirm with `./gradlew :cmp-share-compose:assemble` and check the target's compile task actually
+   appears in the output.
 
 ---
 
@@ -94,15 +128,49 @@ public fun rememberShareLauncher(): Share = remember { Share }
 
 ## §7 Cross-Platform Parity Recipes (authored — LLM-seeded)
 
-<!-- AUTHOR: WIP — initial draft from 2026-05-30 -->
+### Pattern: One scenario suite, one runner per target
 
-### Pattern: _Pattern name TBD_
+**When to use:** any behaviour that must be asserted inside a real composition on more than one
+target.
 
-**When to use:** _TBD_
-**Code shape:**
-```kotlin
-// TBD
+The problem it solves: `androidx.compose.ui.test`'s Android environment reads
+`android.os.Build.FINGERPRINT` to choose an idling strategy. Under the plain android.jar stub that
+static field is null, so every composition dies before rendering — and the field is `final` and not
+reflectively writable. The only real fix is to run the Android host variant under Robolectric, which
+needs a JUnit4 `@RunWith` that a `commonTest` class cannot carry.
+
+**Code shape** — write the scenarios once, let each target bring its runner:
+
 ```
+commonTest/       abstract ShareManagerCompositionScenarios   ← every @Test lives here
+jvmTest/          …JvmTest : …Scenarios()                     ← Skiko, via compose.desktop.currentOs
+androidHostTest/  @RunWith(RobolectricTestRunner::class)
+                  @Config(sdk = [ROBOLECTRIC_SDK])
+                  …AndroidTest : …Scenarios()
+```
+
+**The build wiring this needs** (all four, or it fails in a way that misdirects):
+
+```kotlin
+withHostTestBuilder {}.configure {
+    isReturnDefaultValues = true    // android.jar stubs THROW by default
+    isIncludeAndroidResources = true // else: "Unable to resolve activity for Intent { MAIN }"
+}
+```
+plus `compose.uiTest` in `commonTest`, `compose.desktop.currentOs` in `jvmTest`, and
+`robolectric` + `junit` + `ui-test-manifest` in `androidHostTest`.
+
+`ROBOLECTRIC_SDK` is code-generated from `robolectricSdk` in the version catalog — apply
+`robolectric-host-test.gradle.kts` **and** wire its output:
+
+```kotlin
+kotlin.sourceSets.getByName("androidHostTest").kotlin.srcDir(
+    tasks.named("generateRobolectricSdkConstant"),
+)
+```
+
+Skipping that last line fails as `Unresolved reference 'robolectric'`, which reads like a missing
+dependency rather than missing codegen.
 
 ---
 

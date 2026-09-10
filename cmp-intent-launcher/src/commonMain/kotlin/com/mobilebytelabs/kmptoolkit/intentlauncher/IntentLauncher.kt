@@ -12,15 +12,18 @@ package com.mobilebytelabs.kmptoolkit.intentlauncher
 import kotlin.reflect.KClass
 
 /**
- * Opt-in marker for the experimental cmp-intent-launcher API.
+ * Retained no-op marker. **cmp-intent-launcher graduated to a stable API — no opt-in is required.**
  *
- * Per ADR-08 — per-module marker; not a shared `@ExperimentalInterAppCommsApi`.
- * Usage: `@OptIn(ExperimentalIntentLauncherApi::class)` on call sites, or
- * `-opt-in=com.mobilebytelabs.kmptoolkit.intentlauncher.ExperimentalIntentLauncherApi` in build script.
+ * This annotation no longer carries [RequiresOptIn], so it neither warns nor demands `@OptIn`. It
+ * is kept only so source written against the experimental era — `@OptIn(...)` or
+ * `-opt-in=...ExperimentalIntentLauncherApi` — keeps compiling. Both are now redundant and can be
+ * deleted.
+ *
+ * Scheduled for removal in the next major version.
  */
-@RequiresOptIn(
-    message = "cmp-intent-launcher is experimental until v1.0; API may evolve without major-version bumps.",
-    level = RequiresOptIn.Level.WARNING,
+@Deprecated(
+    message = "cmp-intent-launcher is stable; the opt-in is no longer required. Remove the @OptIn / annotation.",
+    level = DeprecationLevel.WARNING,
 )
 @Retention(AnnotationRetention.BINARY)
 public annotation class ExperimentalIntentLauncherApi
@@ -29,14 +32,12 @@ public annotation class ExperimentalIntentLauncherApi
 // Result + error types
 // -----------------------------------------------------------------------------
 
-@ExperimentalIntentLauncherApi
 public sealed class IntentResult {
     public data class Ok(val data: IntentData?) : IntentResult()
     public object Cancelled : IntentResult()
     public data class Failed(val cause: IntentError) : IntentResult()
 }
 
-@ExperimentalIntentLauncherApi
 public sealed class IntentError {
     public object UnsupportedPlatform : IntentError()
     public object NoHandler : IntentError()
@@ -44,7 +45,6 @@ public sealed class IntentError {
     public data class Unknown(val message: String) : IntentError()
 }
 
-@ExperimentalIntentLauncherApi
 public data class IntentData(
     val uri: String? = null,
     val mimeType: String? = null,
@@ -55,13 +55,11 @@ public data class IntentData(
 // Result contract typeclass
 // -----------------------------------------------------------------------------
 
-@ExperimentalIntentLauncherApi
 public sealed interface ResultContract<R> {
     public val resultType: KClass<*>
     public fun parse(data: IntentData?): R
 }
 
-@ExperimentalIntentLauncherApi
 public object ResultContracts {
     public object PickImage : ResultContract<String?> {
         override val resultType: KClass<*> = String::class
@@ -96,7 +94,6 @@ public object ResultContracts {
 // IntentBuilder DSL — collects builder state; per-platform converters consume
 // -----------------------------------------------------------------------------
 
-@ExperimentalIntentLauncherApi
 public class IntentBuilder internal constructor() {
     internal var action: String? = null
     internal var data: String? = null
@@ -132,7 +129,6 @@ public class IntentBuilder internal constructor() {
 // alongside this dep. Other consumers: call `ComponentActivity.intentLauncher()`
 // directly (Android) or construct `IntentLauncher` via the platform actual ctor.
 
-@ExperimentalIntentLauncherApi
 public expect class IntentLauncher {
     public suspend fun launch(block: IntentBuilder.() -> Unit): IntentResult
 }

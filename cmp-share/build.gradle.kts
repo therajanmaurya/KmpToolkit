@@ -32,11 +32,13 @@ plugins {
 // Targets: Android (Intent.ACTION_SEND), iOS (UIActivityViewController),
 // macOS (NSSharingServicePicker), JVM Desktop (clipboard + FileDialog),
 // JS / wasmJs (navigator.share + clipboard fallback).
-// tvOS (v0.2): UIPasteboard clipboard-share fallback (no UIActivityViewController).
-// watchOS (v0.2): UIActivityViewController N/A — onUnsupported fallback.
+// tvOS: UIPasteboard clipboard-share fallback (no UIActivityViewController).
+// watchOS: WCSession.transferUserInfo handoff to the paired iPhone (text/url; binary N/A).
 // Linux (v0.2): xdg-open URL share + xclip text/URL clipboard.
 // mingw (v0.2): ShellExecuteW URL share + Win32 clipboard.
-// (wasmWasi excluded — no DOM, no clipboard, no UI gesture surface.)
+// wasmWasi: declared UnsupportedPlatform for every payload — no DOM, no clipboard, no gesture
+// surface. Present so a WASI consumer resolves the artifact and compiles shared code.
+// 21 targets total — the full KMP matrix.
 // iOS 14+ / macOS 11+ baseline per TS1.
 // Plan: plan-layer/project-plans/mbs/kmp-toolkit/active/inter-app-comms-suite/
 // v0.2 sub-plan: 10-platform-parity-v0-2.md
@@ -61,6 +63,16 @@ kotlin {
                 .get()
                 .toInt()
         androidResources.enable = true
+
+        // Without this there is no androidHostTest variant at all, so the commonTest suite —
+        // including everything asserting Android's own `platformShareCapabilities` — never ran
+        // on the Android target. Enabling it is what makes `testAndroidHostTest` exist.
+        withHostTestBuilder {}.configure {
+            // android.jar in a JVM host test is a stub whose methods THROW by default, so a
+            // framework call aborts a test even when the code under test handled the situation
+            // correctly. Returning defaults lets the real behaviour be asserted instead.
+            isReturnDefaultValues = true
+        }
     }
 
     iosX64()
@@ -75,7 +87,15 @@ kotlin {
     tvosArm64()
     tvosSimulatorArm64()
 
-    // watchOS (v0.2 — onUnsupported; no share-sheet surface)
+    // watchOS — Text/Url handed to the paired iPhone via WCSession.transferUserInfo, which the
+    // companion app presents in a real UIActivityViewController. All five architectures build:
+    // the handoff passes only Kotlin primitives, so the NSUInteger/size_t bit-width mismatch that
+    // blocks the BINARY path on the 32-bit watchosArm32 never arises here.
+    watchosX64()
+    watchosArm32()
+    watchosArm64()
+    watchosSimulatorArm64()
+    watchosDeviceArm64()
 
     // Linux + mingw (v0.2 — xdg-open / ShellExecuteW for URL share; clipboard fallback for text)
     linuxX64()
@@ -103,11 +123,38 @@ kotlin {
         nodejs()
     }
 
+    // wasmWasi — no DOM, no clipboard, no gesture surface, so every payload reports a DECLARED
+    // UnsupportedPlatform. It is here so a WASI consumer can depend on cmp-share and compile its
+    // shared code, rather than the dependency failing to resolve.
+    wasmWasi {
+        nodejs()
+    }
+
     compilerOptions {
         freeCompilerArgs.add("-Xexpect-actual-classes")
     }
 
     sourceSets {
+        // koin-core publishes every target this module builds EXCEPT wasmWasi. Rather than drop
+        // wasmWasi or split off a `cmp-share-koin` artifact, the Koin binding lives in an
+        // intermediate source set covering the other 20 targets — so `shareModule` ships
+        // everywhere it can, and the wasmWasi variant simply has no Koin on its classpath.
+        //
+        // Only `di/ShareModule.kt` is in here. ShareManager, ShareManagerImpl, ShareCapabilities
+        // and the Share engine all stay in commonMain and are Koin-free, so a consumer on Hilt,
+        // Kodein or hand-rolled wiring binds ShareManagerImpl itself and never loads a Koin class.
+        val koinMain = create("koinMain").apply { dependsOn(getByName("commonMain")) }
+        val koinTest = create("koinTest").apply { dependsOn(getByName("commonTest")) }
+        listOf("jvmMain", "androidMain", "appleMain", "linuxMain", "mingwMain", "jsMain", "wasmJsMain")
+            .forEach { getByName(it).dependsOn(koinMain) }
+        listOf("jvmTest", "androidHostTest", "appleTest", "linuxTest", "mingwTest", "jsTest", "wasmJsTest")
+            .forEach { getByName(it).dependsOn(koinTest) }
+
+        koinMain.dependencies {
+            // `implementation`, not `api` — not forced onto the consumer's compile classpath.
+            implementation(libs.koin.core)
+        }
+
         commonMain.dependencies {
             implementation(libs.kotlinx.coroutines.core)
         }
