@@ -12,6 +12,7 @@ package com.mobilebytelabs.kmptoolkit.bubble
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import platform.Foundation.NSBundle
 import platform.UserNotifications.UNMutableNotificationContent
 import platform.UserNotifications.UNNotificationRequest
 import platform.UserNotifications.UNUserNotificationCenter
@@ -39,11 +40,33 @@ internal class WatchOsBubble(private val config: BubbleConfig) : Bubble {
 
     override val isShowing: Boolean get() = _state.value is BubbleState.Showing
 
-    override val capability: BubbleCapability = BubbleCapability.Notification
+    override val capability: BubbleCapability
+        get() = if (isNotificationAvailable) BubbleCapability.Notification else BubbleCapability.None
 
-    override val capabilityReason: String = "watchOS UNUserNotificationCenter local notification"
+    override val capabilityReason: String
+        get() = if (isNotificationAvailable) {
+            "watchOS UNUserNotificationCenter local notification"
+        } else {
+            "No application bundle — UNUserNotificationCenter is unavailable outside a real app " +
+                "(a bare test binary, for instance)"
+        }
 
     private var counter = 0
+
+    /**
+     * Whether this process has a real application bundle.
+     *
+     * `UNUserNotificationCenter.currentNotificationCenter()` raises
+     * `NSInternalInconsistencyException: bundleProxyForCurrentProcess is nil` when there is none —
+     * and an Objective-C exception is NOT a Kotlin `Throwable`, so `runCatching` cannot catch it
+     * and the process **terminates**. CI surfaced this the first time watchOS code in this repo
+     * ever executed: a unit-test binary has no bundle, so `dismiss()` killed the test runner.
+     *
+     * Checking the bundle first is the only way to avoid it, and it is right for production too —
+     * an unusual host (a bare executable, some extension contexts) would have crashed identically.
+     */
+    private val isNotificationAvailable: Boolean
+        get() = NSBundle.mainBundle.bundleIdentifier != null
 
     override fun show(
         title: String,
@@ -54,6 +77,7 @@ internal class WatchOsBubble(private val config: BubbleConfig) : Bubble {
         onTap: BubbleTapAction,
         autoDismissMs: Long,
     ) {
+        if (!isNotificationAvailable) return
         val content = UNMutableNotificationContent().apply {
             setTitle(title)
             setBody(message)
@@ -93,7 +117,9 @@ internal class WatchOsBubble(private val config: BubbleConfig) : Bubble {
     }
 
     override fun dismiss() {
-        UNUserNotificationCenter.currentNotificationCenter().removeAllDeliveredNotifications()
+        if (isNotificationAvailable) {
+            UNUserNotificationCenter.currentNotificationCenter().removeAllDeliveredNotifications()
+        }
         _state.value = BubbleState.Dismissed(byUser = false)
     }
 }
