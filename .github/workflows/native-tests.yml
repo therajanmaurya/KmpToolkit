@@ -160,10 +160,20 @@ jobs:
       - name: Show PowerShell version
         # Printed first so a failure is immediately attributable to the shell rather than to the
         # code under test — the same reason the watchOS job prints its simulator runtimes.
-        run: powershell -NoProfile -Command "$PSVersionTable.PSVersion"
+        #
+        # `shell: pwsh` rather than `run: powershell -Command "$PSVersionTable..."`: the runner's
+        # DEFAULT shell on Windows is already PowerShell, so the outer shell expanded
+        # $PSVersionTable before the inner one ever saw it, and the step failed with
+        # CommandNotFoundException — taking the whole job with it.
+        shell: pwsh
+        run: $PSVersionTable.PSVersion
 
       - name: Run mingwX64Test
         if: inputs.targets == '' || inputs.targets == 'all' || inputs.targets == 'windows'
+        # bash, not the default pwsh: `./gradlew` is the POSIX launcher script. Windows runners
+        # ship git-bash, so this runs the same wrapper every other job uses rather than needing
+        # gradlew.bat.
+        shell: bash
         run: ./gradlew mingwX64Test --continue
 
       - name: Assert tests actually executed
