@@ -795,3 +795,55 @@ public final class io/github/mobilebytelabs/kmptoolkit/firebase/crashlytics/di/C
 	public static fun values ()[Lio/github/mobilebytelabs/kmptoolkit/firebase/crashlytics/di/CrashReporterModule$Mode;
 }
 
+public final class io/github/mobilebytelabs/kmptoolkit/firebase/testing/FakeAnalyticsHelper : io/github/mobilebytelabs/kmptoolkit/firebase/analytics/AnalyticsHelper {
+	public fun <init> ()V
+	public final fun eventsOf (Ljava/lang/String;)Ljava/util/List;
+	public final fun getEvents ()Ljava/util/List;
+	public fun logButtonClick (Ljava/lang/String;Ljava/lang/String;)V
+	public fun logError (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public fun logEvent (Lio/github/mobilebytelabs/kmptoolkit/firebase/analytics/AnalyticsEvent;)V
+	public fun logEvent (Ljava/lang/String;Ljava/util/Map;)V
+	public fun logEvent (Ljava/lang/String;[Lkotlin/Pair;)V
+	public fun logFeatureUsed (Ljava/lang/String;Ljava/lang/String;)V
+	public fun logScreenView (Ljava/lang/String;Ljava/lang/String;)V
+	public fun logStateTransition (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun loggedType (Ljava/lang/String;)Z
+	public final fun paramsOf (Ljava/lang/String;)Ljava/util/Map;
+	public final fun reset ()V
+	public fun setCollectionEnabled (Z)V
+	public fun setConsent (ZZ)V
+	public fun setUserId (Ljava/lang/String;)V
+	public fun setUserProperty (Ljava/lang/String;Ljava/lang/String;)V
+}
+
+public final class io/github/mobilebytelabs/kmptoolkit/firebase/testing/FakeCrashReporter : io/github/mobilebytelabs/kmptoolkit/firebase/crashlytics/CrashReporter {
+	public fun <init> ()V
+	public final fun getBreadcrumbs ()Ljava/util/List;
+	public final fun getCustomKeys ()Ljava/util/Map;
+	public final fun getInstalled ()Z
+	public fun getLastReport ()Lio/github/mobilebytelabs/kmptoolkit/firebase/crashlytics/CrashReport;
+	public final fun getRecorded ()Ljava/util/List;
+	public final fun getUserId ()Ljava/lang/String;
+	public fun install ()V
+	public fun log (Ljava/lang/String;)V
+	public fun recordException (Ljava/lang/Throwable;ZLjava/util/Map;)V
+	public final fun reset ()V
+	public fun setCustomKey (Ljava/lang/String;Ljava/lang/String;)V
+	public fun setUserId (Ljava/lang/String;)V
+}
+
+public final class io/github/mobilebytelabs/kmptoolkit/firebase/testing/RecordedCrash {
+	public fun <init> (Ljava/lang/Throwable;ZLjava/util/Map;)V
+	public final fun component1 ()Ljava/lang/Throwable;
+	public final fun component2 ()Z
+	public final fun component3 ()Ljava/util/Map;
+	public final fun copy (Ljava/lang/Throwable;ZLjava/util/Map;)Lio/github/mobilebytelabs/kmptoolkit/firebase/testing/RecordedCrash;
+	public static synthetic fun copy$default (Lio/github/mobilebytelabs/kmptoolkit/firebase/testing/RecordedCrash;Ljava/lang/Throwable;ZLjava/util/Map;ILjava/lang/Object;)Lio/github/mobilebytelabs/kmptoolkit/firebase/testing/RecordedCrash;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getExtraKeys ()Ljava/util/Map;
+	public final fun getFatal ()Z
+	public final fun getThrowable ()Ljava/lang/Throwable;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
