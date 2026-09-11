@@ -51,21 +51,21 @@ jobs:
     if: >-
       github.event_name != 'pull_request' ||
       contains(github.event.pull_request.labels.*.name, 'native-tests')
-    # macos-15, not macos-14: the macos-14 image ships an Xcode whose Swift toolchain is older
+    # macos-latest, not macos-14: the macos-14 image ships an Xcode whose Swift toolchain is older
     # than firebase-ios-sdk 12.x requires, so SwiftPM resolution fails before any test runs with
     # "Dependencies could not be resolved because 'firebase-ios-sdk' >= 12.0.0 contains
     # incompatible tools version (6.1.0)". That aborted the whole build at
     # :cmp-app-intents:fetchUmbrellaPackageIdentifierForDefault — nothing to do with the tests.
-    runs-on: macos-15
+    runs-on: macos-latest
     timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v4
-      - uses: gradle/actions/wrapper-validation@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@v7
+      - uses: gradle/actions/wrapper-validation@v6
+      - uses: actions/setup-java@v6
         with:
           java-version: '21'
           distribution: 'zulu'
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v6
 
       - name: Run iosSimulatorArm64Test
         if: inputs.targets != 'linux'
@@ -80,7 +80,7 @@ jobs:
 
       - name: Upload test reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: native-test-reports-ios
           path: '**/build/test-results/iosSimulatorArm64Test/**/*.xml'
@@ -97,21 +97,21 @@ jobs:
     if: >-
       github.event_name != 'pull_request' ||
       contains(github.event.pull_request.labels.*.name, 'native-tests')
-    # macos-15, not macos-14: the macos-14 image ships an Xcode whose Swift toolchain is older
+    # macos-latest, not macos-14: the macos-14 image ships an Xcode whose Swift toolchain is older
     # than firebase-ios-sdk 12.x requires, so SwiftPM resolution fails before any test runs with
     # "Dependencies could not be resolved because 'firebase-ios-sdk' >= 12.0.0 contains
     # incompatible tools version (6.1.0)". That aborted the whole build at
     # :cmp-app-intents:fetchUmbrellaPackageIdentifierForDefault — nothing to do with the tests.
-    runs-on: macos-15
+    runs-on: macos-latest
     timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v4
-      - uses: gradle/actions/wrapper-validation@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@v7
+      - uses: gradle/actions/wrapper-validation@v6
+      - uses: actions/setup-java@v6
         with:
           java-version: '21'
           distribution: 'zulu'
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v6
 
       - name: Show available watchOS runtimes
         # Printed before the run so a failure is immediately attributable to a missing runtime
@@ -128,7 +128,7 @@ jobs:
 
       - name: Upload test reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: native-test-reports-watchos
           path: '**/build/test-results/watchosSimulatorArm64Test/**/*.xml'
@@ -142,13 +142,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
-      - uses: gradle/actions/wrapper-validation@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@v7
+      - uses: gradle/actions/wrapper-validation@v6
+      - uses: actions/setup-java@v6
         with:
           java-version: '21'
           distribution: 'zulu'
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v6
 
       - name: Run linuxX64Test
         if: inputs.targets != 'ios'
@@ -160,7 +160,7 @@ jobs:
 
       - name: Upload test reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: native-test-reports-linux
           path: '**/build/test-results/linuxX64Test/**/*.xml'

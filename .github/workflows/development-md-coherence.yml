@@ -19,7 +19,7 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Validate DEVELOPMENT.md (LD-1 / LD-4 / LD-5 / LD-7 / LD-10)
         run: |
