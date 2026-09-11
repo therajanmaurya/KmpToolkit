@@ -41,6 +41,13 @@ class ClipboardModuleTest {
     }
 
     @Test
+    fun the_narrow_surface_resolves_to_the_same_object_as_the_manager() {
+        // Two instances would mean two histories and two monitors on one clipboard.
+        val koin = startKoin { modules(clipboardModule()) }.koin
+        assertSame<Any>(koin.get<ClipboardManager>(), koin.get<Clipboard>())
+    }
+
+    @Test
     fun a_custom_config_reaches_the_manager() {
         val koin = startKoin { modules(clipboardModule(ClipboardManagerConfig(historySize = 7))) }.koin
         assertEquals(7, koin.get<ClipboardManager>().historyMaxSize)

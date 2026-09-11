@@ -9,6 +9,7 @@
  */
 package com.mobilebytelabs.kmptoolkit.clipboard.di
 
+import com.mobilebytelabs.kmptoolkit.clipboard.Clipboard
 import com.mobilebytelabs.kmptoolkit.clipboard.ClipboardManager
 import com.mobilebytelabs.kmptoolkit.clipboard.ClipboardManagerConfig
 import org.koin.core.module.Module
@@ -37,4 +38,7 @@ import org.koin.dsl.module
  */
 public fun clipboardModule(config: ClipboardManagerConfig = ClipboardManagerConfig.Default): Module = module {
     single { ClipboardManager(config) }
+    // The narrow copy/paste surface most callers actually want. Resolved FROM the manager rather
+    // than built separately, so both views share one instance, one history and one monitor.
+    single<Clipboard> { get<ClipboardManager>() }
 }
