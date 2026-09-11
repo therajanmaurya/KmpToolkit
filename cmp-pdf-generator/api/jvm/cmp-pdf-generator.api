@@ -1,0 +1,1021 @@
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/Alignment : java/lang/Enum {
+	public static final field CENTER Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/Alignment;
+	public static final field JUSTIFY Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/Alignment;
+	public static final field LEFT Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/Alignment;
+	public static final field RIGHT Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/Alignment;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/Alignment;
+	public static fun values ()[Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/Alignment;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/CustomPageSize {
+	public fun <init> (II)V
+	public final fun component1 ()I
+	public final fun component2 ()I
+	public final fun copy (II)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/CustomPageSize;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/CustomPageSize;IIILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/CustomPageSize;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getHeightMm ()I
+	public final fun getWidthMm ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/EdgeMargins {
+	public static final field Companion Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/EdgeMargins$Companion;
+	public fun <init> (IIII)V
+	public final fun component1 ()I
+	public final fun component2 ()I
+	public final fun component3 ()I
+	public final fun component4 ()I
+	public final fun copy (IIII)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/EdgeMargins;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/EdgeMargins;IIIIILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/EdgeMargins;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBottom ()I
+	public final fun getLeft ()I
+	public final fun getRight ()I
+	public final fun getTop ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/EdgeMargins$Companion {
+	public final fun uniform (I)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/EdgeMargins;
+	public final fun zero ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/EdgeMargins;
+}
+
+public abstract interface annotation class com/mobilebytelabs/kmptoolkit/pdfgenerator/ExperimentalPdfGeneratorApi : java/lang/annotation/Annotation {
+}
+
+public abstract class com/mobilebytelabs/kmptoolkit/pdfgenerator/HtmlTemplateGenerator {
+	public fun <init> (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding;)V
+	protected abstract fun generateBody (Lkotlinx/html/BODY;)V
+	public final fun generateHtml (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	protected fun getAdditionalStyles ()Ljava/lang/String;
+	protected final fun getBranding ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding;
+	protected final fun getCommonStyles ()Ljava/lang/String;
+	protected final fun getGenerationDateText ()Ljava/lang/String;
+	protected final fun getLogoDataUri ()Ljava/lang/String;
+	protected final fun getPoweredByText ()Ljava/lang/String;
+	protected abstract fun getTitle ()Ljava/lang/String;
+}
+
+public abstract class com/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource {
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource$Bytes : com/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource {
+	public fun <init> ([B)V
+	public final fun component1 ()[B
+	public final fun copy ([B)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource$Bytes;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource$Bytes;[BILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource$Bytes;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBytes ()[B
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource$DataUri : com/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource$DataUri;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource$DataUri;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource$DataUri;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getUri ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource$Resource : com/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource$Resource;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource$Resource;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource$Resource;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getPath ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource$Url : com/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource$Url;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource$Url;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource$Url;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getUrl ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/JvmHelpersKt {
+	public static final fun createPdfGenerator ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfGenerator;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/MarkdownPdfAdapter {
+	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/MarkdownPdfAdapter;
+	public final fun markdownToHtml (Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/Orientation : java/lang/Enum {
+	public static final field LANDSCAPE Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/Orientation;
+	public static final field PORTRAIT Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/Orientation;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/Orientation;
+	public static fun values ()[Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/Orientation;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PageConfig {
+	public fun <init> ()V
+	public fun <init> (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageSize;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/CustomPageSize;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/Orientation;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/EdgeMargins;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageHeaderFooter;)V
+	public synthetic fun <init> (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageSize;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/CustomPageSize;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/Orientation;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/EdgeMargins;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageHeaderFooter;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageSize;
+	public final fun component2 ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/CustomPageSize;
+	public final fun component3 ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/Orientation;
+	public final fun component4 ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/EdgeMargins;
+	public final fun component5 ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageHeaderFooter;
+	public final fun copy (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageSize;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/CustomPageSize;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/Orientation;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/EdgeMargins;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageHeaderFooter;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageConfig;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageConfig;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageSize;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/CustomPageSize;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/Orientation;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/EdgeMargins;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageHeaderFooter;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageConfig;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCustomSize ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/CustomPageSize;
+	public final fun getEffectiveHeightMm ()I
+	public final fun getEffectiveWidthMm ()I
+	public final fun getHeaderFooter ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageHeaderFooter;
+	public final fun getMargins ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/EdgeMargins;
+	public final fun getOrientation ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/Orientation;
+	public final fun getSize ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageSize;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PageHeaderFooter {
+	public fun <init> ()V
+	public fun <init> (ZZZLjava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (ZZZLjava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Z
+	public final fun component2 ()Z
+	public final fun component3 ()Z
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun copy (ZZZLjava/lang/String;Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageHeaderFooter;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageHeaderFooter;ZZZLjava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageHeaderFooter;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCustomFooterHtml ()Ljava/lang/String;
+	public final fun getCustomHeaderHtml ()Ljava/lang/String;
+	public final fun getShowFooter ()Z
+	public final fun getShowHeader ()Z
+	public final fun getShowPageNumbers ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PageSize : java/lang/Enum {
+	public static final field A3 Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageSize;
+	public static final field A4 Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageSize;
+	public static final field A5 Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageSize;
+	public static final field B5 Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageSize;
+	public static final field LEGAL Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageSize;
+	public static final field LETTER Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageSize;
+	public static final field STATEMENT Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageSize;
+	public static final field TABLOID Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageSize;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getHeightMm ()I
+	public final fun getWidthMm ()I
+	public static fun valueOf (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageSize;
+	public static fun values ()[Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageSize;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding {
+	public static final field Companion Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding$Companion;
+	public fun <init> ()V
+	public fun <init> (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfLogo;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfTheme;Lkotlin/jvm/functions/Function1;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/Watermark;)V
+	public synthetic fun <init> (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfLogo;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfTheme;Lkotlin/jvm/functions/Function1;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/Watermark;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfLogo;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfTheme;
+	public final fun component4 ()Lkotlin/jvm/functions/Function1;
+	public final fun component5 ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/Watermark;
+	public final fun copy (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfLogo;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfTheme;Lkotlin/jvm/functions/Function1;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/Watermark;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfLogo;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfTheme;Lkotlin/jvm/functions/Function1;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/Watermark;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDateFormatter ()Lkotlin/jvm/functions/Function1;
+	public final fun getLogo ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfLogo;
+	public final fun getPoweredByText ()Ljava/lang/String;
+	public final fun getTheme ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfTheme;
+	public final fun getWatermark ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/Watermark;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding$Companion {
+	public final fun default ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding;
+	public final fun mifosDefault (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfLogo;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding;
+	public static synthetic fun mifosDefault$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding$Companion;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfLogo;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding;
+	public final fun none ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBrandingKt {
+	public static final fun defaultDateFormat (Lkotlinx/datetime/LocalDate;)Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDocument {
+	public fun <init> (Ljava/util/List;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageConfig;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageConfig;
+	public final fun component3 ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding;
+	public final fun copy (Ljava/util/List;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageConfig;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDocument;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDocument;Ljava/util/List;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageConfig;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDocument;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBranding ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding;
+	public final fun getConfig ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageConfig;
+	public final fun getPages ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDocumentBuilder {
+	public final fun branding (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding;)V
+	public final fun page (Lkotlin/jvm/functions/Function1;)V
+	public final fun pageConfig (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageConfig;)V
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDocumentBuilderKt {
+	public static final fun pdf (Lkotlin/jvm/functions/Function1;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDocument;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDocumentHtmlCompilerKt {
+	public static final fun toHtml (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDocument;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDocumentHtmlTemplate : com/mobilebytelabs/kmptoolkit/pdfgenerator/HtmlTemplateGenerator {
+	public fun <init> (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDocument;)V
+	protected fun generateBody (Lkotlinx/html/BODY;)V
+	protected final fun getDocument ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDocument;
+	protected fun getTitle ()Ljava/lang/String;
+}
+
+public abstract interface annotation class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDsl : java/lang/annotation/Annotation {
+}
+
+public abstract class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement {
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement$Divider : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement {
+	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement$Divider;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement$Heading : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement {
+	public fun <init> (ILjava/lang/String;)V
+	public final fun component1 ()I
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (ILjava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement$Heading;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement$Heading;ILjava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement$Heading;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContent ()Ljava/lang/String;
+	public final fun getLevel ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement$Html : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement$Html;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement$Html;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement$Html;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getRaw ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement$Image : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement {
+	public fun <init> (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource;Ljava/lang/Integer;Ljava/lang/Integer;)V
+	public synthetic fun <init> (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource;Ljava/lang/Integer;Ljava/lang/Integer;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource;
+	public final fun component2 ()Ljava/lang/Integer;
+	public final fun component3 ()Ljava/lang/Integer;
+	public final fun copy (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource;Ljava/lang/Integer;Ljava/lang/Integer;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement$Image;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement$Image;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource;Ljava/lang/Integer;Ljava/lang/Integer;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement$Image;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getHeightMm ()Ljava/lang/Integer;
+	public final fun getSource ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource;
+	public final fun getWidthMm ()Ljava/lang/Integer;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement$PageBreak : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement {
+	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement$PageBreak;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement$Spacer : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement {
+	public fun <init> (I)V
+	public final fun component1 ()I
+	public final fun copy (I)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement$Spacer;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement$Spacer;IILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement$Spacer;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMm ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement$Table : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement {
+	public fun <init> (Ljava/util/List;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TableRow;)V
+	public synthetic fun <init> (Ljava/util/List;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TableRow;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TableRow;
+	public final fun copy (Ljava/util/List;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TableRow;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement$Table;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement$Table;Ljava/util/List;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TableRow;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement$Table;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getHeaderRow ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TableRow;
+	public final fun getRows ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement$Text : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement {
+	public fun <init> (Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TextStyle;)V
+	public synthetic fun <init> (Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TextStyle;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TextStyle;
+	public final fun copy (Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TextStyle;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement$Text;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement$Text;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TextStyle;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfElement$Text;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContent ()Ljava/lang/String;
+	public final fun getStyle ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TextStyle;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfError : java/lang/Throwable {
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfError$CancellationError : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfError {
+	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfError$CancellationError;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfError$EngineFailure : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfError {
+	public fun <init> (Ljava/lang/Throwable;)V
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfError$InvalidInput : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfError {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun getReason ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfError$IoError : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfError {
+	public fun <init> (Ljava/lang/Throwable;)V
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfError$PermissionDenied : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfError {
+	public fun <init> (Ljava/lang/String;)V
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfError$UnsupportedFeature : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfError {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun getFeature ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfErrorKt {
+	public static final fun toPdfError (Ljava/lang/Throwable;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfError;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfGenerator {
+	public fun <init> ()V
+	public final fun generate (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDocument;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfGeneratorOptions;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun generate$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfGenerator;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDocument;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfGeneratorOptions;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public final fun generateAndSharePdf (Ljava/lang/String;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageConfig;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun generateFromHtml (Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageConfig;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfGeneratorOptions;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun generateFromHtml$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfGenerator;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageConfig;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfGeneratorOptions;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public final fun progressFlow ()Lkotlinx/coroutines/flow/Flow;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfGeneratorOptions {
+	public fun <init> ()V
+	public fun <init> (ZLkotlinx/datetime/LocalDate;IZ)V
+	public synthetic fun <init> (ZLkotlinx/datetime/LocalDate;IZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Z
+	public final fun component2 ()Lkotlinx/datetime/LocalDate;
+	public final fun component3 ()I
+	public final fun component4 ()Z
+	public final fun copy (ZLkotlinx/datetime/LocalDate;IZ)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfGeneratorOptions;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfGeneratorOptions;ZLkotlinx/datetime/LocalDate;IZILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfGeneratorOptions;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCompress ()Z
+	public final fun getDeterministic ()Z
+	public final fun getDpi ()I
+	public final fun getFixedDate ()Lkotlinx/datetime/LocalDate;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfLogo {
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfLogo$DataUri : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfLogo {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfLogo$DataUri;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfLogo$DataUri;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfLogo$DataUri;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getUri ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfLogo$None : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfLogo {
+	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfLogo$None;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfLogo$Png : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfLogo {
+	public fun <init> ([B)V
+	public final fun component1 ()[B
+	public final fun copy ([B)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfLogo$Png;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfLogo$Png;[BILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfLogo$Png;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBytes ()[B
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfLogo$Svg : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfLogo {
+	public fun <init> ([B)V
+	public final fun component1 ()[B
+	public final fun copy ([B)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfLogo$Svg;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfLogo$Svg;[BILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfLogo$Svg;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBytes ()[B
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfManager {
+	public abstract fun generate (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDocument;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfGeneratorOptions;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun generate$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfManager;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDocument;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfGeneratorOptions;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public abstract fun generateFromHtml (Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageConfig;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfGeneratorOptions;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun generateFromHtml$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfManager;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageConfig;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfGeneratorOptions;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public abstract fun getSupportsHtmlLayout ()Z
+	public abstract fun progressFlow ()Lkotlinx/coroutines/flow/Flow;
+	public fun toBytes (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDocument;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfGeneratorOptions;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun toBytes$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfManager;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDocument;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfGeneratorOptions;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfManager$DefaultImpls {
+	public static synthetic fun generate$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfManager;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDocument;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfGeneratorOptions;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static synthetic fun generateFromHtml$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfManager;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageConfig;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfGeneratorOptions;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static fun toBytes (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfManager;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDocument;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfGeneratorOptions;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun toBytes$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfManager;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDocument;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfGeneratorOptions;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfManagerImpl : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfManager {
+	public fun <init> ()V
+	public fun <init> (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfGenerator;)V
+	public synthetic fun <init> (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfGenerator;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun generate (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDocument;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfGeneratorOptions;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun generateFromHtml (Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageConfig;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfGeneratorOptions;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun getSupportsHtmlLayout ()Z
+	public fun progressFlow ()Lkotlinx/coroutines/flow/Flow;
+	public fun toBytes (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDocument;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfGeneratorOptions;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput {
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput$ByteArrayOutput : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput {
+	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput$ByteArrayOutput;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput$File : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput$File;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput$File;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput$File;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getPath ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput$Print : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput {
+	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput$Print;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput$Save : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput {
+	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput$Save;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput$Share : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput {
+	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput$Share;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput$Uri : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput {
+	public fun <init> (Lkotlin/jvm/functions/Function1;)V
+	public final fun component1 ()Lkotlin/jvm/functions/Function1;
+	public final fun copy (Lkotlin/jvm/functions/Function1;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput$Uri;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput$Uri;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput$Uri;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCallback ()Lkotlin/jvm/functions/Function1;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfPage {
+	public fun <init> (Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfPage;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfPage;Ljava/util/List;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfPage;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getElements ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfPageBuilder {
+	public final fun divider ()V
+	public final fun heading (ILjava/lang/String;)V
+	public final fun html (Ljava/lang/String;)V
+	public final fun image (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource;Ljava/lang/Integer;Ljava/lang/Integer;)V
+	public static synthetic fun image$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfPageBuilder;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource;Ljava/lang/Integer;Ljava/lang/Integer;ILjava/lang/Object;)V
+	public final fun pageBreak ()V
+	public final fun spacer (I)V
+	public final fun table (Lkotlin/jvm/functions/Function1;)V
+	public final fun text (Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TextStyle;)V
+	public static synthetic fun text$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfPageBuilder;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TextStyle;ILjava/lang/Object;)V
+}
+
+public abstract class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfProgressEvent {
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfProgressEvent$Complete : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfProgressEvent {
+	public fun <init> (I)V
+	public final fun component1 ()I
+	public final fun copy (I)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfProgressEvent$Complete;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfProgressEvent$Complete;IILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfProgressEvent$Complete;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getByteCount ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfProgressEvent$Failed : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfProgressEvent {
+	public fun <init> (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfError;)V
+	public final fun component1 ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfError;
+	public final fun copy (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfError;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfProgressEvent$Failed;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfProgressEvent$Failed;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfError;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfProgressEvent$Failed;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getError ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfError;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfProgressEvent$Finalizing : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfProgressEvent {
+	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfProgressEvent$Finalizing;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfProgressEvent$PageRendered : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfProgressEvent {
+	public fun <init> (ILjava/lang/Integer;)V
+	public final fun component1 ()I
+	public final fun component2 ()Ljava/lang/Integer;
+	public final fun copy (ILjava/lang/Integer;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfProgressEvent$PageRendered;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfProgressEvent$PageRendered;ILjava/lang/Integer;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfProgressEvent$PageRendered;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getPageNum ()I
+	public final fun getTotal ()Ljava/lang/Integer;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfProgressEvent$Started : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfProgressEvent {
+	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfProgressEvent$Started;
+}
+
+public abstract class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfResult {
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfResult$Failure : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfResult {
+	public fun <init> (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfError;)V
+	public final fun component1 ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfError;
+	public final fun copy (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfError;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfResult$Failure;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfResult$Failure;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfError;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfResult$Failure;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getError ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfError;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfResult$Success : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfResult {
+	public fun <init> ()V
+	public fun <init> ([BLjava/lang/String;I)V
+	public synthetic fun <init> ([BLjava/lang/String;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()[B
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()I
+	public final fun copy ([BLjava/lang/String;I)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfResult$Success;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfResult$Success;[BLjava/lang/String;IILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfResult$Success;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getByteCount ()I
+	public final fun getBytes ()[B
+	public final fun getUri ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfTheme {
+	public static final field Companion Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfTheme$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;F[B)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;F[BILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()F
+	public final fun component7 ()[B
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;F[B)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfTheme;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfTheme;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;F[BILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfTheme;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAccentColorHex ()Ljava/lang/String;
+	public final fun getBorderColorHex ()Ljava/lang/String;
+	public final fun getFontEmbedding ()[B
+	public final fun getFontFamily ()Ljava/lang/String;
+	public final fun getFontScale ()F
+	public final fun getHeaderColorHex ()Ljava/lang/String;
+	public final fun getTableRowEvenHex ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfTheme$Companion {
+	public final fun defaults ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfTheme;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/PlatformHtmlLayout_jvmKt {
+	public static final fun getPlatformSupportsHtmlLayout ()Z
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/TableBuilder {
+	public final fun header (Lkotlin/jvm/functions/Function1;)V
+	public final fun row (Lkotlin/jvm/functions/Function1;)V
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/TableCell {
+	public fun <init> (Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TextStyle;I)V
+	public synthetic fun <init> (Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TextStyle;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TextStyle;
+	public final fun component3 ()I
+	public final fun copy (Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TextStyle;I)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TableCell;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TableCell;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TextStyle;IILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TableCell;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getColSpan ()I
+	public final fun getContent ()Ljava/lang/String;
+	public final fun getStyle ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TextStyle;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/TableRow {
+	public fun <init> (Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TableRow;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TableRow;Ljava/util/List;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TableRow;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCells ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/TableRowBuilder {
+	public final fun cell (Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TextStyle;I)V
+	public static synthetic fun cell$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TableRowBuilder;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TextStyle;IILjava/lang/Object;)V
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/TextPdfWriter {
+	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TextPdfWriter;
+	public final fun write (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDocument;)[B
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/TextStyle {
+	public fun <init> ()V
+	public fun <init> (ZZILjava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/Alignment;)V
+	public synthetic fun <init> (ZZILjava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/Alignment;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Z
+	public final fun component2 ()Z
+	public final fun component3 ()I
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/Alignment;
+	public final fun copy (ZZILjava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/Alignment;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TextStyle;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TextStyle;ZZILjava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/Alignment;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/TextStyle;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAlignment ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/Alignment;
+	public final fun getBold ()Z
+	public final fun getColorHex ()Ljava/lang/String;
+	public final fun getItalic ()Z
+	public final fun getSize ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/Watermark {
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource;FI)V
+	public synthetic fun <init> (Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource;FIILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource;
+	public final fun component3 ()F
+	public final fun component4 ()I
+	public final fun copy (Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource;FI)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/Watermark;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/Watermark;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource;FIILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/Watermark;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getImage ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/ImageSource;
+	public final fun getOpacity ()F
+	public final fun getRotationDeg ()I
+	public final fun getText ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/di/PdfModuleKt {
+	public static final fun getPdfModule ()Lorg/koin/core/module/Module;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/templates/InvoiceData {
+	public fun <init> (Ljava/lang/String;Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component10 ()Ljava/lang/String;
+	public final fun component11 ()Ljava/lang/String;
+	public final fun component2 ()Lkotlinx/datetime/LocalDate;
+	public final fun component3 ()Lkotlinx/datetime/LocalDate;
+	public final fun component4 ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;
+	public final fun component5 ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;
+	public final fun component6 ()Ljava/util/List;
+	public final fun component7 ()Ljava/lang/String;
+	public final fun component8 ()Ljava/lang/String;
+	public final fun component9 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/InvoiceData;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/InvoiceData;Ljava/lang/String;Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/InvoiceData;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBillFrom ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;
+	public final fun getBillTo ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;
+	public final fun getDueDate ()Lkotlinx/datetime/LocalDate;
+	public final fun getInvoiceDate ()Lkotlinx/datetime/LocalDate;
+	public final fun getInvoiceNumber ()Ljava/lang/String;
+	public final fun getLineItems ()Ljava/util/List;
+	public final fun getNotes ()Ljava/lang/String;
+	public final fun getSubtotal ()Ljava/lang/String;
+	public final fun getTax ()Ljava/lang/String;
+	public final fun getTerms ()Ljava/lang/String;
+	public final fun getTotal ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/templates/InvoiceLineItem {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/InvoiceLineItem;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/InvoiceLineItem;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/InvoiceLineItem;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDescription ()Ljava/lang/String;
+	public final fun getLineTotal ()Ljava/lang/String;
+	public final fun getQuantity ()Ljava/lang/String;
+	public final fun getUnitPrice ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/templates/InvoiceTemplate : com/mobilebytelabs/kmptoolkit/pdfgenerator/HtmlTemplateGenerator {
+	public fun <init> (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/InvoiceData;)V
+	public final fun getInvoice ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/InvoiceData;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/templates/LetterData {
+	public fun <init> (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;Lkotlinx/datetime/LocalDate;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;Lkotlinx/datetime/LocalDate;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;
+	public final fun component2 ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;
+	public final fun component3 ()Lkotlinx/datetime/LocalDate;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Ljava/util/List;
+	public final fun component7 ()Ljava/lang/String;
+	public final fun component8 ()Ljava/lang/String;
+	public final fun component9 ()Ljava/lang/String;
+	public final fun copy (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;Lkotlinx/datetime/LocalDate;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/LetterData;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/LetterData;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;Lkotlinx/datetime/LocalDate;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/LetterData;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBodyParagraphs ()Ljava/util/List;
+	public final fun getClosing ()Ljava/lang/String;
+	public final fun getDate ()Lkotlinx/datetime/LocalDate;
+	public final fun getRecipient ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;
+	public final fun getSalutation ()Ljava/lang/String;
+	public final fun getSender ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;
+	public final fun getSignatureName ()Ljava/lang/String;
+	public final fun getSignatureTitle ()Ljava/lang/String;
+	public final fun getSubject ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/templates/LetterTemplate : com/mobilebytelabs/kmptoolkit/pdfgenerator/HtmlTemplateGenerator {
+	public fun <init> (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/LetterData;)V
+	public final fun getLetter ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/LetterData;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo {
+	public fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAddressLines ()Ljava/util/List;
+	public final fun getEmail ()Ljava/lang/String;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getPhone ()Ljava/lang/String;
+	public final fun getTaxId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/templates/ReceiptData {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlinx/datetime/LocalDate;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlinx/datetime/LocalDate;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component10 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Lkotlinx/datetime/LocalDate;
+	public final fun component5 ()Ljava/util/List;
+	public final fun component6 ()Ljava/lang/String;
+	public final fun component7 ()Ljava/lang/String;
+	public final fun component8 ()Ljava/lang/String;
+	public final fun component9 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlinx/datetime/LocalDate;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/ReceiptData;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/ReceiptData;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlinx/datetime/LocalDate;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/ReceiptData;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDate ()Lkotlinx/datetime/LocalDate;
+	public final fun getFooter ()Ljava/lang/String;
+	public final fun getItems ()Ljava/util/List;
+	public final fun getMerchantAddress ()Ljava/lang/String;
+	public final fun getMerchantName ()Ljava/lang/String;
+	public final fun getPaymentMethod ()Ljava/lang/String;
+	public final fun getReceiptNumber ()Ljava/lang/String;
+	public final fun getSubtotal ()Ljava/lang/String;
+	public final fun getTax ()Ljava/lang/String;
+	public final fun getTotal ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/templates/ReceiptLineItem {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/ReceiptLineItem;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/ReceiptLineItem;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/ReceiptLineItem;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAmount ()Ljava/lang/String;
+	public final fun getDescription ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/templates/ReceiptTemplate : com/mobilebytelabs/kmptoolkit/pdfgenerator/HtmlTemplateGenerator {
+	public fun <init> (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/ReceiptData;)V
+	public final fun getReceipt ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/ReceiptData;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/templates/ReportData {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlinx/datetime/LocalDate;Ljava/util/List;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlinx/datetime/LocalDate;Ljava/util/List;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Lkotlinx/datetime/LocalDate;
+	public final fun component5 ()Ljava/util/List;
+	public final fun component6 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlinx/datetime/LocalDate;Ljava/util/List;Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/ReportData;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/ReportData;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlinx/datetime/LocalDate;Ljava/util/List;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/ReportData;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAppendix ()Ljava/lang/String;
+	public final fun getAuthor ()Ljava/lang/String;
+	public final fun getDate ()Lkotlinx/datetime/LocalDate;
+	public final fun getSections ()Ljava/util/List;
+	public final fun getSubtitle ()Ljava/lang/String;
+	public final fun getTitle ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/templates/ReportSection {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/util/List;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/ReportSection;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/ReportSection;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/ReportSection;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBody ()Ljava/lang/String;
+	public final fun getHeading ()Ljava/lang/String;
+	public final fun getSubsections ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/templates/ReportTemplate : com/mobilebytelabs/kmptoolkit/pdfgenerator/HtmlTemplateGenerator {
+	public fun <init> (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/ReportData;)V
+	public final fun getReport ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/ReportData;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/templates/StatementData {
+	public fun <init> (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;Ljava/lang/String;Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)V
+	public final fun component1 ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Lkotlinx/datetime/LocalDate;
+	public final fun component4 ()Lkotlinx/datetime/LocalDate;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Ljava/lang/String;
+	public final fun component7 ()Ljava/util/List;
+	public final fun copy (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;Ljava/lang/String;Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/StatementData;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/StatementData;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;Ljava/lang/String;Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/StatementData;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAccountHolder ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/PartyInfo;
+	public final fun getAccountNumber ()Ljava/lang/String;
+	public final fun getClosingBalance ()Ljava/lang/String;
+	public final fun getOpeningBalance ()Ljava/lang/String;
+	public final fun getPeriodEnd ()Lkotlinx/datetime/LocalDate;
+	public final fun getPeriodStart ()Lkotlinx/datetime/LocalDate;
+	public final fun getTransactions ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/templates/StatementTemplate : com/mobilebytelabs/kmptoolkit/pdfgenerator/HtmlTemplateGenerator {
+	public fun <init> (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/StatementData;)V
+	public final fun getStatement ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/StatementData;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/templates/StatementTransaction {
+	public fun <init> (Lkotlinx/datetime/LocalDate;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Lkotlinx/datetime/LocalDate;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lkotlinx/datetime/LocalDate;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun copy (Lkotlinx/datetime/LocalDate;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/StatementTransaction;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/StatementTransaction;Lkotlinx/datetime/LocalDate;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/templates/StatementTransaction;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBalance ()Ljava/lang/String;
+	public final fun getCredit ()Ljava/lang/String;
+	public final fun getDate ()Lkotlinx/datetime/LocalDate;
+	public final fun getDebit ()Ljava/lang/String;
+	public final fun getDescription ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/testing/FakePdfManager : com/mobilebytelabs/kmptoolkit/pdfgenerator/PdfManager {
+	public fun <init> ()V
+	public fun <init> (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfResult;Z)V
+	public synthetic fun <init> (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfResult;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun generate (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDocument;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfGeneratorOptions;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun generateFromHtml (Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PageConfig;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfBranding;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfGeneratorOptions;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getGenerated ()Ljava/util/List;
+	public final fun getResult ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfResult;
+	public fun getSupportsHtmlLayout ()Z
+	public fun progressFlow ()Lkotlinx/coroutines/flow/Flow;
+	public final fun reset ()V
+	public final fun setResult (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfResult;)V
+	public fun toBytes (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDocument;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfGeneratorOptions;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/pdfgenerator/testing/GeneratedPdf {
+	public fun <init> (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDocument;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput;Ljava/lang/String;)V
+	public final fun component1 ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDocument;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun copy (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDocument;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput;Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/testing/GeneratedPdf;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/testing/GeneratedPdf;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDocument;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/testing/GeneratedPdf;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDocument ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfDocument;
+	public final fun getFileName ()Ljava/lang/String;
+	public final fun getHtml ()Ljava/lang/String;
+	public final fun getOutput ()Lcom/mobilebytelabs/kmptoolkit/pdfgenerator/PdfOutput;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+

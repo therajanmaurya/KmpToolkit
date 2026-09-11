@@ -1,0 +1,300 @@
+public abstract interface class com/mobilebytelabs/kmptoolkit/bubble/Bubble {
+	public abstract fun dismiss ()V
+	public abstract fun getCapability ()Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleCapability;
+	public abstract fun getCapabilityReason ()Ljava/lang/String;
+	public abstract fun getState ()Lkotlinx/coroutines/flow/StateFlow;
+	public abstract fun isShowing ()Z
+	public abstract fun show (Ljava/lang/String;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleIcon;Ljava/util/List;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleStyle;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleTapAction;J)V
+	public static synthetic fun show$default (Lcom/mobilebytelabs/kmptoolkit/bubble/Bubble;Ljava/lang/String;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleIcon;Ljava/util/List;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleStyle;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleTapAction;JILjava/lang/Object;)V
+	public abstract fun showPersistent (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleStyle;)V
+	public static synthetic fun showPersistent$default (Lcom/mobilebytelabs/kmptoolkit/bubble/Bubble;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleStyle;ILjava/lang/Object;)V
+	public abstract fun showScreen (Ljava/lang/String;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleScreenConfig;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleIcon;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleStyle;)V
+	public static synthetic fun showScreen$default (Lcom/mobilebytelabs/kmptoolkit/bubble/Bubble;Ljava/lang/String;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleScreenConfig;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleIcon;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleStyle;ILjava/lang/Object;)V
+	public abstract fun update (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)V
+	public static synthetic fun update$default (Lcom/mobilebytelabs/kmptoolkit/bubble/Bubble;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)V
+}
+
+public final class com/mobilebytelabs/kmptoolkit/bubble/Bubble$DefaultImpls {
+	public static synthetic fun show$default (Lcom/mobilebytelabs/kmptoolkit/bubble/Bubble;Ljava/lang/String;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleIcon;Ljava/util/List;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleStyle;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleTapAction;JILjava/lang/Object;)V
+	public static synthetic fun showPersistent$default (Lcom/mobilebytelabs/kmptoolkit/bubble/Bubble;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleStyle;ILjava/lang/Object;)V
+	public static synthetic fun showScreen$default (Lcom/mobilebytelabs/kmptoolkit/bubble/Bubble;Ljava/lang/String;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleScreenConfig;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleIcon;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleStyle;ILjava/lang/Object;)V
+	public static synthetic fun update$default (Lcom/mobilebytelabs/kmptoolkit/bubble/Bubble;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)V
+}
+
+public final class com/mobilebytelabs/kmptoolkit/bubble/BubbleAction {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function0;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function0;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Lkotlin/jvm/functions/Function0;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function0;)Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleAction;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleAction;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function0;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleAction;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getId ()Ljava/lang/String;
+	public final fun getLabel ()Ljava/lang/String;
+	public final fun getOnClick ()Lkotlin/jvm/functions/Function0;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/bubble/BubbleCapability : java/lang/Enum {
+	public static final field BrowserNotification Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleCapability;
+	public static final field Bubble Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleCapability;
+	public static final field FloatingWindow Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleCapability;
+	public static final field None Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleCapability;
+	public static final field Notification Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleCapability;
+	public static final field Overlay Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleCapability;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleCapability;
+	public static fun values ()[Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleCapability;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/bubble/BubbleConfig {
+	public static final field Companion Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleConfig$Companion;
+	public fun <init> ()V
+	public fun <init> (Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleStyle;Ljava/lang/String;Ljava/lang/String;ZZJJILjava/lang/String;FI)V
+	public synthetic fun <init> (Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleStyle;Ljava/lang/String;Ljava/lang/String;ZZJJILjava/lang/String;FIILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleStyle;
+	public final fun component10 ()F
+	public final fun component11 ()I
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Z
+	public final fun component5 ()Z
+	public final fun component6 ()J
+	public final fun component7 ()J
+	public final fun component8 ()I
+	public final fun component9 ()Ljava/lang/String;
+	public final fun copy (Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleStyle;Ljava/lang/String;Ljava/lang/String;ZZJJILjava/lang/String;FI)Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleConfig;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleConfig;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleStyle;Ljava/lang/String;Ljava/lang/String;ZZJJILjava/lang/String;FIILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleConfig;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getChannelId ()Ljava/lang/String;
+	public final fun getChannelName ()Ljava/lang/String;
+	public final fun getDefaultStyle ()Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleStyle;
+	public final fun getFabColor ()J
+	public final fun getFabElevationDp ()I
+	public final fun getFabIconColor ()J
+	public final fun getFabSizeDp ()I
+	public final fun getFabText ()Ljava/lang/String;
+	public final fun getFabTextSizeSp ()F
+	public final fun getSound ()Z
+	public final fun getVibrate ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/bubble/BubbleConfig$Companion {
+	public final fun getChat ()Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleConfig;
+	public final fun getDefault ()Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleConfig;
+	public final fun getDownload ()Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleConfig;
+}
+
+public abstract class com/mobilebytelabs/kmptoolkit/bubble/BubbleIcon {
+}
+
+public final class com/mobilebytelabs/kmptoolkit/bubble/BubbleIcon$Resource : com/mobilebytelabs/kmptoolkit/bubble/BubbleIcon {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleIcon$Resource;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleIcon$Resource;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleIcon$Resource;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/bubble/BubbleIcon$System : com/mobilebytelabs/kmptoolkit/bubble/BubbleIcon {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleIcon$System;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleIcon$System;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleIcon$System;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/bubble/BubbleIcon$Url : com/mobilebytelabs/kmptoolkit/bubble/BubbleIcon {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleIcon$Url;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleIcon$Url;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleIcon$Url;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getUrl ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class com/mobilebytelabs/kmptoolkit/bubble/BubblePermission {
+	public abstract fun canShowBubble ()Z
+	public abstract fun canShowNotification ()Z
+	public abstract fun requestBubblePermission (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun requestNotificationPermission (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/bubble/BubblePermission_jvmKt {
+	public static final fun createBubblePermission ()Lcom/mobilebytelabs/kmptoolkit/bubble/BubblePermission;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/bubble/BubbleScreenConfig {
+	public static final field Companion Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleScreenConfig$Companion;
+	public static final field MATCH_PARENT I
+	public fun <init> ()V
+	public fun <init> (IIZ)V
+	public synthetic fun <init> (IIZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()I
+	public final fun component2 ()I
+	public final fun component3 ()Z
+	public final fun copy (IIZ)Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleScreenConfig;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleScreenConfig;IIZILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleScreenConfig;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAutoExpand ()Z
+	public final fun getHeight ()I
+	public final fun getWidth ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/bubble/BubbleScreenConfig$Companion {
+	public final fun getDefault ()Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleScreenConfig;
+}
+
+public abstract class com/mobilebytelabs/kmptoolkit/bubble/BubbleState {
+}
+
+public final class com/mobilebytelabs/kmptoolkit/bubble/BubbleState$ActionTaken : com/mobilebytelabs/kmptoolkit/bubble/BubbleState {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleState$ActionTaken;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleState$ActionTaken;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleState$ActionTaken;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getActionId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/bubble/BubbleState$Dismissed : com/mobilebytelabs/kmptoolkit/bubble/BubbleState {
+	public fun <init> (Z)V
+	public final fun component1 ()Z
+	public final fun copy (Z)Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleState$Dismissed;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleState$Dismissed;ZILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleState$Dismissed;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getByUser ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/bubble/BubbleState$Hidden : com/mobilebytelabs/kmptoolkit/bubble/BubbleState {
+	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleState$Hidden;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/bubble/BubbleState$Showing : com/mobilebytelabs/kmptoolkit/bubble/BubbleState {
+	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleState$Showing;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/bubble/BubbleStyle : java/lang/Enum {
+	public static final field Auto Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleStyle;
+	public static final field Floating Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleStyle;
+	public static final field Notification Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleStyle;
+	public static final field Persistent Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleStyle;
+	public static final field Service Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleStyle;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleStyle;
+	public static fun values ()[Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleStyle;
+}
+
+public abstract class com/mobilebytelabs/kmptoolkit/bubble/BubbleTapAction {
+}
+
+public final class com/mobilebytelabs/kmptoolkit/bubble/BubbleTapAction$Callback : com/mobilebytelabs/kmptoolkit/bubble/BubbleTapAction {
+	public fun <init> (Lkotlin/jvm/functions/Function0;)V
+	public final fun component1 ()Lkotlin/jvm/functions/Function0;
+	public final fun copy (Lkotlin/jvm/functions/Function0;)Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleTapAction$Callback;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleTapAction$Callback;Lkotlin/jvm/functions/Function0;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleTapAction$Callback;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getOnTap ()Lkotlin/jvm/functions/Function0;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/bubble/BubbleTapAction$DeepLink : com/mobilebytelabs/kmptoolkit/bubble/BubbleTapAction {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleTapAction$DeepLink;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleTapAction$DeepLink;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleTapAction$DeepLink;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getUri ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/bubble/BubbleTapAction$Dismiss : com/mobilebytelabs/kmptoolkit/bubble/BubbleTapAction {
+	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleTapAction$Dismiss;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/bubble/BubbleTapAction$None : com/mobilebytelabs/kmptoolkit/bubble/BubbleTapAction {
+	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleTapAction$None;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/bubble/Bubble_jvmKt {
+	public static final fun createBubble (Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleConfig;)Lcom/mobilebytelabs/kmptoolkit/bubble/Bubble;
+	public static synthetic fun createBubble$default (Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleConfig;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/bubble/Bubble;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/bubble/di/BubbleModuleKt {
+	public static final fun bubbleModule (Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleConfig;)Lorg/koin/core/module/Module;
+	public static synthetic fun bubbleModule$default (Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleConfig;ILjava/lang/Object;)Lorg/koin/core/module/Module;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/bubble/testing/FakeBubble : com/mobilebytelabs/kmptoolkit/bubble/Bubble {
+	public fun <init> ()V
+	public fun <init> (Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleCapability;Ljava/lang/String;)V
+	public synthetic fun <init> (Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleCapability;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun dismiss ()V
+	public fun getCapability ()Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleCapability;
+	public fun getCapabilityReason ()Ljava/lang/String;
+	public final fun getDismissCalls ()I
+	public final fun getShown ()Ljava/util/List;
+	public fun getState ()Lkotlinx/coroutines/flow/StateFlow;
+	public fun isShowing ()Z
+	public final fun reset ()V
+	public fun show (Ljava/lang/String;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleIcon;Ljava/util/List;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleStyle;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleTapAction;J)V
+	public fun showPersistent (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleStyle;)V
+	public fun showScreen (Ljava/lang/String;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleScreenConfig;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleIcon;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleStyle;)V
+	public fun update (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)V
+}
+
+public final class com/mobilebytelabs/kmptoolkit/bubble/testing/ShownBubble {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleStyle;ZLjava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleStyle;ZLjava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/util/List;
+	public final fun component4 ()Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleStyle;
+	public final fun component5 ()Z
+	public final fun component6 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleStyle;ZLjava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/bubble/testing/ShownBubble;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/bubble/testing/ShownBubble;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleStyle;ZLjava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/bubble/testing/ShownBubble;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getActions ()Ljava/util/List;
+	public final fun getMessage ()Ljava/lang/String;
+	public final fun getPersistent ()Z
+	public final fun getRoute ()Ljava/lang/String;
+	public final fun getStyle ()Lcom/mobilebytelabs/kmptoolkit/bubble/BubbleStyle;
+	public final fun getTitle ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+

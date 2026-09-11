@@ -1,0 +1,462 @@
+public abstract interface class com/mobilebytelabs/kmptoolkit/clipboard/Clipboard {
+	public abstract fun clear ()V
+	public abstract fun copy (Ljava/lang/String;)Z
+	public abstract fun copyAsync (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun getCapabilities ()Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardCapabilities;
+	public abstract fun hasText ()Z
+	public abstract fun paste ()Ljava/lang/String;
+	public abstract fun pasteAsync (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/ClipboardAsync_jvmKt {
+	public static final fun copyToClipboardAsync (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun getFromClipboardAsync (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun hasClipboardTextAsync (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/ClipboardCapabilities {
+	public static final field Companion Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardCapabilities$Companion;
+	public fun <init> (ZZZZ)V
+	public final fun component1 ()Z
+	public final fun component2 ()Z
+	public final fun component3 ()Z
+	public final fun component4 ()Z
+	public final fun copy (ZZZZ)Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardCapabilities;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardCapabilities;ZZZZILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardCapabilities;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getRead ()Z
+	public final fun getReadNeedsPermission ()Z
+	public final fun getSystemWide ()Z
+	public final fun getWrite ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/ClipboardCapabilities$Companion {
+	public final fun getInApp ()Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardCapabilities;
+	public final fun getSystem ()Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardCapabilities;
+	public final fun getSystemPermissioned ()Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardCapabilities;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/ClipboardCapabilities_jvmKt {
+	public static final fun getPlatformClipboardCapabilities ()Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardCapabilities;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/ClipboardChange {
+	public fun <init> (Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardContentType;JLcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardSource;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardContentType;JLcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardSource;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardContentType;
+	public final fun component3 ()J
+	public final fun component4 ()Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardSource;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardContentType;JLcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardSource;Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardChange;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardChange;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardContentType;JLcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardSource;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardChange;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContent ()Ljava/lang/String;
+	public final fun getContentType ()Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardContentType;
+	public final fun getPreviousContent ()Ljava/lang/String;
+	public final fun getSource ()Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardSource;
+	public final fun getTimestamp ()J
+	public final fun hasChanged ()Z
+	public fun hashCode ()I
+	public final fun isUrl ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/ClipboardContentType : java/lang/Enum {
+	public static final field Html Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardContentType;
+	public static final field Image Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardContentType;
+	public static final field Text Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardContentType;
+	public static final field Unknown Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardContentType;
+	public static final field Uri Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardContentType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardContentType;
+	public static fun values ()[Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardContentType;
+}
+
+public abstract interface class com/mobilebytelabs/kmptoolkit/clipboard/ClipboardFilter {
+	public static final field Companion Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardFilter$Companion;
+	public abstract fun getName ()Ljava/lang/String;
+	public abstract fun shouldProcess (Ljava/lang/String;)Z
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/ClipboardFilter$Companion {
+	public final fun exclude ([Lkotlin/text/Regex;)Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardFilter;
+	public final fun maxLength (I)Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardFilter;
+	public final fun minLength (I)Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardFilter;
+	public final fun urlOnly ()Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardFilter;
+}
+
+public abstract interface class com/mobilebytelabs/kmptoolkit/clipboard/ClipboardHistory {
+	public abstract fun clear ()V
+	public abstract fun copyToClipboard (Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardHistoryEntry;)Z
+	public abstract fun getEntries ()Lkotlinx/coroutines/flow/StateFlow;
+	public abstract fun getMaxSize ()I
+	public abstract fun isCapturing ()Z
+	public abstract fun remove (Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardHistoryEntry;)V
+	public abstract fun startCapturing ()V
+	public abstract fun stopCapturing ()V
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/ClipboardHistoryEntry {
+	public fun <init> (Ljava/lang/String;JLcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardContentType;)V
+	public synthetic fun <init> (Ljava/lang/String;JLcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardContentType;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()J
+	public final fun component3 ()Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardContentType;
+	public final fun copy (Ljava/lang/String;JLcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardContentType;)Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardHistoryEntry;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardHistoryEntry;Ljava/lang/String;JLcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardContentType;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardHistoryEntry;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContent ()Ljava/lang/String;
+	public final fun getContentType ()Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardContentType;
+	public final fun getTimestamp ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/ClipboardHistoryKt {
+	public static final fun createClipboardHistory (I)Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardHistory;
+	public static synthetic fun createClipboardHistory$default (IILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardHistory;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/ClipboardManager : com/mobilebytelabs/kmptoolkit/clipboard/Clipboard {
+	public fun <init> ()V
+	public fun <init> (Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardManagerConfig;)V
+	public synthetic fun <init> (Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardManagerConfig;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun addAllSocialMediaMatchers ()V
+	public final fun addFilter (Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardFilter;)V
+	public final fun addUrlMatcher (Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardUrlMatcher;)V
+	public fun clear ()V
+	public final fun clearHistory ()V
+	public fun copy (Ljava/lang/String;)Z
+	public fun copyAsync (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun copyFromHistory (Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardHistoryEntry;)Z
+	public fun getCapabilities ()Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardCapabilities;
+	public final fun getChanges ()Lkotlinx/coroutines/flow/SharedFlow;
+	public final fun getContent ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun getHistory ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun getHistoryMaxSize ()I
+	public final fun getLatestChange ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun getMonitorState ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun getUrlDetections ()Lkotlinx/coroutines/flow/SharedFlow;
+	public final fun hasClipboardAccess ()Z
+	public final fun hasNotificationPermission ()Z
+	public final fun hasOverlayPermission ()Z
+	public fun hasText ()Z
+	public final fun hasTextAsync (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun isActive ()Z
+	public fun paste ()Ljava/lang/String;
+	public fun pasteAsync (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun pause ()V
+	public final fun removeFromHistory (Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardHistoryEntry;)V
+	public final fun requestNotificationPermission (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun resume ()V
+	public final fun start ()V
+	public final fun stop ()V
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/ClipboardManagerConfig {
+	public static final field Companion Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardManagerConfig$Companion;
+	public fun <init> ()V
+	public fun <init> (ZIZLjava/util/List;Ljava/util/List;ZJZZZJ)V
+	public synthetic fun <init> (ZIZLjava/util/List;Ljava/util/List;ZJZZZJILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Z
+	public final fun component10 ()Z
+	public final fun component11 ()J
+	public final fun component2 ()I
+	public final fun component3 ()Z
+	public final fun component4 ()Ljava/util/List;
+	public final fun component5 ()Ljava/util/List;
+	public final fun component6 ()Z
+	public final fun component7 ()J
+	public final fun component8 ()Z
+	public final fun component9 ()Z
+	public final fun copy (ZIZLjava/util/List;Ljava/util/List;ZJZZZJ)Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardManagerConfig;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardManagerConfig;ZIZLjava/util/List;Ljava/util/List;ZJZZZJILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardManagerConfig;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAsync ()Z
+	public final fun getAutoClearAfterReadMs ()J
+	public final fun getDetectUrls ()Z
+	public final fun getFilters ()Ljava/util/List;
+	public final fun getHistorySize ()I
+	public final fun getObserve ()Z
+	public final fun getPollingIntervalMs ()J
+	public final fun getShowNotification ()Z
+	public final fun getShowOverlay ()Z
+	public final fun getTriggerWorkerOnUrl ()Z
+	public final fun getUrlMatchers ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/ClipboardManagerConfig$Companion {
+	public final fun getChatMonitor ()Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardManagerConfig;
+	public final fun getDefault ()Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardManagerConfig;
+	public final fun getDeveloper ()Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardManagerConfig;
+	public final fun getFull ()Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardManagerConfig;
+	public final fun getLinkCollector ()Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardManagerConfig;
+	public final fun getMinimal ()Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardManagerConfig;
+	public final fun getSecureClipboard ()Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardManagerConfig;
+	public final fun getSocialMediaDownloader ()Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardManagerConfig;
+}
+
+public abstract interface class com/mobilebytelabs/kmptoolkit/clipboard/ClipboardMonitor {
+	public abstract fun addFilter (Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardFilter;)V
+	public abstract fun addUrlMatcher (Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardUrlMatcher;)V
+	public abstract fun getChanges ()Lkotlinx/coroutines/flow/SharedFlow;
+	public abstract fun getLatestChange ()Lkotlinx/coroutines/flow/StateFlow;
+	public abstract fun getState ()Lkotlinx/coroutines/flow/StateFlow;
+	public abstract fun getUrlDetections ()Lkotlinx/coroutines/flow/SharedFlow;
+	public abstract fun pause ()V
+	public abstract fun resume ()V
+	public abstract fun start (Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardMonitorConfig;)V
+	public static synthetic fun start$default (Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardMonitor;Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardMonitorConfig;ILjava/lang/Object;)V
+	public abstract fun stop ()V
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/ClipboardMonitor$DefaultImpls {
+	public static synthetic fun start$default (Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardMonitor;Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardMonitorConfig;ILjava/lang/Object;)V
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/ClipboardMonitor_jvmKt {
+	public static final fun createClipboardMonitor ()Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardMonitor;
+}
+
+public abstract interface class com/mobilebytelabs/kmptoolkit/clipboard/ClipboardObserver {
+	public abstract fun getClipboardContent ()Lkotlinx/coroutines/flow/StateFlow;
+	public abstract fun isObserving ()Z
+	public abstract fun startObserving ()V
+	public abstract fun stopObserving ()V
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/ClipboardObserver_jvmKt {
+	public static final fun createClipboardObserver ()Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardObserver;
+}
+
+public abstract interface class com/mobilebytelabs/kmptoolkit/clipboard/ClipboardPermission {
+	public abstract fun hasClipboardAccess ()Z
+	public abstract fun hasNotificationPermission ()Z
+	public abstract fun hasOverlayPermission ()Z
+	public abstract fun requestClipboardAccess (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun requestNotificationPermission (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun requestOverlayPermission (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/ClipboardPermission_jvmKt {
+	public static final fun createClipboardPermission ()Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardPermission;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/ClipboardSource : java/lang/Enum {
+	public static final field External Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardSource;
+	public static final field Internal Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardSource;
+	public static final field Unknown Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardSource;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardSource;
+	public static fun values ()[Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardSource;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/Clipboard_jvmKt {
+	public static final fun clearClipboard ()V
+	public static final fun copyToClipboard (Ljava/lang/String;)Z
+	public static final fun getFromClipboard ()Ljava/lang/String;
+	public static final fun hasClipboardText ()Z
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/InAppClipboard {
+	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/clipboard/InAppClipboard;
+	public final fun getBufferedContent ()Ljava/lang/String;
+	public final fun getOnCopy ()Lkotlin/jvm/functions/Function1;
+	public final fun getOnRead ()Lkotlin/jvm/functions/Function0;
+	public final fun reset ()V
+	public final fun setOnCopy (Lkotlin/jvm/functions/Function1;)V
+	public final fun setOnRead (Lkotlin/jvm/functions/Function0;)V
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/InAppClipboardMonitor : com/mobilebytelabs/kmptoolkit/clipboard/ClipboardMonitor {
+	public fun <init> ()V
+	public fun addFilter (Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardFilter;)V
+	public fun addUrlMatcher (Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardUrlMatcher;)V
+	public fun getChanges ()Lkotlinx/coroutines/flow/SharedFlow;
+	public fun getLatestChange ()Lkotlinx/coroutines/flow/StateFlow;
+	public fun getState ()Lkotlinx/coroutines/flow/StateFlow;
+	public fun getUrlDetections ()Lkotlinx/coroutines/flow/SharedFlow;
+	public fun pause ()V
+	public fun resume ()V
+	public fun start (Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardMonitorConfig;)V
+	public fun stop ()V
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/UrlDetection {
+	public fun <init> (Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardUrlMatcher;Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardChange;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardUrlMatcher;
+	public final fun component3 ()Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardChange;
+	public final fun copy (Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardUrlMatcher;Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardChange;)Lcom/mobilebytelabs/kmptoolkit/clipboard/UrlDetection;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/clipboard/UrlDetection;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardUrlMatcher;Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardChange;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/clipboard/UrlDetection;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getChange ()Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardChange;
+	public final fun getMatcher ()Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardUrlMatcher;
+	public final fun getUrl ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/di/ClipboardModuleKt {
+	public static final fun clipboardModule (Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardManagerConfig;)Lorg/koin/core/module/Module;
+	public static synthetic fun clipboardModule$default (Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardManagerConfig;ILjava/lang/Object;)Lorg/koin/core/module/Module;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardMonitorConfig {
+	public static final field Companion Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardMonitorConfig$Companion;
+	public fun <init> ()V
+	public fun <init> (JZZZZLjava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (JZZZZLjava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()J
+	public final fun component2 ()Z
+	public final fun component3 ()Z
+	public final fun component4 ()Z
+	public final fun component5 ()Z
+	public final fun component6 ()Ljava/lang/String;
+	public final fun component7 ()Ljava/lang/String;
+	public final fun copy (JZZZZLjava/lang/String;Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardMonitorConfig;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardMonitorConfig;JZZZZLjava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardMonitorConfig;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDetectUrls ()Z
+	public final fun getNotificationText ()Ljava/lang/String;
+	public final fun getNotificationTitle ()Ljava/lang/String;
+	public final fun getPollingIntervalMs ()J
+	public final fun getShowNotification ()Z
+	public final fun getShowOverlay ()Z
+	public final fun getTriggerWorkerOnUrl ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardMonitorConfig$Companion {
+	public final fun getDefault ()Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardMonitorConfig;
+	public final fun getSocialMediaDownloader ()Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardMonitorConfig;
+}
+
+public abstract class com/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardMonitorState {
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardMonitorState$Error : com/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardMonitorState {
+	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/Throwable;
+	public final fun copy (Ljava/lang/String;Ljava/lang/Throwable;)Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardMonitorState$Error;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardMonitorState$Error;Ljava/lang/String;Ljava/lang/Throwable;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardMonitorState$Error;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCause ()Ljava/lang/Throwable;
+	public final fun getMessage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardMonitorState$Idle : com/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardMonitorState {
+	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardMonitorState$Idle;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardMonitorState$Monitoring : com/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardMonitorState {
+	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardMonitorState$Monitoring;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardMonitorState$Paused : com/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardMonitorState {
+	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardMonitorState$Paused;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class com/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardUrlMatcher {
+	public abstract fun extractUrl (Ljava/lang/String;)Ljava/lang/String;
+	public abstract fun getName ()Ljava/lang/String;
+	public abstract fun getPatterns ()Ljava/util/List;
+	public abstract fun matches (Ljava/lang/String;)Z
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/monitor/SocialMediaUrlMatchers {
+	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/SocialMediaUrlMatchers;
+	public final fun all ()Ljava/util/List;
+	public final fun facebook ()Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardUrlMatcher;
+	public final fun instagram ()Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardUrlMatcher;
+	public final fun linkedin ()Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardUrlMatcher;
+	public final fun pinterest ()Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardUrlMatcher;
+	public final fun reddit ()Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardUrlMatcher;
+	public final fun snapchat ()Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardUrlMatcher;
+	public final fun threads ()Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardUrlMatcher;
+	public final fun tiktok ()Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardUrlMatcher;
+	public final fun twitter ()Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardUrlMatcher;
+	public final fun youtube ()Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardUrlMatcher;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/overlay/ClipboardOverlayConfig {
+	public static final field Companion Lcom/mobilebytelabs/kmptoolkit/clipboard/overlay/ClipboardOverlayConfig$Companion;
+	public fun <init> ()V
+	public fun <init> (Lcom/mobilebytelabs/kmptoolkit/clipboard/overlay/OverlayPosition;ZJZZ)V
+	public synthetic fun <init> (Lcom/mobilebytelabs/kmptoolkit/clipboard/overlay/OverlayPosition;ZJZZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcom/mobilebytelabs/kmptoolkit/clipboard/overlay/OverlayPosition;
+	public final fun component2 ()Z
+	public final fun component3 ()J
+	public final fun component4 ()Z
+	public final fun component5 ()Z
+	public final fun copy (Lcom/mobilebytelabs/kmptoolkit/clipboard/overlay/OverlayPosition;ZJZZ)Lcom/mobilebytelabs/kmptoolkit/clipboard/overlay/ClipboardOverlayConfig;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/clipboard/overlay/ClipboardOverlayConfig;Lcom/mobilebytelabs/kmptoolkit/clipboard/overlay/OverlayPosition;ZJZZILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/clipboard/overlay/ClipboardOverlayConfig;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAutoDismissMs ()J
+	public final fun getDraggable ()Z
+	public final fun getPosition ()Lcom/mobilebytelabs/kmptoolkit/clipboard/overlay/OverlayPosition;
+	public final fun getShowOnUrlOnly ()Z
+	public final fun getVibrate ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/overlay/ClipboardOverlayConfig$Companion {
+	public final fun getDefault ()Lcom/mobilebytelabs/kmptoolkit/clipboard/overlay/ClipboardOverlayConfig;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/overlay/OverlayPosition : java/lang/Enum {
+	public static final field BottomEnd Lcom/mobilebytelabs/kmptoolkit/clipboard/overlay/OverlayPosition;
+	public static final field BottomStart Lcom/mobilebytelabs/kmptoolkit/clipboard/overlay/OverlayPosition;
+	public static final field CenterEnd Lcom/mobilebytelabs/kmptoolkit/clipboard/overlay/OverlayPosition;
+	public static final field TopEnd Lcom/mobilebytelabs/kmptoolkit/clipboard/overlay/OverlayPosition;
+	public static final field TopStart Lcom/mobilebytelabs/kmptoolkit/clipboard/overlay/OverlayPosition;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/clipboard/overlay/OverlayPosition;
+	public static fun values ()[Lcom/mobilebytelabs/kmptoolkit/clipboard/overlay/OverlayPosition;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/testing/FakeClipboard : com/mobilebytelabs/kmptoolkit/clipboard/Clipboard {
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;ZLcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardCapabilities;)V
+	public synthetic fun <init> (Ljava/lang/String;ZLcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardCapabilities;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun clear ()V
+	public fun copy (Ljava/lang/String;)Z
+	public fun copyAsync (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun getCapabilities ()Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardCapabilities;
+	public final fun getCopied ()Ljava/util/List;
+	public final fun getPasteCalls ()I
+	public final fun getRefused ()Ljava/util/List;
+	public fun hasText ()Z
+	public fun paste ()Ljava/lang/String;
+	public fun pasteAsync (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun reset ()V
+}
+
+public abstract interface class com/mobilebytelabs/kmptoolkit/clipboard/worker/ClipboardWorkerTrigger {
+	public abstract fun onUrlDetected (Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/clipboard/monitor/ClipboardUrlMatcher;Lcom/mobilebytelabs/kmptoolkit/clipboard/ClipboardChange;)V
+}
+
+public final class com/mobilebytelabs/kmptoolkit/clipboard/worker/ClipboardWorkerTrigger_jvmKt {
+	public static final fun createClipboardWorkerTrigger ()Lcom/mobilebytelabs/kmptoolkit/clipboard/worker/ClipboardWorkerTrigger;
+}
+

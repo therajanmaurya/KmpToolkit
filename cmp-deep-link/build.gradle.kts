@@ -11,6 +11,7 @@ plugins {
     alias(libs.plugins.kotlinSerialization)
     id("io.github.mobilebytelabs.kmptoolkit.dokka")
     id("io.github.mobilebytelabs.kmptoolkit.kover")
+    alias(libs.plugins.binaryCompatibilityValidator)
 }
 
 // ============================================================================

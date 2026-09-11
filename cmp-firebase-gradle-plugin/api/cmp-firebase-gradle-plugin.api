@@ -1,0 +1,16 @@
+public class io/github/mobilebytelabs/kmptoolkit/firebase/gradle/CmpFirebaseExtension {
+	public fun <init> ()V
+	public final fun getAddDependency ()Z
+	public final fun setAddDependency (Z)V
+}
+
+public final class io/github/mobilebytelabs/kmptoolkit/firebase/gradle/CmpFirebasePlugin : org/gradle/api/Plugin {
+	public static final field CMP_FIREBASE_ARTIFACT Ljava/lang/String;
+	public static final field CMP_FIREBASE_GROUP Ljava/lang/String;
+	public static final field KOTLIN_MULTIPLATFORM_ID Ljava/lang/String;
+	public static final field MIN_KOTLIN_VERSION Ljava/lang/String;
+	public fun <init> ()V
+	public synthetic fun apply (Ljava/lang/Object;)V
+	public fun apply (Lorg/gradle/api/Project;)V
+}
+

@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.gradle.plugin.publish)
     // Opts this module into root's kover aggregation (see KoverConventionPlugin).
     id("io.github.mobilebytelabs.kmptoolkit.kover")
+    alias(libs.plugins.binaryCompatibilityValidator)
 }
 
 // ============================================================================

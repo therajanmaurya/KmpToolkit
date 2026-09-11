@@ -1,0 +1,397 @@
+public final class com/mobilebytelabs/kmptoolkit/appupdate/AppUpdate {
+	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdate;
+	public final fun checkForUpdate (Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun checkForUpdate$default (Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdate;Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public final fun getCurrentVersion ()Lcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;
+	public final fun isSupported ()Z
+	public final fun openStoreForUpdate (Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig;)Z
+	public static synthetic fun openStoreForUpdate$default (Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdate;Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig;ILjava/lang/Object;)Z
+	public final fun setCurrentVersion (Lcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;)V
+	public final fun startUpdate (Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun startUpdate$default (Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdate;Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig {
+	public static final field Companion Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;ZLjava/lang/String;ZLjava/lang/String;Ljava/lang/String;ZLjava/lang/String;Lcom/mobilebytelabs/kmptoolkit/appupdate/VersionResolver;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;Ljava/lang/String;ZLjava/lang/String;Ljava/lang/String;ZZZ)V
+	public synthetic fun <init> (Ljava/lang/String;ZLjava/lang/String;ZLjava/lang/String;Ljava/lang/String;ZLjava/lang/String;Lcom/mobilebytelabs/kmptoolkit/appupdate/VersionResolver;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;Ljava/lang/String;ZLjava/lang/String;Ljava/lang/String;ZZZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component10 ()Ljava/lang/String;
+	public final fun component11 ()Ljava/lang/String;
+	public final fun component12 ()Ljava/lang/String;
+	public final fun component13 ()Z
+	public final fun component14 ()Ljava/lang/String;
+	public final fun component15 ()Ljava/lang/String;
+	public final fun component16 ()Z
+	public final fun component17 ()Ljava/lang/String;
+	public final fun component18 ()Ljava/lang/String;
+	public final fun component19 ()Z
+	public final fun component2 ()Z
+	public final fun component20 ()Z
+	public final fun component21 ()Z
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Z
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Ljava/lang/String;
+	public final fun component7 ()Z
+	public final fun component8 ()Ljava/lang/String;
+	public final fun component9 ()Lcom/mobilebytelabs/kmptoolkit/appupdate/VersionResolver;
+	public final fun copy (Ljava/lang/String;ZLjava/lang/String;ZLjava/lang/String;Ljava/lang/String;ZLjava/lang/String;Lcom/mobilebytelabs/kmptoolkit/appupdate/VersionResolver;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;Ljava/lang/String;ZLjava/lang/String;Ljava/lang/String;ZZZ)Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig;Ljava/lang/String;ZLjava/lang/String;ZLjava/lang/String;Ljava/lang/String;ZLjava/lang/String;Lcom/mobilebytelabs/kmptoolkit/appupdate/VersionResolver;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;Ljava/lang/String;ZLjava/lang/String;Ljava/lang/String;ZZZILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAndroidEnabled ()Z
+	public final fun getCountryCode ()Ljava/lang/String;
+	public final fun getCustomVersionCheckUrl ()Ljava/lang/String;
+	public final fun getEffectiveJvmVersionCheckUrl ()Ljava/lang/String;
+	public final fun getEffectiveLinuxVersionCheckUrl ()Ljava/lang/String;
+	public final fun getEffectiveWindowsVersionCheckUrl ()Ljava/lang/String;
+	public final fun getIosAppStoreId ()Ljava/lang/String;
+	public final fun getIosEnabled ()Z
+	public final fun getJvmDownloadUrl ()Ljava/lang/String;
+	public final fun getJvmEnabled ()Z
+	public final fun getJvmVersionCheckUrl ()Ljava/lang/String;
+	public final fun getLinuxEnabled ()Z
+	public final fun getLinuxStoreUrl ()Ljava/lang/String;
+	public final fun getLinuxVersionCheckUrl ()Ljava/lang/String;
+	public final fun getMacosAppStoreId ()Ljava/lang/String;
+	public final fun getMacosEnabled ()Z
+	public final fun getMacosStoreUrl ()Ljava/lang/String;
+	public final fun getPackageName ()Ljava/lang/String;
+	public final fun getTvosEnabled ()Z
+	public final fun getVersionResolver ()Lcom/mobilebytelabs/kmptoolkit/appupdate/VersionResolver;
+	public final fun getWatchosEnabled ()Z
+	public final fun getWindowsEnabled ()Z
+	public final fun getWindowsStoreUrl ()Ljava/lang/String;
+	public final fun getWindowsVersionCheckUrl ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder {
+	public fun <init> ()V
+	public final fun android (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+	public static synthetic fun android$default (Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+	public final fun appleOnly ()Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+	public final fun build ()Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig;
+	public final fun countryCode (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+	public final fun customVersionCheckUrl (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+	public final fun desktopOnly ()Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+	public final fun disableAllPlatforms ()Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+	public final fun disableAndroid ()Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+	public final fun disableIos ()Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+	public final fun disableJvm ()Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+	public final fun disableLinux ()Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+	public final fun disableMacos ()Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+	public final fun disableTvos ()Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+	public final fun disableWatchos ()Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+	public final fun disableWindows ()Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+	public final fun github (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+	public static synthetic fun github$default (Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+	public final fun ios (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+	public static synthetic fun ios$default (Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+	public final fun jvm (Ljava/lang/String;Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+	public static synthetic fun jvm$default (Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+	public final fun linux (Ljava/lang/String;Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+	public static synthetic fun linux$default (Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+	public final fun macos (Ljava/lang/String;Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+	public static synthetic fun macos$default (Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+	public final fun mobileOnly ()Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+	public final fun supabase (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+	public static synthetic fun supabase$default (Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+	public final fun versionResolver (Lcom/mobilebytelabs/kmptoolkit/appupdate/VersionResolver;)Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+	public final fun windows (Ljava/lang/String;Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+	public static synthetic fun windows$default (Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Companion {
+	public final fun builder ()Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig$Builder;
+	public final fun getDefault ()Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig;
+}
+
+public abstract interface class com/mobilebytelabs/kmptoolkit/appupdate/AppUpdateManager {
+	public abstract fun check (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun checkAndStart (Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun checkAndStart$default (Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateManager;Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public abstract fun currentVersion ()Lcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;
+	public abstract fun isSupported ()Z
+	public abstract fun openStore ()Z
+	public abstract fun start (Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun start$default (Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateManager;Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appupdate/AppUpdateManager$DefaultImpls {
+	public static synthetic fun checkAndStart$default (Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateManager;Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static synthetic fun start$default (Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateManager;Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appupdate/AppUpdateManagerImpl : com/mobilebytelabs/kmptoolkit/appupdate/AppUpdateManager {
+	public fun <init> ()V
+	public fun <init> (Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig;Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;)V
+	public synthetic fun <init> (Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig;Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun check (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun checkAndStart (Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun currentVersion ()Lcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;
+	public fun isSupported ()Z
+	public fun openStore ()Z
+	public fun start (Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appupdate/AppUpdateManagerKt {
+	public static final fun toOutcome (Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateResult;Z)Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateOutcome;
+	public static synthetic fun toOutcome$default (Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateResult;ZILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateOutcome;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appupdate/AppVersion : java/lang/Comparable {
+	public static final field Companion Lcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion$Companion;
+	public fun <init> (IIILjava/lang/String;Ljava/lang/Long;)V
+	public synthetic fun <init> (IIILjava/lang/String;Ljava/lang/Long;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun compareTo (Lcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;)I
+	public synthetic fun compareTo (Ljava/lang/Object;)I
+	public final fun component1 ()I
+	public final fun component2 ()I
+	public final fun component3 ()I
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/Long;
+	public final fun copy (IIILjava/lang/String;Ljava/lang/Long;)Lcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;IIILjava/lang/String;Ljava/lang/Long;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMajor ()I
+	public final fun getMinor ()I
+	public final fun getPatch ()I
+	public final fun getVersionCode ()Ljava/lang/Long;
+	public final fun getVersionName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public final fun isNewerThan (Lcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;)Z
+	public final fun isOlderThan (Lcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;)Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appupdate/AppVersion$Companion {
+	public final fun getUNKNOWN ()Lcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;
+	public final fun of (IIILjava/lang/Long;)Lcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;
+	public static synthetic fun of$default (Lcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion$Companion;IIILjava/lang/Long;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;
+	public final fun parse (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appupdate/UpdateInfo {
+	public static final field Companion Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateInfo$Companion;
+	public fun <init> (ZLcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;Lcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (ZLcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;Lcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Z
+	public final fun component2 ()Lcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;
+	public final fun component3 ()Lcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;
+	public final fun component4 ()Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Ljava/lang/String;
+	public final fun copy (ZLcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;Lcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;Ljava/lang/String;Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateInfo;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateInfo;ZLcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;Lcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateInfo;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCurrentVersion ()Lcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;
+	public final fun getLatestVersion ()Lcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;
+	public final fun getReleaseNotes ()Ljava/lang/String;
+	public final fun getStoreUrl ()Ljava/lang/String;
+	public final fun getUpdateType ()Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;
+	public fun hashCode ()I
+	public final fun isAvailable ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appupdate/UpdateInfo$Companion {
+	public final fun available (Lcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;Lcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;Ljava/lang/String;Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateInfo;
+	public static synthetic fun available$default (Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateInfo$Companion;Lcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;Lcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateInfo;
+	public final fun noUpdate (Lcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;)Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateInfo;
+}
+
+public abstract class com/mobilebytelabs/kmptoolkit/appupdate/UpdateOutcome {
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appupdate/UpdateOutcome$Available : com/mobilebytelabs/kmptoolkit/appupdate/UpdateOutcome {
+	public fun <init> (Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateInfo;)V
+	public final fun component1 ()Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateInfo;
+	public final fun copy (Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateInfo;)Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateOutcome$Available;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateOutcome$Available;Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateInfo;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateOutcome$Available;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getInfo ()Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateInfo;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appupdate/UpdateOutcome$Cancelled : com/mobilebytelabs/kmptoolkit/appupdate/UpdateOutcome {
+	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateOutcome$Cancelled;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appupdate/UpdateOutcome$Failed : com/mobilebytelabs/kmptoolkit/appupdate/UpdateOutcome {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateOutcome$Failed;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateOutcome$Failed;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateOutcome$Failed;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMessage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appupdate/UpdateOutcome$NotSupported : com/mobilebytelabs/kmptoolkit/appupdate/UpdateOutcome {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateOutcome$NotSupported;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateOutcome$NotSupported;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateOutcome$NotSupported;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getReason ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appupdate/UpdateOutcome$UpToDate : com/mobilebytelabs/kmptoolkit/appupdate/UpdateOutcome {
+	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateOutcome$UpToDate;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appupdate/UpdateOutcome$UpdateStarted : com/mobilebytelabs/kmptoolkit/appupdate/UpdateOutcome {
+	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateOutcome$UpdateStarted;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract class com/mobilebytelabs/kmptoolkit/appupdate/UpdateResult {
+	public final fun getErrorMessage ()Ljava/lang/String;
+	public final fun isSuccess ()Z
+	public final fun isUpdateAvailable ()Z
+	public final fun updateInfoOrNull ()Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateInfo;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appupdate/UpdateResult$Cancelled : com/mobilebytelabs/kmptoolkit/appupdate/UpdateResult {
+	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateResult$Cancelled;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appupdate/UpdateResult$Error : com/mobilebytelabs/kmptoolkit/appupdate/UpdateResult {
+	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/Throwable;
+	public final fun copy (Ljava/lang/String;Ljava/lang/Throwable;)Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateResult$Error;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateResult$Error;Ljava/lang/String;Ljava/lang/Throwable;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateResult$Error;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCause ()Ljava/lang/Throwable;
+	public final fun getMessage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appupdate/UpdateResult$NotSupported : com/mobilebytelabs/kmptoolkit/appupdate/UpdateResult {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateResult$NotSupported;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateResult$NotSupported;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateResult$NotSupported;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getReason ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appupdate/UpdateResult$Success : com/mobilebytelabs/kmptoolkit/appupdate/UpdateResult {
+	public fun <init> (Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateInfo;)V
+	public final fun component1 ()Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateInfo;
+	public final fun copy (Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateInfo;)Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateResult$Success;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateResult$Success;Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateInfo;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateResult$Success;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getUpdateInfo ()Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateInfo;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appupdate/UpdateType : java/lang/Enum {
+	public static final field FLEXIBLE Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;
+	public static final field IMMEDIATE Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;
+	public static final field NONE Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;
+	public static fun values ()[Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appupdate/VersionInfo {
+	public static final field Companion Lcom/mobilebytelabs/kmptoolkit/appupdate/VersionInfo$Companion;
+	public fun <init> (Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;)V
+	public synthetic fun <init> (Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Ljava/util/Map;
+	public final fun copy (Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;)Lcom/mobilebytelabs/kmptoolkit/appupdate/VersionInfo;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/appupdate/VersionInfo;Ljava/lang/String;Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/appupdate/VersionInfo;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDownloadUrl ()Ljava/lang/String;
+	public final fun getMetadata ()Ljava/util/Map;
+	public final fun getReleaseNotes ()Ljava/lang/String;
+	public final fun getStoreUrl ()Ljava/lang/String;
+	public final fun getUpdateType ()Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;
+	public final fun getVersion ()Ljava/lang/String;
+	public fun hashCode ()I
+	public final fun toAppVersion ()Lcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appupdate/VersionInfo$Companion {
+	public final fun noUpdate (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/appupdate/VersionInfo;
+}
+
+public abstract interface class com/mobilebytelabs/kmptoolkit/appupdate/VersionResolver {
+	public abstract fun resolve (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appupdate/di/AppUpdateModuleKt {
+	public static final fun appUpdateModule (Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig;Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;)Lorg/koin/core/module/Module;
+	public static synthetic fun appUpdateModule$default (Lcom/mobilebytelabs/kmptoolkit/appupdate/AppUpdateConfig;Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;ILjava/lang/Object;)Lorg/koin/core/module/Module;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appupdate/resolvers/GitHubResolver : com/mobilebytelabs/kmptoolkit/appupdate/VersionResolver {
+	public static final field Companion Lcom/mobilebytelabs/kmptoolkit/appupdate/resolvers/GitHubResolver$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun resolve (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appupdate/resolvers/GitHubResolver$Companion {
+	public final fun getASSET_PATTERNS ()Ljava/util/Map;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appupdate/resolvers/SupabaseResolver : com/mobilebytelabs/kmptoolkit/appupdate/VersionResolver {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun resolve (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appupdate/testing/FakeAppUpdateManager : com/mobilebytelabs/kmptoolkit/appupdate/AppUpdateManager {
+	public fun <init> ()V
+	public fun <init> (ZLcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateOutcome;Z)V
+	public synthetic fun <init> (ZLcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateOutcome;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun check (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun checkAndStart (Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun currentVersion ()Lcom/mobilebytelabs/kmptoolkit/appupdate/AppVersion;
+	public final fun getCheckAndStartCalls ()I
+	public final fun getCheckCalls ()I
+	public final fun getOpenStoreCalls ()I
+	public final fun getRequestedTypes ()Ljava/util/List;
+	public final fun getScripted ()Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateOutcome;
+	public final fun getStartCalls ()I
+	public final fun getStoreOpens ()Z
+	public fun isSupported ()Z
+	public fun openStore ()Z
+	public final fun reset ()V
+	public final fun setScripted (Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateOutcome;)V
+	public final fun setStoreOpens (Z)V
+	public fun start (Lcom/mobilebytelabs/kmptoolkit/appupdate/UpdateType;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
