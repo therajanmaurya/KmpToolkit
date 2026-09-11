@@ -16,16 +16,16 @@ import kotlinx.cinterop.addressOf
 import kotlinx.cinterop.convert
 import kotlinx.cinterop.toKString
 import kotlinx.cinterop.usePinned
+import platform.posix.SIGPIPE
+import platform.posix.SIG_IGN
 import platform.posix.fclose
 import platform.posix.fopen
 import platform.posix.fputs
 import platform.posix.fwrite
 import platform.posix.getenv
 import platform.posix.pclose
-import platform.posix.SIGPIPE
-import platform.posix.SIG_IGN
-import platform.posix.signal
 import platform.posix.popen
+import platform.posix.signal
 import platform.posix.system
 import kotlin.random.Random
 
@@ -59,7 +59,6 @@ public actual object Share {
         is SharePayload.Multi -> multiShare(payload)
     }
 
-    /** Pipe text to `xclip -selection clipboard`. Returns Completed on success. */
     /**
      * Put [content] on the X11 clipboard via `xclip`.
      *
