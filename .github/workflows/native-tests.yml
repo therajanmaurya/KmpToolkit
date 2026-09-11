@@ -51,7 +51,12 @@ jobs:
     if: >-
       github.event_name != 'pull_request' ||
       contains(github.event.pull_request.labels.*.name, 'native-tests')
-    runs-on: macos-14
+    # macos-15, not macos-14: the macos-14 image ships an Xcode whose Swift toolchain is older
+    # than firebase-ios-sdk 12.x requires, so SwiftPM resolution fails before any test runs with
+    # "Dependencies could not be resolved because 'firebase-ios-sdk' >= 12.0.0 contains
+    # incompatible tools version (6.1.0)". That aborted the whole build at
+    # :cmp-app-intents:fetchUmbrellaPackageIdentifierForDefault — nothing to do with the tests.
+    runs-on: macos-15
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
@@ -92,7 +97,12 @@ jobs:
     if: >-
       github.event_name != 'pull_request' ||
       contains(github.event.pull_request.labels.*.name, 'native-tests')
-    runs-on: macos-14
+    # macos-15, not macos-14: the macos-14 image ships an Xcode whose Swift toolchain is older
+    # than firebase-ios-sdk 12.x requires, so SwiftPM resolution fails before any test runs with
+    # "Dependencies could not be resolved because 'firebase-ios-sdk' >= 12.0.0 contains
+    # incompatible tools version (6.1.0)". That aborted the whole build at
+    # :cmp-app-intents:fetchUmbrellaPackageIdentifierForDefault — nothing to do with the tests.
+    runs-on: macos-15
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4

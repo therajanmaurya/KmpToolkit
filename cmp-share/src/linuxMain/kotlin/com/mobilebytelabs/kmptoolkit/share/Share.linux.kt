@@ -22,6 +22,9 @@ import platform.posix.fputs
 import platform.posix.fwrite
 import platform.posix.getenv
 import platform.posix.pclose
+import platform.posix.SIGPIPE
+import platform.posix.SIG_IGN
+import platform.posix.signal
 import platform.posix.popen
 import platform.posix.system
 import kotlin.random.Random
@@ -57,18 +60,31 @@ public actual object Share {
     }
 
     /** Pipe text to `xclip -selection clipboard`. Returns Completed on success. */
+    /**
+     * Put [content] on the X11 clipboard via `xclip`.
+     *
+     * ## Two defects this shape avoids
+     * `popen` forks a SHELL, so it returns a valid handle even when `xclip` is not installed — the
+     * shell only then fails with `sh: 1: xclip: not found`. So a non-null handle proves nothing.
+     *
+     * Worse, writing to that dead pipe raises `SIGPIPE`, whose default disposition **terminates
+     * the process**: on a Linux box without `xclip`, sharing text killed the calling application.
+     * The `rc < 0` check below never got the chance to run. Ignoring `SIGPIPE` downgrades that to
+     * an ordinary `EPIPE` failure.
+     *
+     * And the old code discarded `pclose`'s status, so a missing `xclip` reported `Completed`.
+     * The exit status (127 when the shell cannot find the command) is the only honest verdict.
+     */
     private fun xclipText(content: String): ShareResult {
+        signal(SIGPIPE, SIG_IGN)
         val pipe = popen("xclip -selection clipboard", "w")
             ?: return ShareResult.Failed(ShareError.NoHandler)
-        return try {
-            val rc = fputs(content, pipe)
-            if (rc < 0) {
-                ShareResult.Failed(ShareError.Unknown("xclip fputs failed (rc=$rc)"))
-            } else {
-                ShareResult.Completed
-            }
-        } finally {
-            pclose(pipe)
+        val rc = fputs(content, pipe)
+        val status = pclose(pipe)
+        return when {
+            rc < 0 -> ShareResult.Failed(ShareError.Unknown("xclip write failed (rc=$rc)"))
+            status != 0 -> ShareResult.Failed(ShareError.NoHandler)
+            else -> ShareResult.Completed
         }
     }
 
