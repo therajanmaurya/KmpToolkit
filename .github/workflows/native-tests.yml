@@ -29,9 +29,12 @@ on:
       targets:
         description: 'Which native targets to run'
         required: false
-        default: 'both'
+        default: 'all'
         type: choice
-        options: [both, ios, linux]
+        # Was [both, ios, linux] — "both" predated the watchOS and Windows jobs and had stopped
+        # describing reality. On a pull_request event this input is empty, which every condition
+        # below treats as "all".
+        options: [all, ios, watchos, linux, windows]
   pull_request:
     # Opt-in per PR: add the `native-tests` label to run these before merging something
     # that touches native behaviour.
@@ -68,14 +71,14 @@ jobs:
       - uses: gradle/actions/setup-gradle@v6
 
       - name: Run iosSimulatorArm64Test
-        if: inputs.targets != 'linux'
+        if: inputs.targets == '' || inputs.targets == 'all' || inputs.targets == 'ios'
         run: ./gradlew iosSimulatorArm64Test --continue
 
       - name: Assert tests actually executed
         # A test task can report success having run nothing (no test sources wired, a filter
         # that matches zero cases, a target that silently no-ops). Silence must not read as
         # success — this is the whole point of the workflow.
-        if: always() && inputs.targets != 'linux'
+        if: always() && (inputs.targets == '' || inputs.targets == 'all' || inputs.targets == 'ios')
         run: bash .github/scripts/assert-tests-ran.sh iosSimulatorArm64Test
 
       - name: Upload test reports
@@ -119,11 +122,11 @@ jobs:
         run: xcrun simctl list runtimes | grep -i watch || echo "NO watchOS runtime on this image"
 
       - name: Run watchosSimulatorArm64Test
-        if: inputs.targets != 'linux'
+        if: inputs.targets == '' || inputs.targets == 'all' || inputs.targets == 'watchos'
         run: ./gradlew watchosSimulatorArm64Test --continue
 
       - name: Assert tests actually executed
-        if: always() && inputs.targets != 'linux'
+        if: always() && (inputs.targets == '' || inputs.targets == 'all' || inputs.targets == 'watchos')
         run: bash .github/scripts/assert-tests-ran.sh watchosSimulatorArm64Test
 
       - name: Upload test reports
@@ -132,6 +135,48 @@ jobs:
         with:
           name: native-test-reports-watchos
           path: '**/build/test-results/watchosSimulatorArm64Test/**/*.xml'
+          if-no-files-found: warn
+
+  windows:
+    name: Test (Windows Native)
+    # The LAST unexecuted platform. Every Windows path in this toolkit — the PowerShell
+    # OpenFileDialog/SaveFileDialog in cmp-intent-launcher, the NotifyIcon balloon in cmp-bubble,
+    # the clipboard fallbacks in cmp-share — has only ever been compile- and link-verified. None
+    # of it has run, so none of the PowerShell quoting has been proven against a real shell.
+    if: >-
+      github.event_name != 'pull_request' ||
+      contains(github.event.pull_request.labels.*.name, 'native-tests')
+    runs-on: windows-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+      - uses: gradle/actions/wrapper-validation@v6
+      - uses: actions/setup-java@v6
+        with:
+          java-version: '21'
+          distribution: 'zulu'
+      - uses: gradle/actions/setup-gradle@v6
+
+      - name: Show PowerShell version
+        # Printed first so a failure is immediately attributable to the shell rather than to the
+        # code under test — the same reason the watchOS job prints its simulator runtimes.
+        run: powershell -NoProfile -Command "$PSVersionTable.PSVersion"
+
+      - name: Run mingwX64Test
+        if: inputs.targets == '' || inputs.targets == 'all' || inputs.targets == 'windows'
+        run: ./gradlew mingwX64Test --continue
+
+      - name: Assert tests actually executed
+        if: always() && (inputs.targets == '' || inputs.targets == 'all' || inputs.targets == 'windows')
+        run: bash .github/scripts/assert-tests-ran.sh mingwX64Test
+        shell: bash
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: native-test-reports-windows
+          path: '**/build/test-results/mingwX64Test/**/*.xml'
           if-no-files-found: warn
 
   linux:
@@ -151,11 +196,11 @@ jobs:
       - uses: gradle/actions/setup-gradle@v6
 
       - name: Run linuxX64Test
-        if: inputs.targets != 'ios'
+        if: inputs.targets == '' || inputs.targets == 'all' || inputs.targets == 'linux'
         run: ./gradlew linuxX64Test --continue
 
       - name: Assert tests actually executed
-        if: always() && inputs.targets != 'ios'
+        if: always() && (inputs.targets == '' || inputs.targets == 'all' || inputs.targets == 'linux')
         run: bash .github/scripts/assert-tests-ran.sh linuxX64Test
 
       - name: Upload test reports
