@@ -324,13 +324,21 @@ class NetworkMonitorScenarioTest {
         val wentOffline = CompletableDeferred<Unit>()
         val cameOnline = CompletableDeferred<NetworkInfo>()
         val onlineHits = mutableListOf<NetworkInfo>()
-        val scope = CoroutineScope(coroutineContext[Job]!! + Dispatchers.Default)
+        // A dedicated child Job, not the test's own: `close()` cancels the collector but
+        // cancellation is ASYNCHRONOUS, and CallbackHandle exposes no Job to wait on. Owning the
+        // parent here lets the test join the collector and know it has actually finished.
+        val callbackJob = Job(coroutineContext[Job])
+        val scope = CoroutineScope(callbackJob + Dispatchers.Default)
 
         val handle = monitor.addCallback(
             scope = scope,
             onOnline = {
                 onlineHits += it
-                cameOnline.complete(it)
+                // The collector replays the CURRENT status the moment it registers, so the first
+                // online callback can be the pre-existing state rather than the reconnection under
+                // test — which surfaced as `expected:<WiFi> but was:<Unknown>` roughly 1 run in 12.
+                // Only the online that FOLLOWS the observed offline is the transition we mean.
+                if (wentOffline.isCompleted) cameOnline.complete(it)
             },
             onOffline = { wentOffline.complete(Unit) },
         )
@@ -343,9 +351,18 @@ class NetworkMonitorScenarioTest {
 
         val onlineBefore = onlineHits.size
         handle.close()
+
+        // Wait for the collector to actually stop before emitting again. Without this the
+        // assertion RACES the cancellation: on a fast multi-core runner the in-flight emission is
+        // still processed and the count moves, while on a slower machine it happens to pass.
+        // Joining also establishes the happens-before edge that makes reading `onlineHits` from
+        // this thread safe — it is mutated on Dispatchers.Default.
+        callbackJob.children.forEach { it.join() }
+
         monitor.setNetworkStatus(NetworkStatus.Available(cellular()))
 
         assertEquals(onlineBefore, onlineHits.size, "no callbacks may fire after close — that is a leak")
+        callbackJob.cancel()
     }
 
     // ── Scenario 8: lifecycle / shutdown ────────────────────────────────────────────────────
