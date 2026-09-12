@@ -1,8 +1,8 @@
-# Native test execution — iOS Simulator + Linux Native.
+# Native test execution — iOS + watchOS Simulator, Windows Native, Linux Native.
 #
 # WHY THIS EXISTS
 # `pr-check.yml` sets run-ios-tests/run-linux-tests to false: executing them on every PR costs
-# a macos-14 runner for up to 45 minutes, and compile-all-targets already catches missing
+# a macOS runner for up to 45 minutes, and compile-all-targets already catches missing
 # actuals and type errors on every platform. That trade is deliberate and stays.
 #
 # The gap it leaves is real, though. `commonTest` runs on native targets too, and a test can be
@@ -18,6 +18,14 @@
 # commit touched no cmp-* module yields `modules=NONE` — the native jobs skip and the run
 # reports green having executed nothing. Calling the gradle tasks directly avoids depending on
 # change detection for a job whose entire purpose is to always run.
+#
+# WHY EVERY JOB GOES THROUGH run-native-tests.sh
+# A root-level `./gradlew <target>Test` runs the task in every project declaring the target, which
+# for the Apple targets includes the 11 sample Compose apps. That was 46% of the iOS job's task
+# graph and is what pushed it into its 45-minute timeout (run 34639024914) — spent linking sample
+# apps and resolving their SwiftPM packages to execute five `assertEquals(3, 1 + 2)` cases. The
+# script scopes each run to the cmp-* library modules; the full rationale and the measurements are
+# in its header.
 name: Native Tests
 
 on:
@@ -72,7 +80,7 @@ jobs:
 
       - name: Run iosSimulatorArm64Test
         if: inputs.targets == '' || inputs.targets == 'all' || inputs.targets == 'ios'
-        run: ./gradlew iosSimulatorArm64Test --continue
+        run: bash .github/scripts/run-native-tests.sh iosSimulatorArm64Test --continue
 
       - name: Assert tests actually executed
         # A test task can report success having run nothing (no test sources wired, a filter
@@ -123,7 +131,7 @@ jobs:
 
       - name: Run watchosSimulatorArm64Test
         if: inputs.targets == '' || inputs.targets == 'all' || inputs.targets == 'watchos'
-        run: ./gradlew watchosSimulatorArm64Test --continue
+        run: bash .github/scripts/run-native-tests.sh watchosSimulatorArm64Test --continue
 
       - name: Assert tests actually executed
         if: always() && (inputs.targets == '' || inputs.targets == 'all' || inputs.targets == 'watchos')
@@ -174,7 +182,7 @@ jobs:
         # ship git-bash, so this runs the same wrapper every other job uses rather than needing
         # gradlew.bat.
         shell: bash
-        run: ./gradlew mingwX64Test --continue
+        run: bash .github/scripts/run-native-tests.sh mingwX64Test --continue
 
       - name: Assert tests actually executed
         if: always() && (inputs.targets == '' || inputs.targets == 'all' || inputs.targets == 'windows')
@@ -207,7 +215,7 @@ jobs:
 
       - name: Run linuxX64Test
         if: inputs.targets == '' || inputs.targets == 'all' || inputs.targets == 'linux'
-        run: ./gradlew linuxX64Test --continue
+        run: bash .github/scripts/run-native-tests.sh linuxX64Test --continue
 
       - name: Assert tests actually executed
         if: always() && (inputs.targets == '' || inputs.targets == 'all' || inputs.targets == 'linux')

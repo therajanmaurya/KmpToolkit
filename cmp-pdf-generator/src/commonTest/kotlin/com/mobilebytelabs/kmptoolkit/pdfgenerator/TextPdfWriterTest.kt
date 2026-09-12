@@ -55,7 +55,11 @@ class TextPdfWriterTest {
         // and fails in another.
         val text = TextPdfWriter.write(doc(PdfElement.Text("hello"))).asText()
         val declared = Regex("""xref\n0 (\d+)""").find(text)?.groupValues?.get(1)?.toInt()
-        val objectCount = Regex("""(?m)^(\d+) 0 obj""").findAll(text).count()
+        // RegexOption.MULTILINE, not an inline `(?m)` flag: JavaScript's RegExp has no inline flag
+        // groups, so the inline form throws "Invalid regular expression: Invalid group" on js and
+        // wasmJs while working fine on JVM/Native. Caught the first time this suite ran on JS.
+        val objectCount =
+            Regex("""^(\d+) 0 obj""", RegexOption.MULTILINE).findAll(text).count()
         assertEquals(objectCount + 1, declared, "xref size must be object count + the free entry")
     }
 

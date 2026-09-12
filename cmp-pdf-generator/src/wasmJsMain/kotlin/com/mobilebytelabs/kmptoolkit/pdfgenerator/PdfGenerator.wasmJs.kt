@@ -11,7 +11,9 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.withTimeoutOrNull
 import org.w3c.dom.HTMLIFrameElement
+import kotlin.time.Duration
 
 /**
  * wasmJs (browser) implementation. Mirror of the JS impl for the HTML route — uses iframe +
@@ -27,7 +29,7 @@ public actual class PdfGenerator public actual constructor() {
     private val progress = MutableSharedFlow<PdfProgressEvent>(extraBufferCapacity = 32)
 
     public actual suspend fun generateAndSharePdf(htmlContent: String, fileName: String, pageConfig: PageConfig) {
-        printViaIframe(htmlContent.injectPageConfigCss(pageConfig))
+        printViaIframe(htmlContent.injectPageConfigCss(pageConfig), PdfGeneratorOptions().renderTimeout)
     }
 
     public actual suspend fun generate(
@@ -39,7 +41,7 @@ public actual class PdfGenerator public actual constructor() {
         progress.tryEmit(PdfProgressEvent.Started)
         return try {
             val html = document.toHtml().injectPageConfigCss(document.config)
-            handleOutput(html, output, ensurePdfFileName(fileName)).also {
+            handleOutput(html, output, ensurePdfFileName(fileName), options.renderTimeout).also {
                 progress.tryEmit(PdfProgressEvent.Complete(html.length))
             }
         } catch (e: Throwable) {
@@ -57,7 +59,12 @@ public actual class PdfGenerator public actual constructor() {
         options: PdfGeneratorOptions,
         fileName: String,
     ): PdfResult = try {
-        handleOutput(html.injectPageConfigCss(pageConfig), output, ensurePdfFileName(fileName)).also {
+        handleOutput(
+            html.injectPageConfigCss(pageConfig),
+            output,
+            ensurePdfFileName(fileName),
+            options.renderTimeout,
+        ).also {
             progress.tryEmit(PdfProgressEvent.Complete(html.length))
         }
     } catch (e: Throwable) {
@@ -66,22 +73,23 @@ public actual class PdfGenerator public actual constructor() {
 
     public actual fun progressFlow(): Flow<PdfProgressEvent> = progress.asSharedFlow()
 
-    private suspend fun handleOutput(html: String, output: PdfOutput, fileName: String): PdfResult = when (output) {
-        PdfOutput.Print, PdfOutput.Share, PdfOutput.Save -> {
-            printViaIframe(html)
-            PdfResult.Success()
+    private suspend fun handleOutput(html: String, output: PdfOutput, fileName: String, timeout: Duration): PdfResult =
+        when (output) {
+            PdfOutput.Print, PdfOutput.Share, PdfOutput.Save -> {
+                printViaIframe(html, timeout)
+                PdfResult.Success()
+            }
+
+            is PdfOutput.File -> throw PdfError.UnsupportedFeature("File output on wasmJs — use Print/Share/Save")
+
+            PdfOutput.ByteArrayOutput -> throw PdfError.UnsupportedFeature(
+                "ByteArray output on wasmJs deferred — pdf-lib wasmJs interop pending.",
+            )
+
+            is PdfOutput.Uri -> throw PdfError.UnsupportedFeature("Uri output on wasmJs deferred.")
         }
 
-        is PdfOutput.File -> throw PdfError.UnsupportedFeature("File output on wasmJs — use Print/Share/Save")
-
-        PdfOutput.ByteArrayOutput -> throw PdfError.UnsupportedFeature(
-            "ByteArray output on wasmJs deferred — pdf-lib wasmJs interop pending.",
-        )
-
-        is PdfOutput.Uri -> throw PdfError.UnsupportedFeature("Uri output on wasmJs deferred.")
-    }
-
-    private suspend fun printViaIframe(html: String) {
+    private suspend fun printViaIframe(html: String, timeout: Duration) {
         val docBody = document.body ?: throw PdfError.EngineFailure(IllegalStateException("document.body is null"))
         val completion = CompletableDeferred<Unit>()
         val iframe = document.createElement("iframe") as HTMLIFrameElement
@@ -106,7 +114,19 @@ public actual class PdfGenerator public actual constructor() {
             )
         }
         frameDoc.close()
-        completion.await()
+
+        // Bounded, not `completion.await()`. `iframe.onload` is the only thing that completes this
+        // deferred, and it is not guaranteed to fire: a blocked or sandboxed frame, a host page that
+        // detaches the iframe before load, or a document.write the browser never finishes parsing all
+        // leave onload silent, and an unbounded await then hangs the caller's coroutine permanently.
+        // withTimeoutOrNull rather than withTimeout because the latter throws
+        // TimeoutCancellationException, which toPdfError maps to CancellationError — indistinguishable
+        // from the caller cancelling, and it propagates instead of becoming a typed failure.
+        if (withTimeoutOrNull(timeout) { completion.await() } == null) {
+            // Detach the orphaned frame immediately; the 2s cleanup below is never reached on this path.
+            if (docBody.contains(iframe)) docBody.removeChild(iframe)
+            throw PdfError.RenderTimeout(timeout)
+        }
         window.setTimeout(
             {
                 if (docBody.contains(iframe)) docBody.removeChild(iframe)

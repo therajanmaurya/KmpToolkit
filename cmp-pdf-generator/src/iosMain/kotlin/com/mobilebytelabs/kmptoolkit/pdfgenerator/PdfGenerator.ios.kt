@@ -14,6 +14,7 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.withTimeoutOrNull
 import platform.CoreGraphics.CGRectMake
 import platform.Foundation.NSData
 import platform.Foundation.NSError
@@ -31,6 +32,7 @@ import platform.WebKit.WKPDFConfiguration
 import platform.WebKit.WKWebView
 import platform.WebKit.WKWebViewConfiguration
 import platform.darwin.NSObject
+import kotlin.time.Duration
 
 /**
  * iOS implementation. HTML route uses `WKWebView.loadHTMLString` + waits for
@@ -53,7 +55,7 @@ public actual class PdfGenerator public actual constructor() {
     }
 
     public actual suspend fun generateAndSharePdf(htmlContent: String, fileName: String, pageConfig: PageConfig) {
-        val data = renderHtmlToData(htmlContent.injectPageConfigCss(pageConfig))
+        val data = renderHtmlToData(htmlContent.injectPageConfigCss(pageConfig), PdfGeneratorOptions().renderTimeout)
         presentShareSheet(data, fileName)
     }
 
@@ -66,7 +68,7 @@ public actual class PdfGenerator public actual constructor() {
         progress.tryEmit(PdfProgressEvent.Started)
         return try {
             val html = document.toHtml()
-            val data = renderHtmlToData(html.injectPageConfigCss(document.config))
+            val data = renderHtmlToData(html.injectPageConfigCss(document.config), options.renderTimeout)
             progress.tryEmit(PdfProgressEvent.Finalizing)
             val result = dispatchOutput(data, output, ensurePdfFileName(fileName))
             progress.tryEmit(PdfProgressEvent.Complete(data.length.toInt()))
@@ -88,7 +90,7 @@ public actual class PdfGenerator public actual constructor() {
     ): PdfResult {
         progress.tryEmit(PdfProgressEvent.Started)
         return try {
-            val data = renderHtmlToData(html.injectPageConfigCss(pageConfig))
+            val data = renderHtmlToData(html.injectPageConfigCss(pageConfig), options.renderTimeout)
             progress.tryEmit(PdfProgressEvent.Finalizing)
             val result = dispatchOutput(data, output, ensurePdfFileName(fileName))
             progress.tryEmit(PdfProgressEvent.Complete(data.length.toInt()))
@@ -102,7 +104,7 @@ public actual class PdfGenerator public actual constructor() {
 
     public actual fun progressFlow(): Flow<PdfProgressEvent> = progress.asSharedFlow()
 
-    private suspend fun renderHtmlToData(html: String): NSData {
+    private suspend fun renderHtmlToData(html: String, timeout: Duration): NSData {
         val pdfReady = CompletableDeferred<NSData>()
         val config = WKWebViewConfiguration()
         val webView = WKWebView(frame = CGRectMake(0.0, 0.0, 612.0, 792.0), configuration = config)
@@ -165,7 +167,15 @@ public actual class PdfGenerator public actual constructor() {
             }
         webView.navigationDelegate = navDelegate
         webView.loadHTMLString(html, baseURL = null)
-        return pdfReady.await()
+
+        // Bounded, not `pdfReady.await()`. Nothing guarantees a WKNavigationDelegate callback ever
+        // arrives: WKWebView only navigates inside a live UIApplication/window context, so in a
+        // headless host (or a background/extension process) neither didFinish nor didFail fires and
+        // an unbounded await hangs the caller's coroutine permanently. withTimeoutOrNull rather than
+        // withTimeout because the latter throws TimeoutCancellationException, which toPdfError maps
+        // to CancellationError — indistinguishable from the caller cancelling, and it would
+        // propagate out of a coroutineScope instead of becoming the documented typed failure.
+        return withTimeoutOrNull(timeout) { pdfReady.await() } ?: throw PdfError.RenderTimeout(timeout)
     }
 
     private fun dispatchOutput(data: NSData, output: PdfOutput, fileName: String): PdfResult = when (output) {

@@ -10,6 +10,7 @@
 package com.mobilebytelabs.kmptoolkit.pdfgenerator
 
 import kotlinx.coroutines.CancellationException
+import kotlin.time.Duration
 
 /**
  * Sealed hierarchy of PDF generation failures.
@@ -47,6 +48,17 @@ public sealed class PdfError(message: String, cause: Throwable? = null) : Throwa
 
     /** Input failed validation (negative margin, empty doc, malformed HTML, …). */
     public class InvalidInput(public val reason: String) : PdfError("Invalid input: $reason")
+
+    /**
+     * The engine did not finish within [PdfGeneratorOptions.renderTimeout].
+     *
+     * Distinct from [EngineFailure]: the engine did not report a problem, it simply never called
+     * back. The WebView-backed routes complete through a delegate/load callback that can fail to
+     * fire at all (no window context, a silently failed navigation, a detached iframe), so this is
+     * the difference between a caller getting a typed failure and its coroutine hanging forever.
+     */
+    public class RenderTimeout(public val timeout: Duration) :
+        PdfError("PDF render did not complete within $timeout")
 }
 
 /**

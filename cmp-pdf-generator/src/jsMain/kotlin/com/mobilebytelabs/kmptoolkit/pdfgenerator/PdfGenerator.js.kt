@@ -11,12 +11,14 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.withTimeoutOrNull
 import org.khronos.webgl.Uint8Array
 import org.w3c.dom.HTMLAnchorElement
 import org.w3c.dom.HTMLIFrameElement
 import org.w3c.dom.url.URL
 import org.w3c.files.Blob
 import org.w3c.files.BlobPropertyBag
+import kotlin.time.Duration
 
 /**
  * JS (browser + Node) implementation.
@@ -33,7 +35,7 @@ public actual class PdfGenerator public actual constructor() {
     private val progress = MutableSharedFlow<PdfProgressEvent>(extraBufferCapacity = 32)
 
     public actual suspend fun generateAndSharePdf(htmlContent: String, fileName: String, pageConfig: PageConfig) {
-        printViaIframe(htmlContent.injectPageConfigCss(pageConfig))
+        printViaIframe(htmlContent.injectPageConfigCss(pageConfig), PdfGeneratorOptions().renderTimeout)
     }
 
     public actual suspend fun generate(
@@ -47,7 +49,7 @@ public actual class PdfGenerator public actual constructor() {
             when (output) {
                 PdfOutput.Print -> {
                     val html = document.toHtml().injectPageConfigCss(document.config)
-                    printViaIframe(html)
+                    printViaIframe(html, options.renderTimeout)
                     progress.tryEmit(PdfProgressEvent.Complete(html.length))
                     PdfResult.Success()
                 }
@@ -80,7 +82,7 @@ public actual class PdfGenerator public actual constructor() {
             val finalHtml = html.injectPageConfigCss(pageConfig)
             when (output) {
                 PdfOutput.Print, PdfOutput.Share, PdfOutput.Save -> {
-                    printViaIframe(finalHtml)
+                    printViaIframe(finalHtml, options.renderTimeout)
                     PdfResult.Success()
                 }
 
@@ -172,7 +174,7 @@ public actual class PdfGenerator public actual constructor() {
         js("navigator.share")(data)
     }
 
-    private suspend fun printViaIframe(html: String) {
+    private suspend fun printViaIframe(html: String, timeout: Duration) {
         val docBody = document.body ?: throw PdfError.EngineFailure(IllegalStateException("document.body is null"))
         val completion = CompletableDeferred<Unit>()
         val iframe = document.createElement("iframe") as HTMLIFrameElement
@@ -195,7 +197,19 @@ public actual class PdfGenerator public actual constructor() {
             }, 0)
         }
         frameDoc.close()
-        completion.await()
+
+        // Bounded, not `completion.await()`. `iframe.onload` is the only thing that completes this
+        // deferred, and it is not guaranteed to fire: a blocked or sandboxed frame, a host page that
+        // detaches the iframe before load, or a document.write the browser never finishes parsing all
+        // leave onload silent, and an unbounded await then hangs the caller's coroutine permanently.
+        // withTimeoutOrNull rather than withTimeout because the latter throws
+        // TimeoutCancellationException, which toPdfError maps to CancellationError — indistinguishable
+        // from the caller cancelling, and it propagates instead of becoming a typed failure.
+        if (withTimeoutOrNull(timeout) { completion.await() } == null) {
+            // Detach the orphaned frame immediately; the 2s cleanup below is never reached on this path.
+            if (docBody.contains(iframe)) docBody.removeChild(iframe)
+            throw PdfError.RenderTimeout(timeout)
+        }
         window.setTimeout({
             if (docBody.contains(iframe)) docBody.removeChild(iframe)
             null

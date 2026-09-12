@@ -13,6 +13,7 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.withTimeoutOrNull
 import platform.AppKit.NSApplication
 import platform.AppKit.NSModalResponseOK
 import platform.AppKit.NSSavePanel
@@ -29,6 +30,7 @@ import platform.WebKit.WKPDFConfiguration
 import platform.WebKit.WKWebView
 import platform.WebKit.WKWebViewConfiguration
 import platform.darwin.NSObject
+import kotlin.time.Duration
 
 /**
  * macOS implementation. HTML route: `WKWebView` + `didFinishNavigation` → `createPDF` (macOS 11+).
@@ -39,7 +41,7 @@ public actual class PdfGenerator public actual constructor() {
     private val progress = MutableSharedFlow<PdfProgressEvent>(extraBufferCapacity = 32)
 
     public actual suspend fun generateAndSharePdf(htmlContent: String, fileName: String, pageConfig: PageConfig) {
-        val data = renderHtmlToData(htmlContent.injectPageConfigCss(pageConfig))
+        val data = renderHtmlToData(htmlContent.injectPageConfigCss(pageConfig), PdfGeneratorOptions().renderTimeout)
         saveViaPanel(data, fileName)
     }
 
@@ -52,7 +54,7 @@ public actual class PdfGenerator public actual constructor() {
         progress.tryEmit(PdfProgressEvent.Started)
         return try {
             val html = document.toHtml().injectPageConfigCss(document.config)
-            val data = renderHtmlToData(html)
+            val data = renderHtmlToData(html, options.renderTimeout)
             progress.tryEmit(PdfProgressEvent.Finalizing)
             val result = dispatchOutput(data, output, ensurePdfFileName(fileName))
             progress.tryEmit(PdfProgressEvent.Complete(data.length.toInt()))
@@ -74,7 +76,7 @@ public actual class PdfGenerator public actual constructor() {
     ): PdfResult {
         progress.tryEmit(PdfProgressEvent.Started)
         return try {
-            val data = renderHtmlToData(html.injectPageConfigCss(pageConfig))
+            val data = renderHtmlToData(html.injectPageConfigCss(pageConfig), options.renderTimeout)
             progress.tryEmit(PdfProgressEvent.Finalizing)
             val result = dispatchOutput(data, output, ensurePdfFileName(fileName))
             progress.tryEmit(PdfProgressEvent.Complete(data.length.toInt()))
@@ -88,7 +90,7 @@ public actual class PdfGenerator public actual constructor() {
 
     public actual fun progressFlow(): Flow<PdfProgressEvent> = progress.asSharedFlow()
 
-    private suspend fun renderHtmlToData(html: String): NSData {
+    private suspend fun renderHtmlToData(html: String, timeout: Duration): NSData {
         val pdfReady = CompletableDeferred<NSData>()
         val webView =
             WKWebView(
@@ -142,7 +144,12 @@ public actual class PdfGenerator public actual constructor() {
             }
         webView.navigationDelegate = navDelegate
         webView.loadHTMLString(html, baseURL = null)
-        return pdfReady.await()
+
+        // Bounded, not `pdfReady.await()` — see the iOS actual for the full reasoning. macOS is less
+        // exposed than iOS (an AppKit app normally has a window), but a WKNavigationDelegate callback
+        // is still not guaranteed: a command-line or background host has no window context, and a
+        // silently failed navigation fires neither didFinish nor didFail.
+        return withTimeoutOrNull(timeout) { pdfReady.await() } ?: throw PdfError.RenderTimeout(timeout)
     }
 
     private fun dispatchOutput(data: NSData, output: PdfOutput, fileName: String): PdfResult = when (output) {
