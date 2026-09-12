@@ -14,7 +14,6 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import com.mobilebytelabs.kmptoolkit.appintents.AppIntents
 import com.mobilebytelabs.kmptoolkit.appintents.AppIntentsConfig
-import com.mobilebytelabs.kmptoolkit.appintents.ExperimentalAppIntentsApi
 
 /**
  * Lifecycle-bound AppIntents registration Composable.
@@ -40,7 +39,6 @@ import com.mobilebytelabs.kmptoolkit.appintents.ExperimentalAppIntentsApi
  * `AppIntents.register(config)` directly.
  */
 @Composable
-@ExperimentalAppIntentsApi
 public fun AppIntentsRegistration(config: AppIntentsConfig) {
     DisposableEffect(config) {
         AppIntents.register(config)
@@ -59,7 +57,6 @@ public fun AppIntentsRegistration(config: AppIntentsConfig) {
  * handle threaded through the Composable tree.
  */
 @Composable
-@ExperimentalAppIntentsApi
 public fun rememberRegisteredAppIntents(config: AppIntentsConfig): AppIntentsConfig = remember(config) {
     AppIntents.register(config)
     config

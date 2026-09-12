@@ -1,7 +1,6 @@
 /*
  * Copyright 2026 MobileByteLabs · Apache 2.0
  */
-@file:OptIn(ExperimentalPdfGeneratorApi::class)
 
 package com.mobilebytelabs.kmptoolkit.pdfgenerator
 
@@ -9,7 +8,6 @@ package com.mobilebytelabs.kmptoolkit.pdfgenerator
  * Substitute the `/* PAGE_CONFIG_PLACEHOLDER */` token in an HTML template's CSS with a real
  * `@page` rule derived from [pageConfig]. Used by every Tier-1 platform implementation.
  */
-@ExperimentalPdfGeneratorApi
 internal fun String.injectPageConfigCss(pageConfig: PageConfig): String {
     val orientation = if (pageConfig.orientation == Orientation.LANDSCAPE) "landscape" else "portrait"
     val sizeKw =

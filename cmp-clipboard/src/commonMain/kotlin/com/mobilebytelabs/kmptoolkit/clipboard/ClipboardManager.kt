@@ -66,7 +66,7 @@ import kotlinx.coroutines.launch
  *
  * @since 0.2.0
  */
-class ClipboardManager(private val config: ClipboardManagerConfig = ClipboardManagerConfig.Default) {
+class ClipboardManager(private val config: ClipboardManagerConfig = ClipboardManagerConfig.Default) : Clipboard {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     // Underlying implementations (lazy — created only when needed)
@@ -113,6 +113,9 @@ class ClipboardManager(private val config: ClipboardManagerConfig = ClipboardMan
      */
     val historyMaxSize: Int get() = config.historySize
 
+    /** What clipboard access means on this target. See [platformClipboardCapabilities]. */
+    override val capabilities: ClipboardCapabilities get() = platformClipboardCapabilities
+
     // ── Monitor State ───────────────────────────────────────────
 
     /**
@@ -149,7 +152,7 @@ class ClipboardManager(private val config: ClipboardManagerConfig = ClipboardMan
      *
      * @return true if copy succeeded.
      */
-    fun copy(text: String): Boolean = copyToClipboard(text)
+    override fun copy(text: String): Boolean = copyToClipboard(text)
 
     /**
      * Read text from clipboard (synchronous).
@@ -157,29 +160,29 @@ class ClipboardManager(private val config: ClipboardManagerConfig = ClipboardMan
      * @return Clipboard text, or null if empty/unavailable.
      * Note: Returns null on JS/Wasm — use [pasteAsync] instead.
      */
-    fun paste(): String? = getFromClipboard()
+    override fun paste(): String? = getFromClipboard()
 
     /**
      * Check if clipboard has text (synchronous).
      */
-    fun hasText(): Boolean = hasClipboardText()
+    override fun hasText(): Boolean = hasClipboardText()
 
     /**
      * Clear the clipboard.
      */
-    fun clear() = clearClipboard()
+    override fun clear(): Unit = clearClipboard()
 
     // ── Async Operations ────────────────────────────────────────
 
     /**
      * Copy text to clipboard (async — works on all platforms including JS/Wasm).
      */
-    suspend fun copyAsync(text: String): Boolean = copyToClipboardAsync(text)
+    override suspend fun copyAsync(text: String): Boolean = copyToClipboardAsync(text)
 
     /**
      * Read text from clipboard (async — works on all platforms including JS/Wasm).
      */
-    suspend fun pasteAsync(): String? = getFromClipboardAsync()
+    override suspend fun pasteAsync(): String? = getFromClipboardAsync()
 
     /**
      * Check if clipboard has text (async).

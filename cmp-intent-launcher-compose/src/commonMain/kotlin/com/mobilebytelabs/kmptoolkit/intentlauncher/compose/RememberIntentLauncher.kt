@@ -10,7 +10,6 @@
 package com.mobilebytelabs.kmptoolkit.intentlauncher.compose
 
 import androidx.compose.runtime.Composable
-import com.mobilebytelabs.kmptoolkit.intentlauncher.ExperimentalIntentLauncherApi
 import com.mobilebytelabs.kmptoolkit.intentlauncher.IntentLauncher
 
 /**
@@ -31,6 +30,5 @@ import com.mobilebytelabs.kmptoolkit.intentlauncher.IntentLauncher
  * user-gesture handler call stack. Returns `IntentResult.Failed(IntentError.UserGestureMissing)`
  * on browser block.
  */
-@ExperimentalIntentLauncherApi
 @Composable
 public expect fun rememberIntentLauncher(): IntentLauncher

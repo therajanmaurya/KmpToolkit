@@ -13,12 +13,10 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.mobilebytelabs.kmptoolkit.intentlauncher.ExperimentalIntentLauncherApi
 import com.mobilebytelabs.kmptoolkit.intentlauncher.IntentLauncher
 import com.mobilebytelabs.kmptoolkit.intentlauncher.IntentResult
 import kotlinx.coroutines.CompletableDeferred
 
-@ExperimentalIntentLauncherApi
 @Composable
 public actual fun rememberIntentLauncher(): IntentLauncher {
     var pending: CompletableDeferred<IntentResult>? = null

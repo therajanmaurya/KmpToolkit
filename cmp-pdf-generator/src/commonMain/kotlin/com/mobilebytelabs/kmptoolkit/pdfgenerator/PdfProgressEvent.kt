@@ -16,7 +16,6 @@ package com.mobilebytelabs.kmptoolkit.pdfgenerator
  *   Started → (PageRendered)* → Finalizing → Complete
  *   Started → … → Failed
  */
-@ExperimentalPdfGeneratorApi
 public sealed class PdfProgressEvent {
     /** Render started. Emitted once at the beginning. */
     public object Started : PdfProgressEvent()

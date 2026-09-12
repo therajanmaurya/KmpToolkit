@@ -14,7 +14,6 @@ import kotlinx.datetime.LocalDate
 /**
  * Logo source for the PDF header. Consumers inject; the library renders.
  */
-@ExperimentalPdfGeneratorApi
 public sealed class PdfLogo {
     public data class Svg(public val bytes: ByteArray) : PdfLogo() {
         override fun equals(other: Any?): Boolean = other is Svg && bytes.contentEquals(other.bytes)
@@ -44,7 +43,6 @@ public sealed class PdfLogo {
  * @param fontScale Multiplier on base 8pt size. 1.0 = default. 1.25 = ~10pt base.
  * @param fontEmbedding Raw TTF bytes to embed as the primary font. Null = use system font.
  */
-@ExperimentalPdfGeneratorApi
 public data class PdfTheme(
     public val accentColorHex: String = "#33618D",
     public val headerColorHex: String = "#1976d2",
@@ -92,7 +90,6 @@ public data class PdfTheme(
  * @param opacity 0.0 (invisible) to 1.0 (opaque).
  * @param rotationDeg Rotation in degrees. Negative rotates counterclockwise.
  */
-@ExperimentalPdfGeneratorApi
 public data class Watermark(
     public val text: String? = null,
     public val image: ImageSource? = null,
@@ -116,7 +113,6 @@ public data class Watermark(
  * @param dateFormatter Function converting a [LocalDate] to a display string.
  * @param watermark Optional watermark applied to every page.
  */
-@ExperimentalPdfGeneratorApi
 public data class PdfBranding(
     public val logo: PdfLogo = PdfLogo.None,
     public val poweredByText: String? = null,
@@ -146,7 +142,6 @@ public data class PdfBranding(
 }
 
 /** Default date format: `dd/MM/yyyy`. */
-@ExperimentalPdfGeneratorApi
 public fun defaultDateFormat(date: LocalDate): String {
     val d = date.dayOfMonth.toString().padStart(2, '0')
     val m = date.monthNumber.toString().padStart(2, '0')

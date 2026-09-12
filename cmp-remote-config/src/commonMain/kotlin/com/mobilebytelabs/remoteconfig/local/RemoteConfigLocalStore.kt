@@ -6,7 +6,7 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-class RemoteConfigLocalStore(private val settings: Settings = Settings()) {
+class RemoteConfigLocalStore(private val settings: Settings = defaultSettings()) {
     fun getImpressions(configId: String): Int = settings.getInt("rc_${configId}_impressions", 0)
 
     fun incrementImpressions(configId: String, currentTimeMs: Long) {

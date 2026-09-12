@@ -33,7 +33,6 @@ import java.io.File as JavaFile
  * immediately after the chooser is started. (Real completion detection would require
  * `IntentSender` callbacks added in API 22; deferred to a future enhancement.)
  */
-@ExperimentalShareApi
 public actual object Share {
     public actual suspend fun share(payload: SharePayload, options: ShareOptions): ShareResult {
         if (!ShareContext.isInitialized()) {

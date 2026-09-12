@@ -1,7 +1,6 @@
 /*
  * Copyright 2026 MobileByteLabs · Apache 2.0
  */
-@file:OptIn(ExperimentalPdfGeneratorApi::class)
 
 package com.mobilebytelabs.kmptoolkit.pdfgenerator
 
@@ -41,7 +40,6 @@ import kotlin.math.roundToInt
  * Context must be supplied before generation. The Compose helper [rememberPdfGenerator] handles
  * this via `LocalContext`. Direct (non-Compose) consumers call [setContext] first.
  */
-@ExperimentalPdfGeneratorApi
 public actual class PdfGenerator public actual constructor() {
     private var context: Context? = null
     private val progress = MutableSharedFlow<PdfProgressEvent>(extraBufferCapacity = 32)

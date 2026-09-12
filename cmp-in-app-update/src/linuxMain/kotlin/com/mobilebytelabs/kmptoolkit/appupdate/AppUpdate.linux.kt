@@ -1,5 +1,7 @@
 package com.mobilebytelabs.kmptoolkit.appupdate
 
+import platform.posix.system
+
 /**
  * Linux implementation of AppUpdate.
  *
@@ -70,7 +72,14 @@ actual object AppUpdate {
      * Linux native doesn't support opening URLs without additional tools.
      * Returns false.
      */
-    actual fun openStoreForUpdate(config: AppUpdateConfig): Boolean = false
+    actual fun openStoreForUpdate(config: AppUpdateConfig): Boolean {
+        // `linuxStoreUrl` has been a config field all along while this returned false
+        // unconditionally, so a download page the app had already configured was never opened.
+        // xdg-open is the same mechanism cmp-open-url uses on this platform.
+        val url = config.linuxStoreUrl?.takeIf { it.isNotBlank() } ?: return false
+        val escaped = url.replace("'", "'\\''")
+        return system("xdg-open '$escaped' >/dev/null 2>&1") == 0
+    }
 
     /**
      * In-app updates have limited support on Linux native.

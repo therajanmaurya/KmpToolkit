@@ -62,6 +62,12 @@ kotlin {
             implementation(libs.kotlinx.coroutines.core)
 
             implementation(project(":cmp-share"))
+
+            // Integration proof for the manager facade: the Compose surface
+            // (LocalShareManager / rememberShareManager) plus Koin, so the sample
+            // exercises the same injected path a consumer app would use.
+            implementation(project(":cmp-share-compose"))
+            implementation(libs.koin.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

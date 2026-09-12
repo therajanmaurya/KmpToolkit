@@ -9,7 +9,6 @@
  */
 package com.mobilebytelabs.kmptoolkit.share.compose
 
-import com.mobilebytelabs.kmptoolkit.share.ExperimentalShareApi
 import com.mobilebytelabs.kmptoolkit.share.SharePayload
 import kotlin.test.Test
 import kotlin.test.assertTrue
@@ -26,7 +25,6 @@ import kotlin.test.assertTrue
  * Full Composable rendering tests require `compose-multiplatform-test` setup —
  * deferred to a post-v0.4 CI run.
  */
-@OptIn(ExperimentalShareApi::class)
 class ShareComposeApiSmokeTest {
 
     @Test

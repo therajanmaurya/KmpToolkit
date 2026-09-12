@@ -29,31 +29,38 @@ commonMain.dependencies {
 
 ---
 
-## Step 2 — Opt in to the Experimental Marker
+## Step 2 — Choose imperative or injected
 
-### Per call-site (recommended)
+No opt-in is required — cmp-intent-launcher is stable. `@ExperimentalIntentLauncherApi` survives as
+a deprecated no-op so older call sites still compile; delete any `@OptIn(...)` and any
+`-opt-in=...ExperimentalIntentLauncherApi` compiler flag you already have.
+
+### Injected — depend on `IntentManager` (recommended)
+
+`IntentLauncher` is an `expect class`, so code calling it directly cannot be faked or decorated.
 
 ```kotlin
-@OptIn(ExperimentalIntentLauncherApi::class)
-@Composable
-fun MyScreen() {
-    val launcher = rememberIntentLauncher()
-    // ...
+startKoin { modules(intentLauncherModule, appModule) }
+
+class AvatarViewModel(private val intents: IntentManager) : ViewModel() {
+    val canPick = intents.supports(IntentOperation.PickImage)
+    fun choose() = viewModelScope.launch { intents.pickImage() }
 }
 ```
 
-### Project-wide (all modules)
+**On Android**, a launcher is Activity-scoped. The default binding therefore reports the pickers as
+unsupported and keeps `openAppSettings` / `createDocument`. Override inside your Activity for the
+full surface:
 
 ```kotlin
-// shared/build.gradle.kts
-kotlin {
-    compilerOptions {
-        freeCompilerArgs.addAll(
-            "-opt-in=com.mobilebytelabs.kmptoolkit.intentlauncher.ExperimentalIntentLauncherApi"
-        )
-    }
-}
+loadKoinModules(module { single<IntentManager> { IntentManagerImpl(intentLauncher()) } })
 ```
+
+Not using Koin? Construct `IntentManagerImpl()` and register it against `IntentManager` yourself.
+
+### Imperative — reach for `IntentLauncher` directly
+
+Fine for a one-off call site; on Android obtain it with `ComponentActivity.intentLauncher()`.
 
 ---
 
@@ -62,7 +69,6 @@ kotlin {
 Call `rememberIntentLauncher()` at Compose composition time, then `launch {}` inside a coroutine:
 
 ```kotlin
-@OptIn(ExperimentalIntentLauncherApi::class)
 @Composable
 fun OpenFilePicker() {
     val scope   = rememberCoroutineScope()

@@ -1,7 +1,6 @@
 /*
  * Copyright 2026 MobileByteLabs · Apache 2.0
  */
-@file:OptIn(ExperimentalPdfGeneratorApi::class)
 
 package com.mobilebytelabs.kmptoolkit.pdfgenerator
 
@@ -16,7 +15,6 @@ import org.khronos.webgl.Uint8Array
  * v0.1 supports: Text, Heading, Spacer, Divider, Table (cells as plain text, equal columns),
  * Image (Bytes only — embedJpg/embedPng). PageBreak, complex CSS via Html(raw) are skipped.
  */
-@ExperimentalPdfGeneratorApi
 internal class JsPdfLibRenderer(
     private val document: PdfDocument,
     private val progress: MutableSharedFlow<PdfProgressEvent>,
@@ -136,7 +134,6 @@ internal class JsPdfLibRenderer(
     }
 }
 
-@ExperimentalPdfGeneratorApi
 internal fun uint8ArrayToByteArray(arr: Uint8Array): ByteArray {
     val ba = ByteArray(arr.length)
     for (i in 0 until arr.length) {

@@ -24,7 +24,6 @@ import platform.WatchKit.WKExtension
  *   on watchOS must use WCSession.transferUserInfo to delegate to the paired iPhone (similar
  *   to the cmp-share watchOS pattern), or use WKInterfacePicker for in-app selection only.
  */
-@ExperimentalIntentLauncherApi
 public actual class IntentLauncher public constructor() {
     public actual suspend fun launch(block: IntentBuilder.() -> Unit): IntentResult {
         val builder = IntentBuilder().apply(block)

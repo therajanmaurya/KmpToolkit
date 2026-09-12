@@ -64,6 +64,7 @@ public final class com/mobilebytelabs/kmptoolkit/appintents/AppIntentResult$Snip
 
 public final class com/mobilebytelabs/kmptoolkit/appintents/AppIntents {
 	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntents;
+	public final fun getPublishedManifestPath ()Ljava/lang/String;
 	public final fun invokeForTesting (Ljava/lang/String;Ljava/util/Map;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun invokeForTesting$default (Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntents;Ljava/lang/String;Ljava/util/Map;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public final fun register (Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsConfig;)V
@@ -73,12 +74,69 @@ public final class com/mobilebytelabs/kmptoolkit/appintents/AppIntentsBuilder {
 	public final fun intent (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
 }
 
+public final class com/mobilebytelabs/kmptoolkit/appintents/AppIntentsCapabilities {
+	public static final field Companion Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsCapabilities$Companion;
+	public fun <init> (ZZZ)V
+	public final fun component1 ()Z
+	public final fun component2 ()Z
+	public final fun component3 ()Z
+	public final fun copy (ZZZ)Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsCapabilities;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsCapabilities;ZZZILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsCapabilities;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAssistantReach ()Ljava/lang/String;
+	public final fun getInProcess ()Z
+	public final fun getOsIntegration ()Z
+	public final fun getPublishesManifest ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appintents/AppIntentsCapabilities$Companion {
+	public final fun getInProcessOnly ()Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsCapabilities;
+	public final fun getManifestOnly ()Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsCapabilities;
+	public final fun getOsIntegrated ()Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsCapabilities;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appintents/AppIntentsCapabilities_jvmKt {
+	public static final fun getPlatformAppIntentsCapabilities ()Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsCapabilities;
+}
+
 public final class com/mobilebytelabs/kmptoolkit/appintents/AppIntentsConfig {
 	public final fun getIntents ()Ljava/util/List;
 }
 
 public final class com/mobilebytelabs/kmptoolkit/appintents/AppIntentsKt {
 	public static final fun appIntents (Lkotlin/jvm/functions/Function1;)Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsConfig;
+	public static final fun performForTesting (Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentDef;Ljava/util/Map;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun performForTesting$default (Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentDef;Ljava/util/Map;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
+public abstract interface class com/mobilebytelabs/kmptoolkit/appintents/AppIntentsManager {
+	public fun current ()Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsConfig;
+	public abstract fun getCapabilities ()Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsCapabilities;
+	public fun invoke (Ljava/lang/String;Ljava/util/Map;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun invoke$default (Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsManager;Ljava/lang/String;Ljava/util/Map;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public fun reachesOs ()Z
+	public abstract fun register (Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsConfig;)V
+	public fun register (Lkotlin/jvm/functions/Function1;)Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsConfig;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appintents/AppIntentsManager$DefaultImpls {
+	public static fun current (Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsManager;)Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsConfig;
+	public static fun invoke (Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsManager;Ljava/lang/String;Ljava/util/Map;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun invoke$default (Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsManager;Ljava/lang/String;Ljava/util/Map;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static fun reachesOs (Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsManager;)Z
+	public static fun register (Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsManager;Lkotlin/jvm/functions/Function1;)Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsConfig;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appintents/AppIntentsManagerImpl : com/mobilebytelabs/kmptoolkit/appintents/AppIntentsManager {
+	public fun <init> ()V
+	public fun current ()Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsConfig;
+	public fun getCapabilities ()Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsCapabilities;
+	public fun invoke (Ljava/lang/String;Ljava/util/Map;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun reachesOs ()Z
+	public fun register (Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsConfig;)V
+	public fun register (Lkotlin/jvm/functions/Function1;)Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsConfig;
 }
 
 public final class com/mobilebytelabs/kmptoolkit/appintents/AppIntentsRuntime {
@@ -134,5 +192,28 @@ public final class com/mobilebytelabs/kmptoolkit/appintents/ParamType$Number : c
 
 public final class com/mobilebytelabs/kmptoolkit/appintents/ParamType$Text : com/mobilebytelabs/kmptoolkit/appintents/ParamType {
 	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/appintents/ParamType$Text;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appintents/WebAppManifestShortcutsKt {
+	public static final fun webAppManifestShortcuts (Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsConfig;Ljava/lang/String;I)Ljava/lang/String;
+	public static synthetic fun webAppManifestShortcuts$default (Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsConfig;Ljava/lang/String;IILjava/lang/Object;)Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appintents/di/AppIntentsModuleKt {
+	public static final fun getAppIntentsModule ()Lorg/koin/core/module/Module;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appintents/testing/FakeAppIntentsManager : com/mobilebytelabs/kmptoolkit/appintents/AppIntentsManager {
+	public fun <init> ()V
+	public fun <init> (Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsCapabilities;)V
+	public synthetic fun <init> (Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsCapabilities;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun current ()Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsConfig;
+	public fun getCapabilities ()Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsCapabilities;
+	public final fun getRegistered ()Ljava/util/List;
+	public fun invoke (Ljava/lang/String;Ljava/util/Map;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun reachesOs ()Z
+	public fun register (Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsConfig;)V
+	public fun register (Lkotlin/jvm/functions/Function1;)Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsConfig;
+	public final fun reset ()V
 }
 

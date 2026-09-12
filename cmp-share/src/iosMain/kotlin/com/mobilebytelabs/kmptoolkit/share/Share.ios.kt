@@ -34,7 +34,6 @@ import kotlin.coroutines.resume
  *
  * Completion bridged via `completionWithItemsHandler` → `suspendCancellableCoroutine`.
  */
-@ExperimentalShareApi
 public actual object Share {
 
     public actual suspend fun share(payload: SharePayload, options: ShareOptions): ShareResult {

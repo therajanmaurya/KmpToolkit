@@ -17,7 +17,6 @@ package com.mobilebytelabs.kmptoolkit.appintents
  * module if requested — see GOAL.md D8 + OOS row). `register()` is intentionally no-op;
  * `invokeForTesting` works for dev/test.
  */
-@ExperimentalAppIntentsApi
 public actual object AppIntents {
     public actual fun register(config: AppIntentsConfig) {
         AppIntentsRuntime.register(config)

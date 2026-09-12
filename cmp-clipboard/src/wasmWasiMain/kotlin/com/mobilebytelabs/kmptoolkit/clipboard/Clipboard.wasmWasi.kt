@@ -1,36 +1,25 @@
+/*
+ * Copyright 2026 MobileByteLabs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ */
 package com.mobilebytelabs.kmptoolkit.clipboard
 
-/**
- * WebAssembly WASI implementation of clipboard operations.
- *
- * WASI (WebAssembly System Interface) does not provide clipboard access
- * as it runs in a sandboxed environment without GUI capabilities.
- *
- * All clipboard operations are no-ops on this platform:
- * - [copyToClipboard] always returns `false`
- * - [getFromClipboard] always returns `null`
- * - [hasClipboardText] always returns `false`
- * - [clearClipboard] does nothing
- *
- * This is expected behavior and should be documented in your application
- * if you target WASI environments.
- */
+// WASI is sandboxed and headless, so there is no system clipboard to reach — but a copy can still
+// round-trip inside the module, and a host that wants the real thing installs InAppClipboard.onCopy
+// / onRead to bridge it. These used to return false/null unconditionally, which was
+// indistinguishable from a broken implementation.
 
-actual fun copyToClipboard(text: String): Boolean {
-    // WASI has no clipboard support
-    return false
-}
+actual fun copyToClipboard(text: String): Boolean = InAppClipboard.copy(text)
 
-actual fun getFromClipboard(): String? {
-    // WASI has no clipboard support
-    return null
-}
+actual fun getFromClipboard(): String? = InAppClipboard.read()
 
-actual fun hasClipboardText(): Boolean {
-    // WASI has no clipboard support
-    return false
-}
+actual fun hasClipboardText(): Boolean = InAppClipboard.has()
 
 actual fun clearClipboard() {
-    // WASI has no clipboard support - no-op
+    InAppClipboard.clear()
 }

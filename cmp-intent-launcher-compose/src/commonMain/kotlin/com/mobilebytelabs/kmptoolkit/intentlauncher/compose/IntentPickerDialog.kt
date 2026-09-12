@@ -15,7 +15,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import com.mobilebytelabs.kmptoolkit.intentlauncher.ExperimentalIntentLauncherApi
 import com.mobilebytelabs.kmptoolkit.intentlauncher.IntentBuilder
 import com.mobilebytelabs.kmptoolkit.intentlauncher.IntentResult
 import com.mobilebytelabs.kmptoolkit.intentlauncher.ResultContract
@@ -50,7 +49,6 @@ import kotlinx.coroutines.launch
  * @param additionalIntentConfig optional [IntentBuilder] DSL block for extra intent configuration (mime type, extras, etc.)
  */
 @Composable
-@ExperimentalIntentLauncherApi
 public fun <R> IntentPickerDialog(
     contract: ResultContract<R>,
     onResult: (R) -> Unit,

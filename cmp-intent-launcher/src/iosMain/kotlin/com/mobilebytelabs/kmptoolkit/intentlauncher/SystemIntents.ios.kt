@@ -43,7 +43,6 @@ import kotlin.coroutines.resume
  *   stores `delegate` as a weak reference; without a strong pin K/N's shadow drops
  *   before the callback fires).
  */
-@ExperimentalIntentLauncherApi
 public actual object SystemIntents {
 
     @Suppress("DEPRECATION") // UIApplication.openURL functional on every supported iOS version

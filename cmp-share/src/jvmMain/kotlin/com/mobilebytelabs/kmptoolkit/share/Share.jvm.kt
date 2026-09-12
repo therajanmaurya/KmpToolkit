@@ -33,7 +33,6 @@ import java.awt.Image as AwtImage
  *
  * JVM has no native share-sheet abstraction. Documented as "best-effort" in SPEC.md.
  */
-@ExperimentalShareApi
 public actual object Share {
 
     public actual suspend fun share(payload: SharePayload, options: ShareOptions): ShareResult =

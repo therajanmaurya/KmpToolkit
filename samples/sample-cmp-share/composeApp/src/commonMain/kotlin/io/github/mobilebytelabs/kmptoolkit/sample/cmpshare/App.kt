@@ -35,17 +35,35 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.mobilebytelabs.kmptoolkit.share.ShareManager
+import com.mobilebytelabs.kmptoolkit.share.compose.ProvideShareManager
 
 private enum class Screen {
     Home,
     TryIt,
     ShareBasic,
     ShareAdvanced,
+    InjectedManager,
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun App() {
+    // Start Koin, then resolve ShareManager the way an app would and hand it to the composition.
+    // Everything below reads it back through LocalShareManager rather than constructing one.
+    val shareManager = remember {
+        initKoinOnce()
+        inject<ShareManager>()
+    }
+
+    ProvideShareManager(shareManager) {
+        AppContent()
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun AppContent() {
     MaterialTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -63,6 +81,7 @@ fun App() {
                                     Screen.TryIt -> "Try It"
                                     Screen.ShareBasic -> "Basic Share"
                                     Screen.ShareAdvanced -> "Advanced Share"
+                                    Screen.InjectedManager -> "Injected ShareManager"
                                 },
                             )
                         },
@@ -89,6 +108,7 @@ fun App() {
                         Screen.TryIt -> TryItPanel()
                         Screen.ShareBasic -> ShareTextScreen()
                         Screen.ShareAdvanced -> ShareAdvancedScreen()
+                        Screen.InjectedManager -> ShareManagerScreen()
                     }
                 }
             }
@@ -134,6 +154,15 @@ private fun HomeScreen(onNavigate: (Screen) -> Unit) {
             title = "Advanced Share",
             subtitle = "Multi-payload + ShareOptions (subject, chooserTitle)",
             onClick = { onNavigate(Screen.ShareAdvanced) },
+        )
+
+        Spacer(Modifier.height(12.dp))
+        DemoCard(
+            title = "Injected ShareManager (DI + Compose)",
+            subtitle = "Resolves ShareManager from Koin's shareModule, reads it via " +
+                "rememberShareManager(), and gates each button on supports() so unsupported " +
+                "payloads disable instead of failing after a tap",
+            onClick = { onNavigate(Screen.InjectedManager) },
         )
 
         Spacer(Modifier.height(32.dp))

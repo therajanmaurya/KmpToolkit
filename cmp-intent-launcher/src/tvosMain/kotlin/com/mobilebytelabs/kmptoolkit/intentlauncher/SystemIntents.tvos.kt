@@ -15,7 +15,6 @@ package com.mobilebytelabs.kmptoolkit.intentlauncher
  * tvOS `SystemIntents` actual — `UnsupportedPlatform` for both entry points.
  * No app-scoped settings deep-link; no document picker UI on tvOS. ADR-09 architectural.
  */
-@ExperimentalIntentLauncherApi
 public actual object SystemIntents {
     public actual suspend fun openAppSettings(): IntentResult = IntentResult.Failed(IntentError.UnsupportedPlatform)
     public actual suspend fun createDocument(suggestedName: String, mimeType: String): IntentResult =

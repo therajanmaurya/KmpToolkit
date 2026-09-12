@@ -17,7 +17,6 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-@OptIn(ExperimentalAppIntentsApi::class)
 class AppIntentsDslTest {
 
     @Test

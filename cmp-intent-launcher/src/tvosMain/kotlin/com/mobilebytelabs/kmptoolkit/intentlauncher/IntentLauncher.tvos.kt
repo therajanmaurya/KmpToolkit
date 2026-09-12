@@ -19,7 +19,6 @@ package com.mobilebytelabs.kmptoolkit.intentlauncher
  *
  * No v0.5/v1.x plan to close this without Apple shipping the underlying UIKit APIs to tvOS.
  */
-@ExperimentalIntentLauncherApi
 public actual class IntentLauncher public constructor() {
     public actual suspend fun launch(block: IntentBuilder.() -> Unit): IntentResult {
         val builder = IntentBuilder().apply(block)

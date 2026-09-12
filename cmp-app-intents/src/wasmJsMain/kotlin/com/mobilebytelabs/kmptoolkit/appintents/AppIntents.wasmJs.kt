@@ -16,7 +16,6 @@ package com.mobilebytelabs.kmptoolkit.appintents
  * Web App Manifest action handlers deferred to potential future `cmp-pwa-shortcuts` module
  * per GOAL.md D8. `register()` is intentionally no-op; `invokeForTesting` works for dev/test.
  */
-@ExperimentalAppIntentsApi
 public actual object AppIntents {
     public actual fun register(config: AppIntentsConfig) {
         AppIntentsRuntime.register(config)

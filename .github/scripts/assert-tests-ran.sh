@@ -16,9 +16,24 @@ set -euo pipefail
 TASK="${1:?usage: assert-tests-ran.sh <task-dir-name> [min-tests]}"
 MIN="${2:-1}"
 
-mapfile -t FILES < <(find . -path "*/build/test-results/${TASK}/*.xml" -type f 2>/dev/null || true)
+# PORTABILITY: no `mapfile`, and no arrays at all.
+#
+# `mapfile` is a bash 4 builtin. macOS runners ship /bin/bash 3.2 (Apple stopped shipping newer
+# bash over its GPLv3 licence), so a `shell: bash` step on macos-latest resolves to 3.2 and this
+# script died with "mapfile: command not found" (exit 127) — AFTER the watchOS tests had run
+# perfectly well. The failure looked like a test failure and was not one.
+#
+# Bash 3.2 also treats `${#ARR[@]}` on an empty array as an unbound variable under `set -u`, so
+# the array form would have needed guarding anyway. A temp file sidesteps both and works on every
+# runner: Linux (bash 5), macOS (bash 3.2) and Windows git-bash.
+LIST="$(mktemp)"
+trap 'rm -f "$LIST"' EXIT
+find . -path "*/build/test-results/${TASK}/*.xml" -type f > "$LIST" 2>/dev/null || true
 
-if [ "${#FILES[@]}" -eq 0 ]; then
+COUNT=$(grep -c . "$LIST" || true)
+COUNT=${COUNT:-0}
+
+if [ "$COUNT" -eq 0 ]; then
   echo "::error::No test-result XML found for '${TASK}'. The task reported success but produced"
   echo "::error::no results — nothing was executed. Treating as failure, not as a pass."
   exit 1
@@ -26,16 +41,17 @@ fi
 
 TOTAL=0
 FAILED=0
-for f in "${FILES[@]}"; do
+while IFS= read -r f; do
+  [ -n "$f" ] || continue
   # Each suite root carries tests= / failures= / errors= attributes.
   t=$(grep -o 'tests="[0-9]*"' "$f" | head -1 | grep -o '[0-9]*' || echo 0)
   fl=$(grep -o 'failures="[0-9]*"' "$f" | head -1 | grep -o '[0-9]*' || echo 0)
   er=$(grep -o 'errors="[0-9]*"' "$f" | head -1 | grep -o '[0-9]*' || echo 0)
-  TOTAL=$((TOTAL + t))
-  FAILED=$((FAILED + fl + er))
-done
+  TOTAL=$((TOTAL + ${t:-0}))
+  FAILED=$((FAILED + ${fl:-0} + ${er:-0}))
+done < "$LIST"
 
-echo "${TASK}: ${TOTAL} tests executed across ${#FILES[@]} suite file(s), ${FAILED} failing."
+echo "${TASK}: ${TOTAL} tests executed across ${COUNT} suite file(s), ${FAILED} failing."
 
 if [ "$TOTAL" -lt "$MIN" ]; then
   echo "::error::${TASK} executed ${TOTAL} tests (minimum ${MIN}). A run that executes nothing"
@@ -55,6 +71,6 @@ fi
   echo "| Metric | Value |"
   echo "|---|---|"
   echo "| Tests executed | ${TOTAL} |"
-  echo "| Suite files | ${#FILES[@]} |"
+  echo "| Suite files | ${COUNT} |"
   echo "| Failures | ${FAILED} |"
 } >> "${GITHUB_STEP_SUMMARY:-/dev/null}"

@@ -3,7 +3,9 @@
 Declarative App Intents DSL for SiriKit Shortcuts + Spotlight (iOS 16+) and
 on-device runtime registry (Android, JVM, JS, wasmJs).
 
-> **Status:** Experimental. All public APIs marked `@ExperimentalAppIntentsApi`.
+> **Stable API.** `@ExperimentalAppIntentsApi` is retained as a deprecated no-op so existing
+> `@OptIn(...)` call sites keep compiling; both it and the `-opt-in` compiler flag are now
+> redundant and can be deleted.
 > Ships alongside the other `cmp-*` modules at the shared `kmptoolkit.version`.
 
 ## Features

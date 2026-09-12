@@ -18,7 +18,6 @@ public annotation class PdfDsl
 /**
  * Document-level builder. See [pdf] for the entry point.
  */
-@ExperimentalPdfGeneratorApi
 @PdfDsl
 public class PdfDocumentBuilder internal constructor() {
     private val pages = mutableListOf<PdfPage>()
@@ -50,7 +49,6 @@ public class PdfDocumentBuilder internal constructor() {
 /**
  * Page-level builder.
  */
-@ExperimentalPdfGeneratorApi
 @PdfDsl
 public class PdfPageBuilder internal constructor() {
     private val elements = mutableListOf<PdfElement>()
@@ -95,7 +93,6 @@ public class PdfPageBuilder internal constructor() {
 /**
  * Table builder — header() once, row() many times.
  */
-@ExperimentalPdfGeneratorApi
 @PdfDsl
 public class TableBuilder internal constructor() {
     private var headerRow: TableRow? = null
@@ -116,7 +113,6 @@ public class TableBuilder internal constructor() {
     internal fun build(): PdfElement.Table = PdfElement.Table(rows = rows.toList(), headerRow = headerRow)
 }
 
-@ExperimentalPdfGeneratorApi
 @PdfDsl
 public class TableRowBuilder internal constructor() {
     private val cells = mutableListOf<TableCell>()
@@ -146,7 +142,6 @@ public class TableRowBuilder internal constructor() {
  * }
  * ```
  */
-@ExperimentalPdfGeneratorApi
 public fun pdf(block: PdfDocumentBuilder.() -> Unit): PdfDocument {
     val builder = PdfDocumentBuilder()
     builder.block()

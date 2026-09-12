@@ -29,26 +29,47 @@ commonMain.dependencies {
 
 ---
 
-## Step 2 — Opt in to the Experimental Marker
+## Step 2 — Choose imperative or injected
 
-### Per call-site (recommended)
+No opt-in is required — cmp-share is stable. `@ExperimentalShareApi` survives as a deprecated
+no-op purely so older call sites still compile; delete any `@OptIn(ExperimentalShareApi::class)`
+and any `-opt-in=...ExperimentalShareApi` compiler flag you already have.
+
+### Imperative — reach for `Share` directly
+
+Fine for a one-off call site.
 
 ```kotlin
-@OptIn(ExperimentalShareApi::class)
 suspend fun onShare() {
     Share.text("Hello from KMP!")
 }
 ```
 
-### Project-wide (all modules)
+### Injected — depend on `ShareManager` (recommended)
+
+`Share` is an `expect object`: code calling it cannot be tested without a real share sheet, and
+cannot be decorated. Depend on the interface instead.
 
 ```kotlin
-// shared/build.gradle.kts
-kotlin {
-    compilerOptions {
-        freeCompilerArgs.addAll("-opt-in=com.mobilebytelabs.kmptoolkit.share.ExperimentalShareApi")
+// With Koin — shareModule ships with the library
+startKoin { modules(shareModule, appModule) }
+
+class ReportViewModel(private val share: ShareManager) : ViewModel() {
+    fun export(uri: String) = viewModelScope.launch {
+        share.shareFile(uri, "application/pdf", message = "Latest report")
     }
 }
+```
+
+Not using Koin? Nothing else in cmp-share touches it — construct `ShareManagerImpl()` and register
+it against `ShareManager` in your own container.
+
+In tests, `FakeShareManager` ships in the main artifact:
+
+```kotlin
+val share = FakeShareManager()
+ReportViewModel(share).export("file:///report.pdf")
+assertIs<SharePayload.Multi>(share.recorded.single().payload)
 ```
 
 ---
@@ -58,7 +79,6 @@ kotlin {
 ### Share plain text
 
 ```kotlin
-@OptIn(ExperimentalShareApi::class)
 suspend fun shareText() {
     val result = Share.text("Check out KMP Toolkit!")
     if (result is ShareResult.Failed) logError(result.cause)

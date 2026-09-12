@@ -30,7 +30,6 @@ import platform.Foundation.writeToURL
  * dir; the consumer-side `CmpAppIntentBridge.swift` (per ADR-04) handles AppShortcuts
  * registration with `#if canImport(AppIntents)` guard (macOS 13+).
  */
-@ExperimentalAppIntentsApi
 public actual object AppIntents {
     public actual fun register(config: AppIntentsConfig) {
         AppIntentsRuntime.register(config)
@@ -68,7 +67,6 @@ public actual object AppIntents {
 }
 
 @ObjCName("CmpAppIntentsCallback")
-@OptIn(ExperimentalAppIntentsApi::class)
 public class AppIntentsCallback {
     public var handler: ((String, Map<String, Any>) -> AppIntentResult)? = null
 

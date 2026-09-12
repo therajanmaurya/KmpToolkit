@@ -12,7 +12,6 @@ package com.mobilebytelabs.kmptoolkit.pdfgenerator
 /**
  * Standard page sizes in millimeters.
  */
-@ExperimentalPdfGeneratorApi
 public enum class PageSize(public val widthMm: Int, public val heightMm: Int) {
     A3(297, 420),
     A4(210, 297),
@@ -27,7 +26,6 @@ public enum class PageSize(public val widthMm: Int, public val heightMm: Int) {
 /**
  * Custom page size (mm). Use when none of the standard [PageSize] values fit.
  */
-@ExperimentalPdfGeneratorApi
 public data class CustomPageSize(public val widthMm: Int, public val heightMm: Int) {
     init {
         require(widthMm > 0) { "widthMm must be > 0" }
@@ -38,13 +36,11 @@ public data class CustomPageSize(public val widthMm: Int, public val heightMm: I
 /**
  * Page orientation.
  */
-@ExperimentalPdfGeneratorApi
 public enum class Orientation { PORTRAIT, LANDSCAPE }
 
 /**
  * Per-edge margins in millimeters.
  */
-@ExperimentalPdfGeneratorApi
 public data class EdgeMargins(
     public val top: Int,
     public val right: Int,
@@ -73,7 +69,6 @@ public data class EdgeMargins(
  * @param customHeaderHtml If non-null, replaces the default branding header.
  * @param customFooterHtml If non-null, replaces the default "powered by" footer.
  */
-@ExperimentalPdfGeneratorApi
 public data class PageHeaderFooter(
     public val showHeader: Boolean = true,
     public val showFooter: Boolean = true,
@@ -91,7 +86,6 @@ public data class PageHeaderFooter(
  * @param margins Per-edge margins.
  * @param headerFooter Optional per-page header/footer behavior.
  */
-@ExperimentalPdfGeneratorApi
 public data class PageConfig(
     public val size: PageSize = PageSize.A4,
     public val customSize: CustomPageSize? = null,

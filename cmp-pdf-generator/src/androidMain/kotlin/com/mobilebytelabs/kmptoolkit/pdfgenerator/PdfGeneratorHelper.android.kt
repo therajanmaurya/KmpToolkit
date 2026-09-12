@@ -1,7 +1,6 @@
 /*
  * Copyright 2026 MobileByteLabs · Apache 2.0
  */
-@file:OptIn(ExperimentalPdfGeneratorApi::class)
 
 package com.mobilebytelabs.kmptoolkit.pdfgenerator
 
@@ -16,5 +15,4 @@ import android.content.Context
  * val generator = remember { createPdfGenerator(context) }
  * ```
  */
-@ExperimentalPdfGeneratorApi
 public fun createPdfGenerator(context: Context): PdfGenerator = PdfGenerator().apply { setContext(context) }

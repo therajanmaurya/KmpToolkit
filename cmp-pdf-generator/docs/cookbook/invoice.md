@@ -3,7 +3,6 @@
 End-to-end recipe for generating an invoice PDF.
 
 ```kotlin
-@OptIn(ExperimentalPdfGeneratorApi::class)
 suspend fun generateInvoicePdf(): ByteArray? {
     // 1. Build the data
     val invoice = InvoiceData(

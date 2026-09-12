@@ -23,7 +23,6 @@ import javax.swing.SwingUtilities
  *   Linux gnome-control-center → kcmshell5 → xdg-open chain).
  * - `createDocument()` — Swing `JFileChooser` in SAVE_DIALOG mode, run on EDT.
  */
-@ExperimentalIntentLauncherApi
 public actual object SystemIntents {
 
     public actual suspend fun openAppSettings(): IntentResult = withContext(Dispatchers.IO) {

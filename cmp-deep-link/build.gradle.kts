@@ -11,6 +11,7 @@ plugins {
     alias(libs.plugins.kotlinSerialization)
     id("io.github.mobilebytelabs.kmptoolkit.dokka")
     id("io.github.mobilebytelabs.kmptoolkit.kover")
+    alias(libs.plugins.binaryCompatibilityValidator)
 }
 
 // ============================================================================
@@ -59,12 +60,14 @@ kotlin {
     // ========================================================================
     // iOS Targets
     // ========================================================================
+    iosX64()
     iosArm64()
     iosSimulatorArm64()
 
     // ========================================================================
     // macOS Targets
     // ========================================================================
+    macosX64()
     macosArm64()
 
     // ========================================================================
@@ -73,6 +76,15 @@ kotlin {
     tvosX64()
     tvosArm64()
     tvosSimulatorArm64()
+
+    // watchOS — src/watchosMain carries a documented no-op explaining that WatchKit has no API
+    // for receiving custom URI schemes. Declaring the targets makes that note compile with the
+    // rest of the module instead of sitting in a directory nothing builds.
+    watchosX64()
+    watchosArm32()
+    watchosArm64()
+    watchosSimulatorArm64()
+    watchosDeviceArm64()
 
     // ========================================================================
     // watchOS Targets
@@ -126,6 +138,19 @@ kotlin {
     // Source Sets Configuration
     // ========================================================================
     sourceSets {
+        // koin-core publishes every target this module builds EXCEPT wasmWasi, so the Koin
+        // binding lives in an intermediate source set spanning the other 20. Same as cmp-share.
+        val koinMain = create("koinMain").apply { dependsOn(getByName("commonMain")) }
+        val koinTest = create("koinTest").apply { dependsOn(getByName("commonTest")) }
+        listOf("jvmMain", "androidMain", "appleMain", "linuxMain", "mingwMain", "jsMain", "wasmJsMain")
+            .forEach { getByName(it).dependsOn(koinMain) }
+        listOf("jvmTest", "appleTest", "linuxTest", "mingwTest", "jsTest", "wasmJsTest")
+            .forEach { getByName(it).dependsOn(koinTest) }
+
+        koinMain.dependencies {
+            implementation(libs.koin.core)
+        }
+
         commonMain.dependencies {
             // Coroutines for SharedFlow / StateFlow plumbing
             implementation(libs.kotlinx.coroutines.core)

@@ -26,7 +26,6 @@ import kotlin.js.Promise
  * 2026-06-01 — Added Image payload support via base64-bridged `File` construction
  * + `navigator.share({files})` (per cmp-intent-share-coverage-trueup sub-plan 02 T4).
  */
-@ExperimentalShareApi
 public actual object Share {
 
     public actual suspend fun share(payload: SharePayload, options: ShareOptions): ShareResult {
@@ -88,12 +87,18 @@ public actual object Share {
 
         is SharePayload.Url -> payload.href
 
-        is SharePayload.Image, is SharePayload.File -> null
+        // The URI is text even though the Web Share API cannot take the file itself — put it on
+        // the clipboard so the user can paste it, rather than refusing outright.
+        is SharePayload.File -> payload.uri
+
+        // Image is bytes; shareImageFile() above is the only route.
+        is SharePayload.Image -> null
 
         is SharePayload.Multi -> payload.items.mapNotNull {
             when (it) {
                 is SharePayload.Text -> it.content
                 is SharePayload.Url -> it.href
+                is SharePayload.File -> it.uri
                 else -> null
             }
         }.takeIf { it.isNotEmpty() }?.joinToString("\n")

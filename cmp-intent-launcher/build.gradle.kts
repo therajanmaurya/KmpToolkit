@@ -63,11 +63,22 @@ kotlin {
                 .get()
                 .toInt()
         androidResources.enable = true
+
+        // Without this there is no androidHostTest variant at all — src/androidUnitTest/ was the
+        // legacy name and the com.android.kotlin.multiplatform.library plugin never picked it up,
+        // so SystemIntentsAndroidUnitTest had never been compiled, let alone run.
+        withHostTestBuilder {}.configure {
+            // android.jar in a JVM host test is a stub whose methods THROW by default, so a
+            // framework call aborts a test even when the code under test handled it correctly.
+            isReturnDefaultValues = true
+        }
     }
 
+    iosX64()
     iosArm64()
     iosSimulatorArm64()
 
+    macosX64()
     macosArm64()
 
     // v0.3 expansion — Compose-free core reaches 19 KMP targets.
@@ -76,6 +87,15 @@ kotlin {
     tvosX64()
     tvosArm64()
     tvosSimulatorArm64()
+
+    // watchOS — `WKExtension.openSystemURL` really does launch http/https/mailto from the watch;
+    // the picker contracts are the part watchOS has no surface for. The actuals already existed
+    // in src/watchosMain but NO target was declared, so nothing ever compiled them.
+    watchosX64()
+    watchosArm32()
+    watchosArm64()
+    watchosSimulatorArm64()
+    watchosDeviceArm64()
 
     linuxX64()
     linuxArm64()
@@ -102,11 +122,32 @@ kotlin {
         nodejs()
     }
 
+    // wasmWasi — a sandbox has no picker UI, but it does have a host. WasiIntents routes every
+    // request across that boundary so a WASI consumer resolves the artifact and can serve
+    // intents itself, instead of the dependency failing to resolve.
+    wasmWasi {
+        nodejs()
+    }
+
     compilerOptions {
         freeCompilerArgs.add("-Xexpect-actual-classes")
     }
 
     sourceSets {
+        // koin-core publishes every target this module builds EXCEPT wasmWasi, so the Koin
+        // binding lives in an intermediate source set spanning the other 20 — one artifact, and
+        // wasmWasi simply has no Koin on its classpath. Same arrangement as cmp-share.
+        val koinMain = create("koinMain").apply { dependsOn(getByName("commonMain")) }
+        val koinTest = create("koinTest").apply { dependsOn(getByName("commonTest")) }
+        listOf("jvmMain", "androidMain", "appleMain", "linuxMain", "mingwMain", "jsMain", "wasmJsMain")
+            .forEach { getByName(it).dependsOn(koinMain) }
+        listOf("jvmTest", "appleTest", "linuxTest", "mingwTest", "jsTest", "wasmJsTest")
+            .forEach { getByName(it).dependsOn(koinTest) }
+
+        koinMain.dependencies {
+            implementation(libs.koin.core)
+        }
+
         commonMain.dependencies {
             implementation(libs.kotlinx.coroutines.core)
         }

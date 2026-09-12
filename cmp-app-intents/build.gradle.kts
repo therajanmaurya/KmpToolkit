@@ -74,6 +74,14 @@ kotlin {
     tvosArm64()
     tvosSimulatorArm64()
 
+    // watchOS — the actual already existed in src/watchosMain but no target was declared, so it
+    // had never been compiled. Runtime-registry only, same as tvOS.
+    watchosX64()
+    watchosArm32()
+    watchosArm64()
+    watchosSimulatorArm64()
+    watchosDeviceArm64()
+
     // watchOS targets (v0.2 — FULL App Intents impl; watchOS 10+ Shortcuts via Swift bridge)
 
     // Linux + mingw (v0.2 — registry-only; manifest JSON to XDG / APPDATA dir)
@@ -95,11 +103,31 @@ kotlin {
         nodejs()
     }
 
+    // wasmWasi — no OS intent surface, but a WASI host can serve one. WasiAppIntents routes
+    // registration across the boundary so the artifact resolves and shared code compiles.
+    wasmWasi {
+        nodejs()
+    }
+
     compilerOptions {
         freeCompilerArgs.add("-Xexpect-actual-classes")
     }
 
     sourceSets {
+        // koin-core publishes every target this module builds EXCEPT wasmWasi, so the Koin
+        // binding lives in an intermediate source set spanning the other 20 — one artifact, and
+        // wasmWasi simply has no Koin on its classpath. Same arrangement as cmp-share.
+        val koinMain = create("koinMain").apply { dependsOn(getByName("commonMain")) }
+        val koinTest = create("koinTest").apply { dependsOn(getByName("commonTest")) }
+        listOf("jvmMain", "androidMain", "appleMain", "linuxMain", "mingwMain", "jsMain", "wasmJsMain")
+            .forEach { getByName(it).dependsOn(koinMain) }
+        listOf("jvmTest", "appleTest", "linuxTest", "mingwTest", "jsTest", "wasmJsTest")
+            .forEach { getByName(it).dependsOn(koinTest) }
+
+        koinMain.dependencies {
+            implementation(libs.koin.core)
+        }
+
         commonMain.dependencies {
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization.json)

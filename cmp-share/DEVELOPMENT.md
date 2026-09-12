@@ -3,7 +3,7 @@ module: cmp-share
 artifact: io.github.mobilebytelabs:cmp-share
 version: UNKNOWN
 package: com.mobilebytelabs.kmptoolkit.share
-api_tier: experimental
+api_tier: stable  # @ExperimentalShareApi retained as a deprecated no-op for source compat
 last_reviewed: 2026-05-30
 goal_plan_ref: plan-layer/project-plans/mbs/kmp-toolkit/active/consumer-library-ai-bridge/GOAL.md
 adr_refs: []
@@ -20,7 +20,7 @@ adr_refs: []
 
 | Artifact | Package | Current version | Maven | Since | API tier |
 |----------|---------|-----------------|-------|-------|----------|
-| `io.github.mobilebytelabs:cmp-share` | `com.mobilebytelabs.kmptoolkit.share` | `UNKNOWN` | [Central](https://central.sonatype.com/artifact/io.github.mobilebytelabs/cmp-share) | 2026-05-30 | experimental |
+| `io.github.mobilebytelabs:cmp-share` | `com.mobilebytelabs.kmptoolkit.share` | `UNKNOWN` | [Central](https://central.sonatype.com/artifact/io.github.mobilebytelabs/cmp-share) | 2026-05-30 | stable |
 
 **Module purpose (one paragraph):** <!-- AUTHOR: WIP — initial draft from 2026-05-30. One-paragraph module purpose (≤200 words). Seed from idea-layer/cmp-share/SPEC.md if present. -->
 
@@ -86,11 +86,34 @@ Same procedure as `cmp-intent-launcher` — see [cmp-intent-launcher DEVELOPMENT
   - Linux — `linuxMain/Share.linux.kt` (POSIX `fopen`+`fwrite` to `$TMPDIR/cmp-share-*` for Image; `xclip` for text; `xdg-open` for url/file).
   - mingw — `mingwMain/Share.mingw.kt` (Win32 `ShellExecuteW` for url; clipboard API for text; binary blocked — see ADR-001).
   - tvOS — `tvosMain/Share.tvos.kt` (optional consumer-provided `CmpShareTvosBridge.swift` probed via ObjC runtime — Text/Url only).
-  - watchOS — `watchosMain/Share.watchos.kt` (`WCSession.transferUserInfo` for text/url; binary blocked on arm32 — see ADR-001).
+  - watchOS — `watchosMain/Share.watchos.kt` (`WCSession.transferUserInfo` for text/url; binary blocked by the arm32 bit-width split — see ADR-001). All five architectures are declared and build. NOTE: `watchosSimulatorArm64Test` cannot execute on a dev box with no watchOS simulator runtime installed (Xcode reports "does not support simulator tests for watchos_simulator_arm64"); execution happens in the `watchos` job of `.github/workflows/native-tests.yml`.
+  - wasmWasi — `wasmWasiMain/Share.wasmWasi.kt` (every payload → `UnsupportedPlatform`; `ShareCapabilities.None`). Asserted by `wasmWasiTest/ShareWasmWasiTest.kt` so the declared-failure contract cannot silently become a no-op.
 
 - **Step 5 contract tests:** mirror `FakeShareLauncher` + `ShareContractTest`. Verify your impl returns the same sealed-result types as the Fake's scripted results (`Completed` / `Cancelled` / `Failed(typed cause)`).
 
 - **Step 7 ADR:** if your graduation reverses a row from [ADR-001](docs/ADR-001-tvos-no-share-watchos-arm32.md), supersede ADR-001 with a new ADR explaining what changed.
+
+### Recipe: Add a capability to the manager facade
+
+`ShareManager` is the injectable surface; `Share` is the engine. Adding to the facade:
+
+1. Add the method to `ShareManager` **as an interface default** that routes to `share(payload, options)`.
+   Keep `capabilities` and `share` the only abstract members — that is what makes a test double two
+   lines, and `FakeShareManager` gets your new method for free.
+2. If the method takes a message alongside a payload, bundle through the private `withMessage`
+   helper rather than building a `SharePayload.Multi` at the call site — a blank message must not
+   produce a bundle carrying an empty `Text` item.
+3. If the new capability is not universal, add a field to `ShareCapabilities` and update **all nine**
+   `ShareCapabilities.<platform>.kt` actuals. Do not guess a value: read that platform's
+   `when (payload)` block and record what it really does.
+4. Extend `supports()` for the new payload kind. For anything bundle-shaped, recurse — a bundle is
+   supported only when bundling *and* every item is.
+5. Test against `FakeShareManager` in `commonTest`, asserting the PAYLOAD the method builds. That
+   mapping is the whole value of the facade and is where a regression goes unnoticed.
+6. Refresh BCV: `./gradlew :cmp-share:apiDump`.
+
+Compose-only surface (anything typed in `androidx.compose.*`) belongs in `cmp-share-compose`, not
+here — the headless artifact ships to tvOS, Linux and Windows, which have no Compose at all.
 
 ### Recipe: Add a new SharePayload subtype
 
@@ -113,15 +136,46 @@ Same procedure as `cmp-intent-launcher` — see [cmp-intent-launcher DEVELOPMENT
 
 ## §7 Cross-Platform Parity Recipes (authored — LLM-seeded)
 
-<!-- AUTHOR: WIP — initial draft from 2026-05-30 -->
+### Pattern: Declared capability, never a silent no-op
 
-### Pattern: _Pattern name TBD_
+**When to use:** whenever a capability is real on some targets and absent on others — which is the
+normal case for anything touching the platform.
 
-**When to use:** _TBD_
-**Code shape:**
+The failure mode this avoids: a UI renders a share button on tvOS, the user selects it, and nothing
+happens (or it fails after they have already picked a target). The fix is to let callers ask BEFORE
+they offer, and to make the answer come from the same place the behaviour does.
+
+**Code shape** — an `expect val` descriptor, one `actual` per source set, plus a derived query:
+
 ```kotlin
-// TBD
+// commonMain
+public expect val platformShareCapabilities: ShareCapabilities
+
+// tvosMain — reflects what Share.tvos.kt's `when (payload)` actually does
+public actual val platformShareCapabilities: ShareCapabilities = ShareCapabilities.TextAndUrlOnly
 ```
+
+```kotlin
+// derived in commonMain — no extra actuals, and bundles recurse
+public fun supports(payload: SharePayload): Boolean = when (payload) {
+    is SharePayload.Multi -> capabilities.multi && payload.items.all { supports(it) }
+    ...
+}
+```
+
+**Rules that make it hold:**
+
+- The descriptor is written by READING each `actual`, never assumed. Every value in
+  `ShareCapabilities.<platform>.kt` carries a KDoc line saying why.
+- `true` means *the implementation attempts it*, not *it will succeed*. Per-call outcomes stay in
+  `ShareResult` — a browser without Web Share Level 2 still reports `NoHandler`.
+- A capability that is false must return a typed `ShareError.UnsupportedPlatform`, never `Unit` and
+  never a swallowed exception.
+- The published README table is generated from the same facts, so documentation cannot drift from
+  behaviour.
+
+Applies unchanged to the other platform-facade modules — `cmp-intent-launcher`, `cmp-app-intents`,
+`cmp-clipboard`, `cmp-in-app-update`.
 
 ---
 

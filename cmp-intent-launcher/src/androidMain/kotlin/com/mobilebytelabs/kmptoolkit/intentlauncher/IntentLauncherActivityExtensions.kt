@@ -34,7 +34,6 @@ import kotlinx.coroutines.CompletableDeferred
  *
  * Prefer the Composable [rememberIntentLauncher] for new code.
  */
-@ExperimentalIntentLauncherApi
 public fun ComponentActivity.intentLauncher(): IntentLauncher {
     var pending: CompletableDeferred<IntentResult>? = null
     val arl = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->

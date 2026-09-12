@@ -1,7 +1,6 @@
 /*
  * Copyright 2026 MobileByteLabs · Apache 2.0
  */
-@file:OptIn(ExperimentalPdfGeneratorApi::class)
 
 package com.mobilebytelabs.kmptoolkit.pdfgenerator
 
@@ -24,7 +23,6 @@ import javax.swing.filechooser.FileNameExtensionFilter
  * JVM (Desktop) implementation. Uses OpenHTMLToPDF for HTML route + JvmNativePdfRenderer
  * (Apache PDFBox direct) for DSL route.
  */
-@ExperimentalPdfGeneratorApi
 public actual class PdfGenerator public actual constructor() {
     private val progress = MutableSharedFlow<PdfProgressEvent>(extraBufferCapacity = 32)
 

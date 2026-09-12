@@ -27,7 +27,6 @@ import platform.posix.system
  *   `IntentLauncher` Linux impl (documented in module README).
  */
 @OptIn(ExperimentalForeignApi::class)
-@ExperimentalIntentLauncherApi
 public actual object SystemIntents {
 
     public actual suspend fun openAppSettings(): IntentResult {

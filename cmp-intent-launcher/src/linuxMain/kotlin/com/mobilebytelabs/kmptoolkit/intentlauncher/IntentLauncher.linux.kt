@@ -34,7 +34,6 @@ import platform.posix.system
  *   plan to close it without a custom GTK/Qt contact-picker module.
  */
 @OptIn(ExperimentalForeignApi::class)
-@ExperimentalIntentLauncherApi
 public actual class IntentLauncher public constructor() {
     public actual suspend fun launch(block: IntentBuilder.() -> Unit): IntentResult {
         val builder = IntentBuilder().apply(block)

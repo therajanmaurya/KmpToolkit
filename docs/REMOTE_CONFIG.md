@@ -5,13 +5,16 @@ Current docs have moved to docs/remote-config/
   → Setup:   docs/remote-config/SETUP.md
   → AI sync: docs/remote-config/CLAUDE_AI_SETUP.md
 
-Current artifact: io.github.mobilebytelabs:kmptoolkit-remote-config:2.1.0
+Current artifacts: io.github.mobilebytelabs:cmp-remote-config          (headless, 15 KMP targets)
+                   io.github.mobilebytelabs:cmp-remote-config-compose  (UI + remoteConfig { } DSL)
+                   — both at the shared kmptoolkit.version. The
+                   `kmptoolkit-remote-config` coordinate below was never published.
 Current package:  com.mobilebytelabs.remoteconfig
 Current table:    product_remote_config (not remote_config)
 -->
 
 > **Docs moved** → [`docs/remote-config/README.md`](remote-config/README.md) | [`SETUP.md`](remote-config/SETUP.md)
-> Current version: **2.1.0** — artifact and table name changed, use new docs.
+> Split into `cmp-remote-config` (headless) + `cmp-remote-config-compose` (UI) — use the new docs.
 
 ---
 

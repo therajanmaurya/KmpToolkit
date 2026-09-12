@@ -10,16 +10,18 @@
 package com.mobilebytelabs.kmptoolkit.share
 
 /**
- * Opt-in marker for the experimental [Share] API. Per ADR-08 — per-module marker,
- * not a shared `@ExperimentalInterAppCommsApi`. Remove the annotation when cmp-share
- * graduates to v1.0.
+ * Retained no-op marker. **cmp-share graduated to a stable API — no opt-in is required.**
  *
- * Usage: `@OptIn(ExperimentalShareApi::class)` on call sites, or set
- * `-opt-in=com.mobilebytelabs.kmptoolkit.share.ExperimentalShareApi` in your build script.
+ * This annotation no longer carries [RequiresOptIn], so it neither warns nor demands
+ * `@OptIn`. It is kept only so that source written against the experimental era —
+ * `@OptIn(ExperimentalShareApi::class)` or `-opt-in=...ExperimentalShareApi` — keeps
+ * compiling. Both are now redundant and can be deleted.
+ *
+ * Scheduled for removal in the next major version.
  */
-@RequiresOptIn(
-    message = "cmp-share is experimental until v1.0; API may evolve without major-version bumps.",
-    level = RequiresOptIn.Level.WARNING,
+@Deprecated(
+    message = "cmp-share is stable; the opt-in is no longer required. Remove the @OptIn / annotation.",
+    level = DeprecationLevel.WARNING,
 )
 @Retention(AnnotationRetention.BINARY)
 public annotation class ExperimentalShareApi
@@ -29,7 +31,6 @@ public annotation class ExperimentalShareApi
  *
  * Plan: plan-layer/project-plans/mbs/kmp-toolkit/active/inter-app-comms-suite/04-cmp-share.md
  */
-@ExperimentalShareApi
 public sealed class SharePayload {
     public data class Text(val content: String, val mimeType: String = "text/plain") : SharePayload()
 
@@ -80,7 +81,6 @@ public sealed class SharePayload {
  *   the payload, the implementation falls back to the normal chooser rather than failing. Ignored on iOS /
  *   desktop / web (no per-app targeting on those platforms).
  */
-@ExperimentalShareApi
 public data class ShareOptions(
     val chooserTitle: String? = null,
     val excludedActivities: List<String> = emptyList(),
@@ -91,7 +91,6 @@ public data class ShareOptions(
 /**
  * Outcome of a share invocation. Never thrown — always returned.
  */
-@ExperimentalShareApi
 public sealed class ShareResult {
     public object Completed : ShareResult()
 
@@ -100,7 +99,6 @@ public sealed class ShareResult {
     public data class Failed(val cause: ShareError) : ShareResult()
 }
 
-@ExperimentalShareApi
 public sealed class ShareError {
     public object UnsupportedPlatform : ShareError()
 
@@ -116,7 +114,6 @@ public sealed class ShareError {
  *
  * Per-platform behaviour matrix lives in SPEC.md + ADR-01.
  */
-@ExperimentalShareApi
 public expect object Share {
     public suspend fun share(payload: SharePayload, options: ShareOptions = ShareOptions()): ShareResult
 }
@@ -125,15 +122,12 @@ public expect object Share {
 // DSL convenience helpers — all delegate to Share.share()
 // -----------------------------------------------------------------------------
 
-@ExperimentalShareApi
 public suspend fun Share.text(content: String, options: ShareOptions = ShareOptions()): ShareResult =
     share(SharePayload.Text(content), options)
 
-@ExperimentalShareApi
 public suspend fun Share.url(href: String, options: ShareOptions = ShareOptions()): ShareResult =
     share(SharePayload.Url(href), options)
 
-@ExperimentalShareApi
 public suspend fun Share.image(
     bytes: ByteArray,
     mimeType: String,
@@ -141,7 +135,6 @@ public suspend fun Share.image(
     options: ShareOptions = ShareOptions(),
 ): ShareResult = share(SharePayload.Image(bytes, mimeType, filename), options)
 
-@ExperimentalShareApi
 public suspend fun Share.file(
     uri: String,
     mimeType: String,
@@ -149,6 +142,5 @@ public suspend fun Share.file(
     options: ShareOptions = ShareOptions(),
 ): ShareResult = share(SharePayload.File(uri, mimeType, filename), options)
 
-@ExperimentalShareApi
 public suspend fun Share.multi(payloads: List<SharePayload>, options: ShareOptions = ShareOptions()): ShareResult =
     share(SharePayload.Multi(payloads), options)

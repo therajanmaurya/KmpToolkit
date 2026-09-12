@@ -11,7 +11,16 @@
 
 package com.mobilebytelabs.kmptoolkit.share
 
+import kotlinx.cinterop.addressOf
+import kotlinx.cinterop.convert
+import kotlinx.cinterop.toKString
+import kotlinx.cinterop.usePinned
+import platform.posix.fclose
+import platform.posix.fopen
+import platform.posix.fwrite
+import platform.posix.getenv
 import platform.posix.system
+import kotlin.random.Random
 
 /**
  * mingw (Windows) `Share` — `cmd /c start` for URL share + `cmd /c "echo TEXT | clip"`
@@ -35,16 +44,19 @@ import platform.posix.system
  * **Security:** URL is double-quote-wrapped + embedded quotes escaped to prevent
  * cmd injection.
  */
-@ExperimentalShareApi
+@OptIn(kotlinx.cinterop.ExperimentalForeignApi::class)
 public actual object Share {
     public actual suspend fun share(payload: SharePayload, options: ShareOptions): ShareResult = when (payload) {
         is SharePayload.Url -> winStart(payload.href)
 
         is SharePayload.Text -> winClipText(payload.content)
 
-        is SharePayload.Image,
-        is SharePayload.File,
-        -> ShareResult.Failed(ShareError.UnsupportedPlatform)
+        // Windows has no ambient share sheet, so both of these degrade to the clipboard — the
+        // same fallback the JVM, Linux and web targets use. Copying the path is worth far more
+        // than refusing: the user can paste it into mail, chat or Explorer.
+        is SharePayload.File -> winClipText(payload.uri)
+
+        is SharePayload.Image -> imageShare(payload)
 
         is SharePayload.Multi -> multi(payload)
     }
@@ -54,6 +66,55 @@ public actual object Share {
         val escaped = href.replace("\"", "\\\"")
         val rc = system("cmd /c start \"\" \"$escaped\"")
         return if (rc == 0) ShareResult.Completed else ShareResult.Failed(ShareError.Unknown("cmd start exit=$rc"))
+    }
+
+    /**
+     * Write image bytes to `%TEMP%` and put that path on the clipboard.
+     *
+     * Windows offers no way to hand raw bytes to another app without the WinRT share contract
+     * (`IDataTransferManagerInterop`), and the CF_DIB clipboard route is blocked because K/N
+     * cinterop cannot resolve the Win32 SDK types when the klib is built on a non-Windows host —
+     * see this file's header. A real file plus its path is the useful degradation: the user
+     * pastes the path, or drags the file from Explorer.
+     */
+    private fun imageShare(image: SharePayload.Image): ShareResult {
+        val suffix = mimeToSuffix(image.mimeType)
+        val basename = image.filename
+            ?.substringBeforeLast('.', missingDelimiterValue = image.filename ?: "image")
+            ?.replace(Regex("[^A-Za-z0-9._-]"), "_")
+            ?.take(64)
+            ?: "image"
+        val tmpdir = getenv("TEMP")?.toKString()?.takeIf { it.isNotEmpty() }
+            ?: getenv("TMP")?.toKString()?.takeIf { it.isNotEmpty() }
+            ?: "C:\\Windows\\Temp"
+        val rand = Random.nextLong().toULong().toString(16)
+        val path = "$tmpdir\\cmp-share-$basename-$rand$suffix"
+
+        val file = fopen(path, "wb")
+            ?: return ShareResult.Failed(ShareError.Unknown("fopen failed for $path (TEMP not writable?)"))
+        try {
+            val written: ULong = image.bytes.usePinned { pinned ->
+                fwrite(pinned.addressOf(0), 1uL.convert(), image.bytes.size.convert(), file).convert()
+            }
+            if (written.toInt() != image.bytes.size) {
+                return ShareResult.Failed(
+                    ShareError.Unknown("fwrite short write: $written / ${image.bytes.size}"),
+                )
+            }
+        } finally {
+            fclose(file)
+        }
+        return winClipText(path)
+    }
+
+    /** File extension for a MIME type, defaulting to `.bin` for anything unrecognised. */
+    private fun mimeToSuffix(mime: String): String = when (mime.lowercase()) {
+        "image/png" -> ".png"
+        "image/jpeg", "image/jpg" -> ".jpg"
+        "image/gif" -> ".gif"
+        "image/webp" -> ".webp"
+        "image/bmp" -> ".bmp"
+        else -> ".bin"
     }
 
     /** Copy text to clipboard via Windows built-in `clip.exe` (since Windows XP). */
@@ -74,7 +135,9 @@ public actual object Share {
             val r = when (item) {
                 is SharePayload.Text -> winClipText(item.content)
                 is SharePayload.Url -> winStart(item.href)
-                else -> ShareResult.Failed(ShareError.UnsupportedPlatform)
+                is SharePayload.File -> winClipText(item.uri)
+                is SharePayload.Image -> imageShare(item)
+                is SharePayload.Multi -> ShareResult.Failed(ShareError.UnsupportedPlatform)
             }
             if (r is ShareResult.Completed) return r
         }

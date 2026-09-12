@@ -28,7 +28,6 @@ import platform.posix.mkdir
  * `invokeForTesting` works for dev/test as a fallback (manifest reading is consumer/system
  * tooling's responsibility on Linux).
  */
-@ExperimentalAppIntentsApi
 public actual object AppIntents {
     public actual fun register(config: AppIntentsConfig) {
         AppIntentsRuntime.register(config)

@@ -24,7 +24,6 @@ package com.mobilebytelabs.kmptoolkit.appintents
  * to v0.4 Phase 4 polish — this `AssistantBii` helper ships now so consumers can call
  * `AssistantBii.resolveBii(def)` directly OR the v0.4 task can consume it.
  */
-@OptIn(ExperimentalAppIntentsApi::class)
 public object AssistantBii {
 
     /** Resolve the BII identifier for an intent definition; defers to [defaultBiiForIntent] when caller hasn't set one. */

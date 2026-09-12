@@ -25,7 +25,6 @@ import kotlin.coroutines.resume
  * Arbitrary intents → File System Access API path when `globalThis.window.showOpenFilePicker`
  * is defined (modern Chromium browsers); otherwise falls back to `<input type=file>`.
  */
-@ExperimentalIntentLauncherApi
 public actual class IntentLauncher public constructor() {
     public actual suspend fun launch(block: IntentBuilder.() -> Unit): IntentResult {
         val builder = IntentBuilder().apply(block)
@@ -43,8 +42,29 @@ public actual class IntentLauncher public constructor() {
             // ADR-09: wasmJs has no canonical contact picker
             ResultContracts.PickContact -> IntentResult.Failed(IntentError.UnsupportedPlatform)
 
+            // A plain launch with a URI is the commonest intent there is, and a browser can
+            // obviously honour it — this used to fall through to UnsupportedPlatform.
+            null -> openUri(builder)
+
             else -> builder.onUnsupportedHandler?.invoke()
                 ?: IntentResult.Failed(IntentError.UnsupportedPlatform)
+        }
+    }
+
+    /**
+     * Open [IntentBuilder.data] in a new tab.
+     *
+     * A popup blocker outside a user gesture makes `window.open` return `null`; that surfaces as
+     * [IntentError.UserGestureMissing], matching how the file picker classifies the same
+     * condition rather than reporting a generic failure.
+     */
+    private fun openUri(builder: IntentBuilder): IntentResult {
+        val uri = builder.data ?: return IntentResult.Failed(IntentError.NoHandler)
+        val opened = kotlinx.browser.window.open(uri, "_blank")
+        return if (opened != null) {
+            IntentResult.Ok(IntentData(uri = uri))
+        } else {
+            IntentResult.Failed(IntentError.UserGestureMissing)
         }
     }
 

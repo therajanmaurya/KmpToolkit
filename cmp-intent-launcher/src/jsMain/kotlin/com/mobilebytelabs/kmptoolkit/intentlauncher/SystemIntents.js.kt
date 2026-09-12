@@ -23,7 +23,6 @@ import kotlin.coroutines.resume
  *   actuals share a contract). Returns `UnsupportedPlatform` on browsers without the
  *   File System Access API (Firefox + Safari today).
  */
-@ExperimentalIntentLauncherApi
 public actual object SystemIntents {
 
     public actual suspend fun openAppSettings(): IntentResult = IntentResult.Failed(IntentError.UnsupportedPlatform)

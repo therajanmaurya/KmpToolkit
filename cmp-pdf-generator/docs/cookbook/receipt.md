@@ -3,7 +3,6 @@
 80mm thermal-printer-style receipt with merchant header, line items, totals, payment method, and footer.
 
 ```kotlin
-@OptIn(ExperimentalPdfGeneratorApi::class)
 suspend fun generateReceiptPdf(generator: PdfGenerator, dest: PdfOutput = PdfOutput.Share) {
     val receipt = ReceiptData(
         merchantName    = "Sample Coffee Co",

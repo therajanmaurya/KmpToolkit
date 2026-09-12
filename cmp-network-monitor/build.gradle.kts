@@ -84,6 +84,15 @@ kotlin {
     tvosArm64()
     tvosSimulatorArm64()
 
+    // watchOS — src/watchosMain already held a complete NSURLSession captive-portal detector,
+    // written FOR this platform (it uses KVC to dodge the NSInteger bit-width mismatch that
+    // watchOS's ILP32 ABI causes). No target was ever declared, so none of it compiled.
+    watchosX64()
+    watchosArm32()
+    watchosArm64()
+    watchosSimulatorArm64()
+    watchosDeviceArm64()
+
     // ========================================================================
     // watchOS Targets (arm32 removed — deprecated by Kotlin, Apple requires 64-bit since watchOS 7)
     // ========================================================================

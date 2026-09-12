@@ -26,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mobilebytelabs.kmptoolkit.share.ExperimentalShareApi
 import com.mobilebytelabs.kmptoolkit.share.Share
 import com.mobilebytelabs.kmptoolkit.share.ShareOptions
 import com.mobilebytelabs.kmptoolkit.share.SharePayload
@@ -48,7 +47,6 @@ import kotlinx.coroutines.launch
  * Decision D3 ("DoD = compile + Fake test + sample demonstrates it"), this panel
  * is the manual smoke-test surface for the per-platform `Share` impls.
  */
-@OptIn(ExperimentalShareApi::class)
 @Composable
 fun TryItPanel() {
     val scope = rememberCoroutineScope()
@@ -158,7 +156,6 @@ private val SAMPLE_PNG_PLACEHOLDER: ByteArray = byteArrayOf(
     0x0D.toByte(), 0x0A.toByte(), 0x1A.toByte(), 0x0A.toByte(),
 )
 
-@OptIn(ExperimentalShareApi::class)
 private fun formatResult(r: ShareResult?): String = when (r) {
     null -> "(no call yet)"
     ShareResult.Completed -> "Completed"

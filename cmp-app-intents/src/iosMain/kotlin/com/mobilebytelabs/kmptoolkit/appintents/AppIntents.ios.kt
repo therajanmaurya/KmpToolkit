@@ -51,7 +51,6 @@ import platform.Foundation.writeToURL
  * Apple APIs whose surface K/N cannot reach (category-only properties, SwiftUI
  * modifiers, AppIntents macros).
  */
-@ExperimentalAppIntentsApi
 public actual object AppIntents {
     public actual fun register(config: AppIntentsConfig) {
         AppIntentsRuntime.register(config)
@@ -97,7 +96,6 @@ public actual object AppIntents {
  * Pattern mirrors `cmp-deep-link/swift/DeepLinkPlugin.swift` ↔ `DeepLinkAppleHelper.shared`.
  */
 @ObjCName("CmpAppIntentsCallback")
-@OptIn(ExperimentalAppIntentsApi::class)
 public class AppIntentsCallback {
     public var handler: ((String, Map<String, Any>) -> AppIntentResult)? = null
 

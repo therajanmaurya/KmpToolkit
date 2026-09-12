@@ -30,7 +30,6 @@ package com.mobilebytelabs.kmptoolkit.appintents
  * ADR-09 #11 audit refresh: watchOS = runtime-only at v0.4; full manifest + Swift dispatch
  * follow-up post-v0.4 once the appleMain consolidation lands.
  */
-@ExperimentalAppIntentsApi
 public actual object AppIntents {
     public actual fun register(config: AppIntentsConfig) {
         AppIntentsRuntime.register(config)

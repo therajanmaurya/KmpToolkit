@@ -54,7 +54,15 @@ kotlin {
                 .get()
                 .toInt()
         withJava()
-        withHostTestBuilder {}.configure {}
+        withHostTestBuilder {}.configure {
+            // android.jar in a JVM host test is a stub whose methods THROW by default.
+            isReturnDefaultValues = true
+
+            // Robolectric reads the MERGED manifest/resources; without this the ui-test-manifest
+            // activity Compose's ActivityScenario launches is invisible and every UI test dies
+            // with "Unable to resolve activity for Intent { MAIN }".
+            isIncludeAndroidResources = true
+        }
         withDeviceTestBuilder { sourceSetTreeName = "test" }
         compilerOptions {
             jvmTarget = JvmTarget.JVM_11
@@ -83,8 +91,22 @@ kotlin {
             implementation(libs.kotlinx.coroutines.core)
         }
 
+        // getByName: the com.android.kotlin.multiplatform.library plugin does not generate a
+        // typed `androidHostTest` accessor the way it does for commonTest/jvmTest.
+        getByName("androidHostTest").dependencies {
+            implementation(libs.robolectric)
+            implementation(libs.junit)
+            implementation(libs.androidx.compose.ui.test.manifest)
+        }
+
+        jvmTest.dependencies {
+            implementation(compose.desktop.currentOs)
+        }
+
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+            implementation(compose.uiTest)
             implementation(libs.kotlinx.coroutines.test)
         }
     }
@@ -137,3 +159,9 @@ mavenPublishing {
 
 // Library Runtime Observability — auto-generate CmpMetadata.kt for cmp-observe hooks (epic 2026-05-30)
 apply(from = "$rootDir/cmp-observe-metadata.gradle.kts")
+
+// Generates robolectric.ROBOLECTRIC_SDK from the version catalog for androidHostTest.
+apply(from = "$rootDir/robolectric-host-test.gradle.kts")
+kotlin.sourceSets.getByName("androidHostTest").kotlin.srcDir(
+    tasks.named("generateRobolectricSdkConstant"),
+)

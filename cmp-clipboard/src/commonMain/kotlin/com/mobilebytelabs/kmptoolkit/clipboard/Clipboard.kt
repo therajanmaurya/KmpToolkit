@@ -137,3 +137,54 @@ expect fun hasClipboardText(): Boolean
  * ```
  */
 expect fun clearClipboard()
+
+/**
+ * Copy and paste — the narrow, injectable surface a ViewModel actually depends on.
+ *
+ * ## Why this is smaller than [ClipboardManager]
+ * [ClipboardManager] is a 40-member facade over monitoring, history, permissions and observation.
+ * Almost no caller wants all of that: a ViewModel wants "copy this code", "read what is on the
+ * clipboard". Depending on the whole manager to do that makes it unfakeable — the manager is a
+ * concrete class whose primitives route straight to top-level `expect fun`s, so a test touches the
+ * real system clipboard, which behaves differently on every CI runner.
+ *
+ * This interface is those primitives and nothing else. [ClipboardManager] implements it, so
+ * existing wiring is unchanged, and `FakeClipboard` gives tests an isolated one.
+ *
+ * ```kotlin
+ * class ReferralViewModel(private val clipboard: Clipboard) : ViewModel() {
+ *     fun copyCode(code: String) {
+ *         if (clipboard.copy(code)) showToast("Copied")
+ *     }
+ * }
+ * ```
+ *
+ * For monitoring, history or permissions, inject [ClipboardManager] instead — this is deliberately
+ * the small half.
+ */
+public interface Clipboard {
+
+    /** Put [text] on the clipboard. `false` if the platform refused it. */
+    public fun copy(text: String): Boolean
+
+    /** Read the clipboard, or `null` when it is empty or unreadable. */
+    public fun paste(): String?
+
+    /** Whether the clipboard currently holds text. */
+    public fun hasText(): Boolean
+
+    /** Empty the clipboard. */
+    public fun clear()
+
+    /** Suspending [copy], for platforms whose clipboard write is asynchronous (the browser). */
+    public suspend fun copyAsync(text: String): Boolean
+
+    /** Suspending [paste]. On the web this is the form that can await a permission prompt. */
+    public suspend fun pasteAsync(): String?
+
+    /**
+     * What clipboard access means here — in particular whether it is the OS clipboard other apps
+     * can see, or the app-scoped buffer used on tvOS, watchOS and wasmWasi.
+     */
+    public val capabilities: ClipboardCapabilities
+}

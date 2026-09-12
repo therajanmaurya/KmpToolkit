@@ -1,36 +1,20 @@
+/*
+ * Copyright 2026 MobileByteLabs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ */
 package com.mobilebytelabs.kmptoolkit.clipboard
 
-import com.mobilebytelabs.kmptoolkit.clipboard.monitor.ClipboardMonitorConfig
-import com.mobilebytelabs.kmptoolkit.clipboard.monitor.ClipboardMonitorState
-import com.mobilebytelabs.kmptoolkit.clipboard.monitor.ClipboardUrlMatcher
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
-
-internal class WatchosClipboardMonitor : ClipboardMonitor {
-    private val _state = MutableStateFlow<ClipboardMonitorState>(ClipboardMonitorState.Idle)
-    override val state: StateFlow<ClipboardMonitorState> = _state.asStateFlow()
-
-    private val _changes = MutableSharedFlow<ClipboardChange>(extraBufferCapacity = 64)
-    override val changes: SharedFlow<ClipboardChange> = _changes.asSharedFlow()
-
-    private val _latestChange = MutableStateFlow<ClipboardChange?>(null)
-    override val latestChange: StateFlow<ClipboardChange?> = _latestChange.asStateFlow()
-
-    private val _urlDetections = MutableSharedFlow<UrlDetection>(extraBufferCapacity = 64)
-    override val urlDetections: SharedFlow<UrlDetection> = _urlDetections.asSharedFlow()
-
-    override fun start(config: ClipboardMonitorConfig) {
-        // No-op: watchOS does not support clipboard monitoring
-    }
-    override fun stop() {}
-    override fun pause() {}
-    override fun resume() {}
-    override fun addUrlMatcher(matcher: ClipboardUrlMatcher) {}
-    override fun addFilter(filter: ClipboardFilter) {}
-}
-
-actual fun createClipboardMonitor(): ClipboardMonitor = WatchosClipboardMonitor()
+/**
+ * watchOS has no system clipboard to poll, so the monitor watches [InAppClipboard] instead — see
+ * [InAppClipboardMonitor], which drives the same state machine as every other platform.
+ *
+ * The previous no-op monitor here had a `start()` that did nothing, leaving the state stuck on
+ * Idle and failing the shared monitor tests in commonTest. It was deleted rather than left beside
+ * its replacement: an unused class next to a working one reads as a live alternative.
+ */
+actual fun createClipboardMonitor(): ClipboardMonitor = InAppClipboardMonitor()

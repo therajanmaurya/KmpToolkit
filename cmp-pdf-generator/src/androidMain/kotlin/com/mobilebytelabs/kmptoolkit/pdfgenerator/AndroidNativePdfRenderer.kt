@@ -1,7 +1,6 @@
 /*
  * Copyright 2026 MobileByteLabs · Apache 2.0
  */
-@file:OptIn(ExperimentalPdfGeneratorApi::class)
 
 package com.mobilebytelabs.kmptoolkit.pdfgenerator
 
@@ -26,7 +25,6 @@ import android.graphics.pdf.PdfDocument as NativePdfDocument
  *
  * For pixel-perfect output use the HTML route (declare any `Html(raw)` element).
  */
-@ExperimentalPdfGeneratorApi
 internal class AndroidNativePdfRenderer(
     private val document: PdfDocument,
     private val options: PdfGeneratorOptions,

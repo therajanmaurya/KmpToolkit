@@ -1,21 +1,26 @@
+/*
+ * Copyright 2026 MobileByteLabs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ */
 package com.mobilebytelabs.kmptoolkit.clipboard
 
-/**
- * watchOS implementation of clipboard operations.
- *
- * Note: watchOS does not have clipboard/pasteboard support like iOS.
- * UIPasteboard is not available on watchOS. These are no-op implementations.
- *
- * See: https://developer.apple.com/documentation/uikit/uipasteboard
- * UIPasteboard is only available on iOS and iPadOS, not watchOS.
- */
+// Apple ships no UIPasteboard to watchos — verified by compiling against it, not assumed. These used
+// to return false/null unconditionally, so an in-app copy could never be pasted back even within
+// the same screen. They now round-trip through [InAppClipboard], which is app-scoped and says so
+// via platformClipboardCapabilities.systemWide == false. Install InAppClipboard.onCopy to forward
+// the copy somewhere real (a paired phone, a companion app).
 
-actual fun copyToClipboard(text: String): Boolean = false
+actual fun copyToClipboard(text: String): Boolean = InAppClipboard.copy(text)
 
-actual fun getFromClipboard(): String? = null
+actual fun getFromClipboard(): String? = InAppClipboard.read()
 
-actual fun hasClipboardText(): Boolean = false
+actual fun hasClipboardText(): Boolean = InAppClipboard.has()
 
 actual fun clearClipboard() {
-    // No-op: watchOS does not support clipboard operations
+    InAppClipboard.clear()
 }

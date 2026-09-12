@@ -2,7 +2,7 @@
 module: cmp-remote-config
 artifact: io.github.mobilebytelabs:cmp-remote-config
 version: UNKNOWN
-package: com.mobilebytelabs.kmptoolkit.remote.config
+package: com.mobilebytelabs.remoteconfig
 api_tier: experimental
 last_reviewed: 2026-05-30
 goal_plan_ref: plan-layer/project-plans/mbs/kmp-toolkit/active/consumer-library-ai-bridge/GOAL.md
@@ -30,7 +30,7 @@ adr_refs: []
 
 | Target | Source-set present | Real impl | UnsupportedPlatform stub | .kt count | Last reviewed | Coverage | Notes |
 |--------|:------------------:|:---------:|:------------------------:|:---------:|---------------|----------|-------|
-| (no src/{platform}Main/ directories found) | — | — | — | — | 2026-06-01 | — | — |
+| (no src/{platform}Main/ directories found) | — | — | — | — | 2026-09-12 | — | — |
 
 Legend (Real impl): ✅ real impl, 🟡 partial / wontfix-OS / wontfix-infra / legacy stub, ⛔ not declared, — N/A.
 Legend (Coverage enum, since 2026-06-01): `full` (all public-API methods backed by OS primitive) · `partial` (most real; some typed UnsupportedPlatform fallbacks for contracts that don't apply) · `wontfix-OS` (OS lacks the primitive) · `wontfix-infra` (impl possible but CI/toolchain blocks it) · `(legacy:full|stub)` (auto-derived; pre-opt-in modules — add a `// LD-2-coverage: {enum}` comment to the platform's primary `.kt` file to graduate). See `RULE-LIB-DEVELOPMENT-MD-001` LD-2 + ADRs for accepted wontfix cases.

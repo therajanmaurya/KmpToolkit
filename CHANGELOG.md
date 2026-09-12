@@ -9,6 +9,80 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed — ⚠️ BREAKING: cmp-remote-config split into headless core + `-compose`
+
+`cmp-remote-config` is now **headless and builds for 15 KMP targets** (was 7). Its Compose surface
+moved to a new artifact, **`cmp-remote-config-compose`**.
+
+**Migration — add one dependency; nothing else changes.** Every package, class and function keeps its
+exact name and fully-qualified package, so there are no import rewrites:
+
+```kotlin
+implementation(libs.cmp.remote.config)          // unchanged — evaluator, flags, model, network
+implementation(libs.cmp.remote.config.compose)  // ADD THIS if you render any remote-config UI
+```
+
+You need the new artifact if you use `RemoteConfigHost`, `RemoteConfigBanner`, `RemoteConfigDialog`,
+`RemoteConfigBottomSheet`, `RemoteConfigFullScreen`, `RemoteConfigViewModel`, `RemoteConfigState`,
+the dynamic UI renderer, or the `Module.remoteConfig { }` Koin DSL. If you only evaluate flags, keep
+the single core dependency and gain the new targets for free.
+
+Verified as a pure relocation: the union of both modules' BCV baselines has the **same 45 public
+symbols** as the old single baseline — nothing was removed from the toolkit, only moved.
+
+**Why.** 12 of the module's 20 files needed no renderer, yet material3, navigation-compose and Coil
+in `commonMain` pinned the whole library to the 7 Compose-Multiplatform targets — so a server or CLI
+could not evaluate a flag at all. The headless core now builds for android, jvm, js, wasmJs,
+iosArm64, iosSimulatorArm64, macosArm64, **linuxX64, mingwX64, tvOS ×3 and watchOS ×3**.
+
+This could not be done inside one module with a Compose-only source set, which was tried first: the
+Compose compiler plugin applies to *every* compilation and fails with "The Compose Compiler requires
+the Compose Runtime to be on the class path" on any target lacking the runtime. That is the
+structural reason this toolkit ships `X` / `X-compose` pairs.
+
+**Targets deliberately absent, measured rather than assumed:** `iosX64`/`macosX64` (Compose 1.12.0
+publishes no artifact for either), `linuxArm64`/`watchosArm32`/`watchosDeviceArm64` (`postgrest-kt`
+3.2.6 publishes no artifact for exactly those three), `wasmWasi` (koin-core has no wasmWasi artifact).
+
+**Also in this change:**
+- `ActionContext`'s constructor is now **public** (was `internal`). Additive — it is the parameter
+  type of the public `ActionHandler` interface, `ActionDispatcher` now lives in the Compose module
+  where `internal` is not visible, and it lets you construct one to unit-test your own handler.
+- `RemoteConfigLocalStore` / `DeviceIdProvider` keep their `Settings` parameter and its default, but
+  the default is now supplied per platform. On linuxX64 / mingwX64 — where multiplatform-settings
+  declares no `Settings()` factory because the OS has no preference store — it is an in-memory store:
+  impression counts and cooldowns are correct within a process and do not survive a restart. Pass
+  your own `Settings` for persistence. Constructor signatures are unchanged.
+- `ActionDispatcher` gains its first tests (4), covering handler routing, registration replacement,
+  and unknown action types being ignored rather than thrown.
+
+### Changed — API graduation: all four opt-in markers are now stable
+
+`cmp-share`, `cmp-app-intents`, `cmp-intent-launcher` and **`cmp-pdf-generator`** no longer require
+an opt-in. Every `@Experimental*Api` annotation has been removed from the public surface.
+
+- **Nothing to do, but you can delete things.** Any `@OptIn(Experimental…Api::class)` and any
+  `-opt-in=…Experimental…Api` compiler flag is now redundant. Both still compile — see below — so
+  this is not a breaking change, and there is no rush.
+- **The marker classes are RETAINED as deprecated no-ops**, not deleted. Each keeps
+  `@Retention(BINARY)` and drops `@RequiresOptIn`, so source written during the experimental era
+  keeps compiling (with a deprecation warning pointing at the now-redundant annotation). They are
+  scheduled for removal in the next major version. `cmp-pdf-generator`'s marker additionally keeps its
+  `@Target` list, because its experimental surface permitted `TYPEALIAS` — a target the default set
+  omits.
+- **Zero binary change.** Annotations are not part of the Binary Compatibility Validator's dumped API,
+  so `apiCheck` passes on all four modules with no baseline movement whatsoever. A published consumer
+  cannot break on this.
+- Each module gains a `GraduatedApiCompatTest` pinning both halves of the promise — that the stable
+  surface is reachable with no opt-in, and that the legacy `@OptIn` form still compiles.
+
+This closes the condition recorded in the v0.4 Phase 11 notes below, which deferred the marker
+decision "pending Windows CI verification … before locking BCV baselines + dropping markers". Both
+now hold: BCV baselines are committed for every publishable module, and the Windows Native CI job
+executes `mingwX64Test` (previously the Windows paths were only ever compile- and link-verified).
+One correction to that note's premise: the Windows file-dialog surface shipped via PowerShell over
+`_popen`, not Win32 `GetSaveFileNameW` cinterop, so what CI now verifies is the PowerShell route.
+
 ### Changed — cmp-firebase: GitLive `3.0.0-alpha02` + wasmJs on the native tier
 
 - **GitLive bumped `3.0.0-alpha01` → `3.0.0-alpha02`**, Firebase BoM `34.17.0` → `34.18.0`.

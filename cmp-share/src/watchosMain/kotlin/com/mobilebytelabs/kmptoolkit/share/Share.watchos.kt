@@ -36,7 +36,6 @@ import platform.WatchConnectivity.WCSession
  * ADR-09 #2 audit refresh: closed for Text/Url; binary deferred to v0.5
  * (Q: drop watchosArm32 or wrap binary calls behind per-arch source sets?).
  */
-@ExperimentalShareApi
 public actual object Share {
     public actual suspend fun share(payload: SharePayload, options: ShareOptions): ShareResult = when (payload) {
         is SharePayload.Text -> handoffUserInfo(

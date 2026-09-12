@@ -27,7 +27,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.mobilebytelabs.kmptoolkit.share.ExperimentalShareApi
 import com.mobilebytelabs.kmptoolkit.share.Share
 import com.mobilebytelabs.kmptoolkit.share.ShareOptions
 import com.mobilebytelabs.kmptoolkit.share.SharePayload
@@ -58,7 +57,6 @@ import kotlinx.coroutines.launch
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@ExperimentalShareApi
 public fun ShareSheet(
     payload: SharePayload,
     onDismiss: () -> Unit,

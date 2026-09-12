@@ -7,11 +7,10 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.android.kotlin.multiplatform.library)
-    alias(libs.plugins.composeMultiplatform)
-    alias(libs.plugins.composeCompiler)
     alias(libs.plugins.vanniktech.mavenPublish)
     id("io.github.mobilebytelabs.kmptoolkit.dokka")
     id("io.github.mobilebytelabs.kmptoolkit.kover")
+    alias(libs.plugins.binaryCompatibilityValidator)
 }
 
 group = "io.github.mobilebytelabs"
@@ -51,6 +50,30 @@ kotlin {
 
     macosArm64()
 
+    // Headless families, added by E2 (2026-09-12) once the Compose surface moved to
+    // cmp-remote-config-compose. This is the point of the split: a server, a CLI or a watch
+    // complication can now evaluate a flag without a renderer on the class path.
+    //
+    // ABSENT, measured rather than assumed:
+    //   iosX64 / macosX64            — Compose 1.12.0 publishes no artifact (they would be fine
+    //                                  here, but cmp-remote-config-compose could not follow).
+    //   watchosArm32 / watchosDeviceArm64 / linuxArm64
+    //                                — `postgrest-kt` 3.2.6 publishes no artifact for exactly
+    //                                  these three. It DOES publish for linuxX64, mingwX64, tvOS
+    //                                  and the remaining watchOS archs, which is why they are here.
+    //   wasmWasi                     — koin-core has no wasmWasi artifact (the same gap that made
+    //                                  `koinMain` necessary elsewhere in this toolkit).
+    watchosX64()
+    watchosArm64()
+    watchosSimulatorArm64()
+
+    tvosX64()
+    tvosArm64()
+    tvosSimulatorArm64()
+
+    linuxX64()
+    mingwX64()
+
     jvm()
 
     js {
@@ -68,14 +91,23 @@ kotlin {
     }
 
     sourceSets {
-        commonMain.dependencies {
-            // Compose
-            implementation(compose.material3)
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.ui)
-            implementation(compose.materialIconsExtended)
+        // `Settings()` (multiplatform-settings' no-arg factory) is not declared for every target
+        // this module now builds, so the default argument on RemoteConfigLocalStore /
+        // DeviceIdProvider is supplied per platform via `defaultSettings()`. Two flavours only:
+        // a platform-backed store where one exists, an in-memory one where the OS has none.
+        val bundledSettingsMain = create("bundledSettingsMain").apply { dependsOn(getByName("commonMain")) }
+        listOf("androidMain", "jvmMain", "jsMain", "wasmJsMain", "appleMain").forEach {
+            getByName(it).dependsOn(bundledSettingsMain)
+        }
 
+        val inMemorySettingsMain = create("inMemorySettingsMain").apply { dependsOn(getByName("commonMain")) }
+        listOf("linuxMain", "mingwMain").forEach { getByName(it).dependsOn(inMemorySettingsMain) }
+
+        // HEADLESS. Every Compose-bound dependency moved to cmp-remote-config-compose along with
+        // the code that used it — material3 / runtime / foundation / ui / materialIconsExtended,
+        // navigation-compose, the two lifecycle-compose artifacts, koin-compose-viewmodel and the
+        // two Coil artifacts. What is left resolves for all 15 targets.
+        commonMain.dependencies {
             // Supabase
             implementation(libs.supabase.postgrest)
             implementation(libs.ktor.client.core)
@@ -85,24 +117,12 @@ kotlin {
 
             // DI
             implementation(libs.koin.core)
-            implementation(libs.koin.compose.viewmodel)
-
-            // Navigation
-            implementation(libs.navigation.compose)
-
-            // Lifecycle
-            implementation(libs.lifecycle.viewmodel.compose)
-            implementation(libs.androidx.lifecycle.runtime.compose)
 
             // Logging
             implementation(libs.kermit)
 
             // Local storage
             implementation(libs.multiplatform.settings)
-
-            // Image Loading
-            implementation(libs.coil.compose)
-            implementation(libs.coil.network.ktor)
 
             // Coroutines
             implementation(libs.kotlinx.coroutines.core)

@@ -25,7 +25,6 @@ import kotlin.coroutines.resume
  *   Returns `UnsupportedPlatform` on Firefox / Safari (no File System Access API),
  *   `Cancelled` on user dismissal (AbortError / NotAllowedError).
  */
-@ExperimentalIntentLauncherApi
 public actual object SystemIntents {
 
     public actual suspend fun openAppSettings(): IntentResult = IntentResult.Failed(IntentError.UnsupportedPlatform)

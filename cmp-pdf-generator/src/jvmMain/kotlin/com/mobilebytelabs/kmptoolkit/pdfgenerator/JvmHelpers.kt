@@ -1,7 +1,6 @@
 /*
  * Copyright 2026 MobileByteLabs · Apache 2.0
  */
-@file:OptIn(ExperimentalPdfGeneratorApi::class)
 
 package com.mobilebytelabs.kmptoolkit.pdfgenerator
 
@@ -13,14 +12,12 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle
 import org.apache.pdfbox.pdmodel.font.PDType1Font
 import java.io.ByteArrayOutputStream
 
-@ExperimentalPdfGeneratorApi
 public fun createPdfGenerator(): PdfGenerator = PdfGenerator()
 
 /**
  * Apache PDFBox direct renderer for the DSL route. v0.1 produces a structured PDF with
  * simple text + tables + spacers + page breaks. Images and complex CSS belong on the HTML route.
  */
-@ExperimentalPdfGeneratorApi
 internal class JvmNativePdfRenderer(
     private val document: PdfDocument,
     private val options: PdfGeneratorOptions,

@@ -25,7 +25,6 @@ import platform.Foundation.NSURL
  * - `createDocument()` runs `NSSavePanel` modally on the main queue; returns the
  *   selected URL on `NSModalResponseOK`, `Cancelled` otherwise.
  */
-@ExperimentalIntentLauncherApi
 public actual object SystemIntents {
 
     public actual suspend fun openAppSettings(): IntentResult {

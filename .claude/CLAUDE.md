@@ -195,11 +195,25 @@ artifact:  io.github.mobilebytelabs:cmp-share
 version:   3.2.11
 package:   com.mobilebytelabs.kmptoolkit.share
 supabase:  false
-di:        false   # expect object + extension functions — no Koin module
+di:        true    # `shareModule` binds ShareManager -> ShareManagerImpl (single); 20/21 targets (no koin on wasmWasi)
 nav:       false
 config:    none    # zero-config
-api_tier:  v0.1.0 experimental (@ExperimentalShareApi)
+api_tier:  stable  # @ExperimentalShareApi retained as a deprecated no-op for source compat
+targets:   21 headless — the full KMP matrix (+ 7 via cmp-share-compose)
 ```
+
+### Key APIs
+
+| API | Description |
+|-----|-------------|
+| `Share.share(payload, options)` | Imperative entry point (`expect object`) |
+| `ShareManager` / `ShareManagerImpl` | Injectable facade — only `capabilities` + `share` are abstract |
+| `shareModule` | Koin module binding `ShareManager` as a `single` |
+| `ShareCapabilities` / `platformShareCapabilities` | What THIS target can share |
+| `ShareManager.supports(payload)` | Ask before rendering a share affordance |
+| `FakeShareManager` | Test double, shipped in the main artifact |
+| `LocalShareManager` / `ProvideShareManager` / `rememberShareManager()` | Compose surface (`cmp-share-compose`) — non-throwing default |
+| `ShareManager.shareImage(title, ImageBitmap)` | Share on-screen content (`cmp-share-compose`) |
 
 ### Quick Sync Commands
 
@@ -226,10 +240,24 @@ artifact:  io.github.mobilebytelabs:cmp-intent-launcher
 version:   3.2.11
 package:   com.mobilebytelabs.kmptoolkit.intentlauncher
 supabase:  false
-di:        false   # rememberIntentLauncher() Compose helper — no Koin module
+di:        true    # `intentLauncherModule` binds IntentManager -> IntentManagerImpl; 20/21 targets
 nav:       false
-config:    none    # zero Gradle config; Activity wiring = developer responsibility
-api_tier:  v0.1.0 experimental (@ExperimentalIntentLauncherApi)
+config:    none    # zero Gradle config; Android Activity wiring = developer responsibility
+api_tier:  stable  # @ExperimentalIntentLauncherApi retained as a deprecated no-op
+targets:   21 headless — the full KMP matrix (+ 7 via cmp-intent-launcher-compose)
+
+### Key APIs
+
+| API | Description |
+|-----|-------------|
+| `IntentLauncher.launch { }` | Imperative entry point (`expect class`; Android = Activity-scoped) |
+| `IntentManager` / `IntentManagerImpl` | Injectable facade — only `capabilities` + `launch` abstract |
+| `intentLauncherModule` | Koin module; binds `IntentManager` as a `single` |
+| `IntentCapabilities` / `platformIntentCapabilities` | Which of the 7 `IntentOperation`s work here |
+| `IntentManager.supports(op)` | Ask before rendering an affordance |
+| `FakeIntentManager` | Test double, shipped in the main artifact |
+| `WasiIntents.handler` | wasmWasi host bridge; makes capabilities dynamic |
+| `LocalIntentManager` / `rememberIntentManagerFromLauncher()` | Compose surface (`-compose`) |
 ```
 
 ### Quick Sync Commands
@@ -257,10 +285,25 @@ artifact:  io.github.mobilebytelabs:cmp-app-intents
 version:   3.2.11
 package:   com.mobilebytelabs.kmptoolkit.appintents
 supabase:  false
-di:        false   # AppIntents.register() at app startup — no Koin module
+di:        true    # `appIntentsModule` binds AppIntentsManager -> AppIntentsManagerImpl; 20/21 targets
 nav:       false
 config:    none    # zero Gradle config; Swift bridge = developer responsibility
-api_tier:  v0.1.0 experimental (@ExperimentalAppIntentsApi)
+api_tier:  stable  # @ExperimentalAppIntentsApi retained as a deprecated no-op
+targets:   21 headless — the full KMP matrix (+ 7 via cmp-app-intents-compose)
+
+### Key APIs
+
+| API | Description |
+|-----|-------------|
+| `appIntents { intent(id) { } }` | Declare intents |
+| `AppIntentsManager` / `AppIntentsManagerImpl` | Injectable facade; only `capabilities` + `register` abstract |
+| `appIntentsModule` | Koin module; binds `AppIntentsManager` as a `single` |
+| `AppIntentsCapabilities` | Reach spectrum: `os` / `manifest` / `in-process` |
+| `AppIntentsManager.reachesOs()` | Gate voice onboarding on real assistant reach |
+| `AppIntentsConfig.webAppManifestShortcuts()` | PWA manifest `shortcuts` JSON for web targets |
+| `WasiAppIntents.onRegister` | wasmWasi host bridge; makes reach dynamic |
+| `FakeAppIntentsManager` | Test double; does NOT touch the process-wide registry |
+| `LocalAppIntentsManager` / `rememberAppIntentsReachOs()` | Compose surface (`-compose`) |
 ```
 
 ### Quick Sync Commands

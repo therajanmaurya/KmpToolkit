@@ -1,37 +1,57 @@
 # cmp-remote-config — Integration Guide
 
-> `io.github.mobilebytelabs:kmptoolkit-remote-config:4.0.0`
+> `io.github.mobilebytelabs:cmp-remote-config` — headless, 15 KMP targets
+> `io.github.mobilebytelabs:cmp-remote-config-compose` — the UI + the `remoteConfig { }` DSL
 >
 > **Standalone.** No prerequisite on `cmp-product-tickets` or any other kmp-toolkit
 > module. Per-project Supabase model — bring your own `supabaseUrl` + `anonKey`.
+>
+> Both ship at the shared `kmptoolkit.version`. (Earlier revisions of this page named a
+> `kmptoolkit-remote-config:4.0.0` coordinate; that was never published.)
 
 ---
 
 ## Step 1 — Add Gradle Dependency
 
+The library is two artifacts. Which you need depends on whether you RENDER remote config or
+only EVALUATE it:
+
+| You want to… | Depend on |
+|---|---|
+| Show a banner / dialog / sheet, or use `remoteConfig { }` | **both** (the Compose one brings the core transitively) |
+| Only evaluate flags — server, CLI, background worker | `cmp-remote-config` alone |
+
 ### `gradle/libs.versions.toml`
 
 ```toml
 [versions]
-kmptoolkit-remote-config = "4.0.0"
+kmptoolkit = "3.5.24"
 
 [libraries]
-kmptoolkit-remote-config = { module = "io.github.mobilebytelabs:kmptoolkit-remote-config", version.ref = "kmptoolkit-remote-config" }
+cmp-remote-config         = { module = "io.github.mobilebytelabs:cmp-remote-config",         version.ref = "kmptoolkit" }
+cmp-remote-config-compose = { module = "io.github.mobilebytelabs:cmp-remote-config-compose", version.ref = "kmptoolkit" }
 ```
 
 ### `shared/build.gradle.kts`
 
 ```kotlin
 commonMain.dependencies {
-    implementation(libs.kmptoolkit.remote.config)
+    implementation(libs.cmp.remote.config)
+
+    // Needed for RemoteConfigHost, the banner / dialog / sheet / full-screen presentations, the
+    // dynamic UI renderer and the `remoteConfig { }` DSL below. Omit it on a headless consumer.
+    implementation(libs.cmp.remote.config.compose)
 }
 ```
+
+> **Upgrading from a single-artifact version?** Add the `-compose` line; nothing else changes.
+> Every package and class name is identical, so there are no imports to rewrite.
 
 ---
 
 ## Step 2 — Install via `remoteConfig { }` DSL
 
-`cmp-remote-config` ships a Koin `Module` extension function. Drop it inside any
+`cmp-remote-config-compose` ships a Koin `Module` extension function. Drop it inside any
 existing `module { }` block — typically your `networkModule` or its equivalent.
 No separate top-level Koin module to register, no init function to call from
 `Application`.
@@ -390,7 +410,8 @@ To force a re-show during testing: delete the device row from `device_impression
 
 ## Migrating from 3.x
 
-1. Bump `libs.versions.toml` → `kmptoolkit-remote-config = "4.0.0"`.
+1. Depend on `cmp-remote-config` (headless) and add `cmp-remote-config-compose` if you render any
+   remote-config UI or use the `remoteConfig { }` DSL. Both ship at the shared `kmptoolkit.version`.
 2. Replace `RemoteConfigConfig.supabaseUrl = …; supabaseKey = …; productType = …` with
    the `remoteConfig { supabaseUrl = …; supabaseKey = … }` DSL block inside an
    existing Koin `module { }`. Drop the separate `initRemoteConfig()` function

@@ -23,7 +23,6 @@ import kotlinx.coroutines.CompletableDeferred
  * For Activity-extension escape hatch (non-Compose Android callers), see
  * [intentLauncher] in [IntentLauncherActivityExtensions.kt].
  */
-@ExperimentalIntentLauncherApi
 public actual class IntentLauncher
 public constructor(
     private val launcher: ActivityResultLauncher<Intent>,

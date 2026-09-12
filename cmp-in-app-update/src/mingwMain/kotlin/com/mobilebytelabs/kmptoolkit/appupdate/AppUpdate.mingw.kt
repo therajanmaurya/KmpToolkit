@@ -1,5 +1,7 @@
 package com.mobilebytelabs.kmptoolkit.appupdate
 
+import platform.posix.system
+
 /**
  * Windows (mingw) implementation of AppUpdate.
  *
@@ -69,7 +71,14 @@ actual object AppUpdate {
      * Windows native doesn't support opening URLs without shell32.
      * Returns false.
      */
-    actual fun openStoreForUpdate(config: AppUpdateConfig): Boolean = false
+    actual fun openStoreForUpdate(config: AppUpdateConfig): Boolean {
+        // `windowsStoreUrl` has been a config field all along while this returned false
+        // unconditionally. `cmd /c start ""` is the same shell dispatch cmp-open-url uses here;
+        // the empty title argument stops `start` treating the URL as a window title.
+        val url = config.windowsStoreUrl?.takeIf { it.isNotBlank() } ?: return false
+        val escaped = url.replace("\"", "\\\"")
+        return system("cmd /c start \"\" \"$escaped\"") == 0
+    }
 
     /**
      * In-app updates have limited support on Windows native.

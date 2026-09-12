@@ -14,3 +14,11 @@ public final class com/mobilebytelabs/kmptoolkit/appintents/compose/ComposableSi
 	public final fun getLambda$636826172$io_github_mobilebytelabs_cmp_app_intents_compose ()Lkotlin/jvm/functions/Function3;
 }
 
+public final class com/mobilebytelabs/kmptoolkit/appintents/compose/LocalAppIntentsManagerKt {
+	public static final fun ProvideAppIntentsManager (Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsManager;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;I)V
+	public static final fun getLocalAppIntentsManager ()Landroidx/compose/runtime/ProvidableCompositionLocal;
+	public static final fun rememberAppIntentsCapabilities (Landroidx/compose/runtime/Composer;I)Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsCapabilities;
+	public static final fun rememberAppIntentsManager (Landroidx/compose/runtime/Composer;I)Lcom/mobilebytelabs/kmptoolkit/appintents/AppIntentsManager;
+	public static final fun rememberAppIntentsReachOs (Landroidx/compose/runtime/Composer;I)Z
+}
+

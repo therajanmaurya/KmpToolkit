@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.vanniktech.mavenPublish)
     id("io.github.mobilebytelabs.kmptoolkit.dokka")
     id("io.github.mobilebytelabs.kmptoolkit.kover")
+    alias(libs.plugins.binaryCompatibilityValidator)
 }
 
 // ============================================================================
@@ -97,6 +98,20 @@ kotlin {
     // Source Sets Configuration
     // ========================================================================
     sourceSets {
+        // koin-core publishes for every target this module builds (Compose targets only, so no
+        // wasmWasi to worry about here), but the split is kept consistent with the rest of the
+        // toolkit so a reader finds the Koin binding in the same place in every module.
+        val koinMain = create("koinMain").apply { dependsOn(getByName("commonMain")) }
+        val koinTest = create("koinTest").apply { dependsOn(getByName("commonTest")) }
+        listOf("jvmMain", "androidMain", "appleMain", "jsMain", "wasmJsMain")
+            .forEach { getByName(it).dependsOn(koinMain) }
+        listOf("jvmTest", "appleTest", "jsTest", "wasmJsTest")
+            .forEach { getByName(it).dependsOn(koinTest) }
+
+        koinMain.dependencies {
+            implementation(libs.koin.core)
+        }
+
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -106,6 +121,7 @@ kotlin {
         }
 
         commonTest.dependencies {
+            implementation(libs.kotlinx.coroutines.test)
             implementation(libs.kotlin.test)
         }
     }
