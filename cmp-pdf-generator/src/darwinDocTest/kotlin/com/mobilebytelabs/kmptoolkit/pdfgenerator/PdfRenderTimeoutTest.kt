@@ -24,6 +24,13 @@ import kotlin.time.Duration.Companion.seconds
  * first time the iOS suite was executed in CI — a hang in the library, reported as a test timeout.
  *
  * A caller must get the documented typed [PdfResult.Failure] instead.
+ *
+ * **Lives in `darwinDocTest` (iOS + macOS), NOT `appleTest` — do not move it.** The default hierarchy
+ * feeds `appleTest` to watchOS and tvOS too, and neither has a `WKWebView`: they resolve
+ * [PdfGenerator] from `fallbackMain`, whose route never awaits a callback and so never yields
+ * [PdfError.RenderTimeout]. Placed in `appleTest` this test is green on iOS/macOS and RED on
+ * watchOS/tvOS — which is precisely how it shipped and how the watchOS CI job caught it. A macOS dev
+ * box has no watchOS simulator runtime, so only CI can see that failure.
  */
 class PdfRenderTimeoutTest {
 

@@ -93,10 +93,15 @@ private fun DynamicRow(node: UiNode.Row, onAction: (UiAction) -> Unit) {
 
 @Composable
 private fun DynamicBox(node: UiNode.Box, onAction: (UiAction) -> Unit) {
+    // Bound to locals rather than smart-cast: `width`/`height` are public properties of a class in
+    // another module now (UiNode lives in cmp-remote-config), and Kotlin refuses to smart-cast those
+    // — it cannot prove the getter is stable across a module boundary.
+    val width = node.width
+    val height = node.height
     Box(
         modifier = Modifier
-            .then(if (node.width != null) Modifier.width(node.width.dp) else Modifier.fillMaxWidth())
-            .then(if (node.height != null) Modifier.height(node.height.dp) else Modifier)
+            .then(if (width != null) Modifier.width(width.dp) else Modifier.fillMaxWidth())
+            .then(if (height != null) Modifier.height(height.dp) else Modifier)
             .padding(node.padding.dp)
             .maybeBackground(node.background),
         contentAlignment = when (node.alignment) {
@@ -152,8 +157,9 @@ private fun DynamicImage(node: UiNode.Image) {
             else -> ContentScale.Crop
         },
         modifier = Modifier
-            .then(if (node.width != null) Modifier.width(node.width.dp) else Modifier.fillMaxWidth())
-            .then(if (node.height != null) Modifier.height(node.height.dp) else Modifier)
+            // Locals via ?.let, not smart casts — UiNode is in another module now; see DynamicBox.
+            .then(node.width?.let { Modifier.width(it.dp) } ?: Modifier.fillMaxWidth())
+            .then(node.height?.let { Modifier.height(it.dp) } ?: Modifier)
             .clip(RoundedCornerShape(node.cornerRadius.dp)),
     )
 }

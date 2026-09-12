@@ -82,6 +82,9 @@ kotlin {
             implementation(project(":cmp-app-intents"))
             implementation(project(":cmp-product-tickets"))
             implementation(project(":cmp-remote-config"))
+            // The Compose surface (RemoteConfigHost, DynamicUiRenderer) moved here in the E2 split —
+            // cmp-remote-config itself is headless now. This one line IS the consumer migration.
+            implementation(project(":cmp-remote-config-compose"))
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

@@ -63,6 +63,7 @@ extra["cmp_in_app_update_artifact"] = "io.github.mobilebytelabs:cmp-in-app-updat
 
 extra["cmp_remote_config_version"] = kmpToolkitVersion
 extra["cmp_remote_config_artifact"] = "io.github.mobilebytelabs:cmp-remote-config"
+extra["cmp_remote_config_compose_artifact"] = "io.github.mobilebytelabs:cmp-remote-config-compose"
 
 extra["cmp_product_tickets_version"] = kmpToolkitVersion
 extra["cmp_product_tickets_artifact"] = "io.github.mobilebytelabs:cmp-product-tickets"

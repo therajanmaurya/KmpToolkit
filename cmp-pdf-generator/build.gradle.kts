@@ -136,6 +136,18 @@ kotlin {
         val darwinDocMain = create("darwinDocMain").apply { dependsOn(getByName("commonMain")) }
         listOf("iosMain", "macosMain").forEach { getByName(it).dependsOn(darwinDocMain) }
 
+        // Test twin of darwinDocMain — the WKWebView-backed Apple targets, and ONLY those.
+        //
+        // A WebView-route test CANNOT live in `appleTest`: the default hierarchy feeds appleTest to
+        // watchOS and tvOS as well, and those targets have no WKWebView — they resolve PdfGenerator
+        // from `fallbackMain`. A test asserting `PdfError.RenderTimeout` therefore passes on
+        // iOS/macOS and fails on watchOS/tvOS, which is exactly what happened: the watchOS CI job
+        // went red on `PdfRenderTimeoutTest` while the same test was green on both targets a macOS
+        // dev box can actually run (a local box has no watchOS simulator runtime — see
+        // native-tests.yml).
+        val darwinDocTest = create("darwinDocTest").apply { dependsOn(getByName("commonTest")) }
+        listOf("iosTest", "macosTest").forEach { getByName(it).dependsOn(darwinDocTest) }
+
         // `kotlinx-html` does not publish for wasmWasi, and the HTML compiler / templates are the
         // only things that use it. Moving them here keeps wasmWasi in the matrix with the parts
         // that ARE portable — the PdfDocument DSL and TextPdfWriter — which is the combination a

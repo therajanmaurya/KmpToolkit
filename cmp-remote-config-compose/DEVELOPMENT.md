@@ -1,17 +1,17 @@
 ---
-module: cmp-remote-config
-artifact: io.github.mobilebytelabs:cmp-remote-config
+module: cmp-remote-config-compose
+artifact: io.github.mobilebytelabs:cmp-remote-config-compose
 version: UNKNOWN
-package: com.mobilebytelabs.remoteconfig
+package: com.mobilebytelabs.remoteconfig  # ui / dynamic / di / dispatch — same root as the core module
 api_tier: experimental
-last_reviewed: 2026-05-30
+last_reviewed: 2026-09-12
 goal_plan_ref: plan-layer/project-plans/mbs/kmp-toolkit/active/consumer-library-ai-bridge/GOAL.md
 adr_refs: []
 ---
 
-# cmp-remote-config — Development
+# cmp-remote-config-compose — Development
 
-> Single source of truth for development state of `cmp-remote-config` (KMP library module). Per RULE-LIB-DEVELOPMENT-MD-001.
+> Single source of truth for development state of `cmp-remote-config-compose` (KMP library module). Per RULE-LIB-DEVELOPMENT-MD-001.
 > Bootstrap: `.claude-runtime/scripts/development-md-bootstrap.sh`. Refresh auto-gen sections: `development-md-scan.sh`.
 
 ---
@@ -20,9 +20,9 @@ adr_refs: []
 
 | Artifact | Package | Current version | Maven | Since | API tier |
 |----------|---------|-----------------|-------|-------|----------|
-| `io.github.mobilebytelabs:cmp-remote-config` | `com.mobilebytelabs.kmptoolkit.remote.config` | `UNKNOWN` | [Central](https://central.sonatype.com/artifact/io.github.mobilebytelabs/cmp-remote-config) | 2026-05-30 | experimental |
+| `io.github.mobilebytelabs:cmp-remote-config-compose` | `com.mobilebytelabs.kmptoolkit.remote.config.compose` | `UNKNOWN` | [Central](https://central.sonatype.com/artifact/io.github.mobilebytelabs/cmp-remote-config-compose) | 2026-09-12 | experimental |
 
-**Module purpose (one paragraph):** <!-- AUTHOR: WIP — initial draft from 2026-05-30. One-paragraph module purpose (≤200 words). Seed from idea-layer/cmp-remote-config/SPEC.md if present. -->
+**Module purpose (one paragraph):** <!-- AUTHOR: WIP — initial draft from 2026-09-12. One-paragraph module purpose (≤200 words). Seed from idea-layer/cmp-remote-config-compose/SPEC.md if present. -->
 
 ---
 
@@ -49,19 +49,15 @@ class RemoteConfigViewModel(
 internal fun RemoteConfigBottomSheet(
 fun Module.remoteConfig(block: RemoteConfigBuilder.() -> Unit) {
 class RemoteConfigBuilder internal constructor() {
-object UiNodeParser {
-sealed class UiNode {
 fun DynamicUiRenderer(node: UiNode, onAction: (UiAction) -> Unit) {
-class ActionContext internal constructor()
 internal object ActionDispatcher {
-fun interface ActionHandler {
 ```
 
 ---
 
 ## §4 Spec Snapshot (authored — LLM-seeded)
 
-<!-- AUTHOR: WIP — initial draft from 2026-05-30 -->
+<!-- AUTHOR: WIP — initial draft from 2026-09-12 -->
 
 **Problem this module solves:** _TBD by author._
 
@@ -75,7 +71,7 @@ fun interface ActionHandler {
 
 ## §5 Extension Recipes (authored — LLM-seeded)
 
-<!-- AUTHOR: WIP — initial draft from 2026-05-30 -->
+<!-- AUTHOR: WIP — initial draft from 2026-09-12 -->
 
 ### Recipe: Add a new platform actual
 
@@ -99,13 +95,13 @@ fun interface ActionHandler {
 
 | Date | Author | PR | Summary | State |
 |------|--------|----|---------|-------|
-| (no open PRs labeled `cmp-remote-config` — refresh via `gh pr list --label cmp-remote-config` then re-run scan) | — | — | — | — |
+| (no open PRs labeled `cmp-remote-config-compose` — refresh via `gh pr list --label cmp-remote-config-compose` then re-run scan) | — | — | — | — |
 
 ---
 
 ## §7 Cross-Platform Parity Recipes (authored — LLM-seeded)
 
-<!-- AUTHOR: WIP — initial draft from 2026-05-30 -->
+<!-- AUTHOR: WIP — initial draft from 2026-09-12 -->
 
 ### Pattern: _Pattern name TBD_
 
@@ -123,5 +119,32 @@ fun interface ActionHandler {
 |------|-----------|
 | GOAL.md | [consumer-library-ai-bridge](../../../../../../plan-layer/project-plans/mbs/kmp-toolkit/active/consumer-library-ai-bridge/GOAL.md) |
 | ADRs | _List relevant ADR-NN entries (e.g. ADR-09 for inter-app-comms modules)._ |
-| Sync rule | [RULE-LIB-DEVELOPMENT-MD-001](../../../../../../layers/framework/rules/RULE-LIB-DEVELOPMENT-MD-001.md) |
+| Sync rule | [RULE-LIB-DEVELOPMENT-MD-001](../../../../../../layers/framework/rules/RULE-LIB-DEVELOPMENT-MD-001.md) + [RULE-LIB-OBSERVABILITY-SURFACE-001](../../../../../../layers/framework/rules/RULE-LIB-OBSERVABILITY-SURFACE-001.md) |
 | External docs | [README](README.md) |
+
+---
+
+## §9 Observability Surface (authored — LLM-seeded)
+
+<!-- AUTHOR: WIP — initial draft from 2026-09-12. Per RULE-LIB-OBSERVABILITY-SURFACE-001 (LD-9a..LD-9d). -->
+
+| Signal Tier | Status | Details |
+|-------------|--------|---------|
+| T0 (Crashlytics attribution) | enabled | custom_key: `library:cmp-remote-config-compose@UNKNOWN` (set on init by FirebaseCrashlyticsAttributionHook) |
+| T1 (config + version health)  | enabled | events: `lib_init_success`, `lib_init_failure` (FirebaseAnalyticsHealthHook) |
+| T2 (lifecycle events)         | opted-out | (author when ready — populate event_schema YAML below + flip to enabled) |
+| T3 (performance traces)       | opted-out | (opt-in per consumer; FirebasePerformanceHook wraps `*_start` / `*_end` lifecycle events) |
+| T4 (full API usage)           | opted-out | opt-in per consumer + per end-user; iOS ATT prompt required |
+
+```yaml
+# DEVELOPMENT_OBSERVABILITY.schema.yaml-conformant block
+tiers:
+  T0: enabled
+  T1: enabled
+  T2: opted-out
+custom_key_format: "library:cmp-remote-config-compose@UNKNOWN"
+event_schema: []  # populate when T2 enabled — see library-runtime-observability epic AC #12-13
+consumer_opt_in: "lib-integrate.properties#cmp-remote-config-compose.observability_opt_in"
+```
+
+**Consumer opt-in:** controlled via `cmp-remote-config-compose.observability_opt_in=true` in consumer's `lib-integrate.properties`.

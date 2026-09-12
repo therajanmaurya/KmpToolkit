@@ -23,6 +23,7 @@ include(":cmp-toast") // Toast/Snackbar UI
 include(":cmp-in-app-update") // In-App Update checking
 include(":cmp-product-tickets") // Product Tickets — Feature Request/Bug Report/Contact Support
 include(":cmp-remote-config") // Remote Config
+include(":cmp-remote-config-compose") // Remote Config — Compose UI surface (banner/dialog/sheet/host + Koin DSL)
 include(":cmp-bubble") // Floating UI, Bubbles, Notifications
 include(":cmp-open-url") // Open URL — cross-platform URL/scheme handler (browser, email, maps, phone, SMS)
 include(":cmp-deep-link") // Deep Link — unified deep link handling across all KMP targets
