@@ -22,6 +22,7 @@ include(":cmp-clipboard") // Clipboard utilities
 include(":cmp-toast") // Toast/Snackbar UI
 include(":cmp-in-app-update") // In-App Update checking
 include(":cmp-product-tickets") // Product Tickets — Feature Request/Bug Report/Contact Support
+include(":cmp-product-tickets-compose") // Product Tickets — Compose UI surface (screens + nav + ViewModel)
 include(":cmp-remote-config") // Remote Config
 include(":cmp-remote-config-compose") // Remote Config — Compose UI surface (banner/dialog/sheet/host + Koin DSL)
 include(":cmp-bubble") // Floating UI, Bubbles, Notifications

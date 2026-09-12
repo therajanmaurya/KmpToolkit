@@ -9,6 +9,83 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed — ⚠️ BREAKING: cmp-product-tickets split into headless core + `-compose`
+
+The same split E2 applied to `cmp-remote-config`, for the same reason. `cmp-product-tickets` is now
+**headless at 15 KMP targets** (was 7); the screens, navigation graph and `ProductTicketsViewModel`
+moved to **`cmp-product-tickets-compose`**.
+
+**Migration — add one dependency; nothing else changes.** Packages and class names are identical, and
+`productTicketsModule` keeps its exact name and effect:
+
+```kotlin
+implementation(libs.cmp.product.tickets)          // unchanged — models, repository, Supabase service
+implementation(libs.cmp.product.tickets.compose)  // ADD THIS for the screens / nav / productTicketsModule
+```
+
+Verified as a relocation: the union of both BCV baselines keeps **all 32 previous public symbols** and
+adds one (`productTicketsDataModule`, below).
+
+**Why.** 7 of the module's 13 files needed no renderer, but material3, navigation-compose and
+koin-compose-viewmodel in `commonMain` pinned the library to the 7 Compose-Multiplatform targets, so
+filing a ticket from a server, CLI or background worker was impossible. The headless core now builds
+for android, jvm, js, wasmJs, iosArm64, iosSimulatorArm64, macosArm64, **linuxX64, mingwX64, tvOS ×3
+and watchOS ×3**. As in E2, a Compose-only source set inside one module is not an option — the Compose
+compiler plugin applies to every compilation and fails wherever the runtime is absent.
+
+**`productTicketsDataModule` (new, in the core).** The old `productTicketsModule` registered the
+service and repository *and* the ViewModel. Rather than move it wholesale — which would have forced
+`ProductTicketsService`, `ProductTicketsServiceImpl` and the Ktor client from `internal` to public —
+the headless bindings now live in `productTicketsDataModule`, and `productTicketsModule` (in the
+Compose artifact) is `module { includes(productTicketsDataModule); viewModelOf(...) }`. Installing
+`productTicketsModule` gives the identical graph it always did; a headless host can install
+`productTicketsDataModule` alone.
+
+**Targets deliberately absent, measured:** `iosX64`/`macosX64` (Compose 1.12.0 publishes no artifact),
+`linuxArm64`/`watchosArm32`/`watchosDeviceArm64` (`postgrest-kt` 3.2.6 publishes none for those three),
+`wasmWasi` (koin-core has no wasmWasi artifact).
+
+**Fixed in passing — a runtime bug the split exposed.** `cmp-product-tickets-compose` initially lacked
+the `kotlinx-serialization` plugin. The `@Serializable` navigation routes still *compiled* (the
+annotation alone is inert without the plugin) but generated no serializers, so type-safe
+`navigate(CreateTicketRoute(...))` and `toRoute<TicketDetailRoute>()` would have failed at **runtime**.
+Caught by the BCV baseline diff — the generated `$$serializer` / `$Companion` entries vanished — not by
+the build. The plugin is now applied, with that reasoning recorded next to it.
+
+### Added — cmp-observe: a recording hook double and a way to isolate hook tests
+
+- **`FakeLibraryObservationHook`** — shipped in the main artifact under `testing/`, like
+  `FakeNetworkMonitor` and `FakeAnalyticsHelper`. Records each callback as a structured
+  `Event` (`InitStart` / `InitComplete` / `InitFailure` / `Lifecycle` / `Close`), so `meta`, the
+  lifecycle `payload` and the failure `throwable` are all assertable:
+
+  ```kotlin
+  val hook = FakeLibraryObservationHook()
+  LibraryObservation.register(hook)
+  myLibrary.initialize()
+
+  assertEquals("cmp-share", hook.initCompletions.single().meta.name)
+  assertEquals("whatsapp", hook.payloadOf("share_invoked")?.get("target"))
+  ```
+
+  Pass `failWith` to model a hook that throws — the other half of the documented contract — and
+  assert your own code still runs: `FakeLibraryObservationHook(failWith = RuntimeException("boom"))`.
+  It counts reaches in `failedCallCount`, which a hand-rolled throwing stub cannot tell you.
+
+- **`resetLibraryObservation()`** — unregisters every hook, for `@BeforeTest` / `@AfterTest`.
+  `LibraryObservation` is a process-wide `object` and its `reset()` has always been **`internal`**:
+  it isolated this library's own suite and was unreachable from any consumer, so a consumer's tests
+  leaked registrations into each other and could not assert event counts at all. This exposes exactly
+  that one capability, as a function in `testing/` rather than by making production `reset()` public.
+
+Both are strictly additive — the BCV baseline gains 91 lines and removes nothing.
+
+Dogfooded: this module's own `LibraryObservationTest` now uses both, dropping a 17-line hand-rolled
+recorder and a five-override anonymous throwing hook. That surfaced a real gap — the old recorder
+flattened every callback to `"lifecycle:<module>:<event>"`, so the test named *"notifyLifecycle
+propagates event name + payload"* never asserted the payload, and `notifyInitFailure` could only check
+the throwable's message rather than its identity. Both now assert what their names claim.
+
 ### Changed — ⚠️ BREAKING: cmp-remote-config split into headless core + `-compose`
 
 `cmp-remote-config` is now **headless and builds for 15 KMP targets** (was 7). Its Compose surface

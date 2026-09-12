@@ -9,6 +9,8 @@
  */
 package io.github.mobilebytelabs.kmptoolkit.observe
 
+import io.github.mobilebytelabs.kmptoolkit.observe.testing.FakeLibraryObservationHook
+import io.github.mobilebytelabs.kmptoolkit.observe.testing.resetLibraryObservation
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -22,62 +24,42 @@ import kotlin.test.assertTrue
  */
 class LibraryObservationTest {
 
-    private class RecordingHook : LibraryObservationHook {
-        val calls = mutableListOf<String>()
-        override fun onInitStart(meta: CmpMetadata) {
-            calls += "init_start:${meta.name}"
-        }
-        override fun onInitComplete(meta: CmpMetadata) {
-            calls += "init_complete:${meta.name}"
-        }
-        override fun onInitFailure(meta: CmpMetadata, throwable: Throwable) {
-            calls += "init_failure:${meta.name}:${throwable.message}"
-        }
-        override fun onLifecycleEvent(meta: CmpMetadata, event: String, payload: Map<String, Any?>) {
-            calls += "lifecycle:${meta.name}:$event"
-        }
-        override fun onClose(meta: CmpMetadata) {
-            calls += "close:${meta.name}"
-        }
-    }
-
     private val testMeta = CmpMetadata(
         name = "cmp-test",
         version = "1.0.0",
         artifact = "io.github.mobilebytelabs:cmp-test",
     )
 
+    // Via the public `testing` helper rather than the internal reset(), so this suite exercises the
+    // same isolation path a consumer has.
     @BeforeTest fun setUp() {
-        LibraryObservation.reset()
+        resetLibraryObservation()
     }
 
     @AfterTest fun tearDown() {
-        LibraryObservation.reset()
+        resetLibraryObservation()
     }
 
     @Test fun `notifyInit fans out to all registered hooks`() {
-        val h1 = RecordingHook()
-        val h2 = RecordingHook()
+        val h1 = FakeLibraryObservationHook()
+        val h2 = FakeLibraryObservationHook()
         LibraryObservation.register(h1)
         LibraryObservation.register(h2)
         LibraryObservation.notifyInit(testMeta)
-        assertEquals(listOf("init_start:cmp-test"), h1.calls)
-        assertEquals(listOf("init_start:cmp-test"), h2.calls)
+        assertEquals(listOf(testMeta), h1.initStarts.map { it.meta })
+        assertEquals(listOf(testMeta), h2.initStarts.map { it.meta })
     }
 
     @Test fun `hook exception is isolated — subsequent hooks still run`() {
-        val failingHook = object : LibraryObservationHook {
-            override fun onInitStart(meta: CmpMetadata): Unit = throw RuntimeException("hook crashed")
-            override fun onInitComplete(meta: CmpMetadata) {}
-            override fun onInitFailure(meta: CmpMetadata, throwable: Throwable) {}
-            override fun onLifecycleEvent(meta: CmpMetadata, event: String, payload: Map<String, Any?>) {}
-            override fun onClose(meta: CmpMetadata) {}
-        }
-        val recordingHook = RecordingHook()
+        // `failWith` replaces five stub overrides of an anonymous object, and unlike that object it
+        // also records that the failing hook was actually reached.
+        val failingHook = FakeLibraryObservationHook(failWith = RuntimeException("hook crashed"))
+        val recordingHook = FakeLibraryObservationHook()
         LibraryObservation.register(failingHook)
         LibraryObservation.register(recordingHook)
         LibraryObservation.notifyInit(testMeta)
-        assertTrue(recordingHook.calls.isNotEmpty(), "second hook ran despite first throwing")
+        assertEquals(1, failingHook.failedCallCount, "the throwing hook was reached")
+        assertTrue(recordingHook.events.isNotEmpty(), "second hook ran despite first throwing")
     }
 
     @Test fun `notifyInit with zero registered hooks is silent + non-throwing`() {
@@ -85,26 +67,31 @@ class LibraryObservationTest {
     }
 
     @Test fun `replaceHooks atomically swaps registered list`() {
-        val before = RecordingHook()
-        val after = RecordingHook()
+        val before = FakeLibraryObservationHook()
+        val after = FakeLibraryObservationHook()
         LibraryObservation.register(before)
         LibraryObservation.replaceHooks { _ -> listOf(after) }
         LibraryObservation.notifyInit(testMeta)
-        assertEquals(emptyList(), before.calls, "old hook unregistered")
-        assertEquals(listOf("init_start:cmp-test"), after.calls, "new hook registered")
+        assertEquals(emptyList(), before.events, "old hook unregistered")
+        assertEquals(listOf(testMeta), after.initStarts.map { it.meta }, "new hook registered")
     }
 
     @Test fun `notifyLifecycle propagates event name + payload`() {
-        val hook = RecordingHook()
+        val hook = FakeLibraryObservationHook()
         LibraryObservation.register(hook)
         LibraryObservation.notifyLifecycle(testMeta, "share_invoked", mapOf("target" to "whatsapp"))
-        assertEquals(listOf("lifecycle:cmp-test:share_invoked"), hook.calls)
+        // The payload half of this test's own name was never asserted before: the previous recorder
+        // flattened each callback to "lifecycle:<module>:<event>" and dropped the map entirely.
+        assertEquals(listOf("share_invoked"), hook.lifecycleNames())
+        assertEquals(mapOf("target" to "whatsapp"), hook.payloadOf("share_invoked"))
     }
 
     @Test fun `notifyInitFailure carries throwable to hook`() {
-        val hook = RecordingHook()
+        val hook = FakeLibraryObservationHook()
         LibraryObservation.register(hook)
-        LibraryObservation.notifyInitFailure(testMeta, IllegalStateException("bad config"))
-        assertEquals(listOf("init_failure:cmp-test:bad config"), hook.calls)
+        val cause = IllegalStateException("bad config")
+        LibraryObservation.notifyInitFailure(testMeta, cause)
+        // The throwable IDENTITY is assertable now, not just its message.
+        assertEquals(cause, hook.initFailures.single().throwable)
     }
 }
