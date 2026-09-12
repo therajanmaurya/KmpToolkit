@@ -27,6 +27,7 @@ include(":cmp-remote-config") // Remote Config
 include(":cmp-remote-config-compose") // Remote Config — Compose UI surface (banner/dialog/sheet/host + Koin DSL)
 include(":cmp-bubble") // Floating UI, Bubbles, Notifications
 include(":cmp-open-url") // Open URL — cross-platform URL/scheme handler (browser, email, maps, phone, SMS)
+include(":cmp-app-review") // App Review — native in-app review, store-listing fallback via cmp-open-url
 include(":cmp-deep-link") // Deep Link — unified deep link handling across all KMP targets
 include(":cmp-network-monitor") // Network Monitor — reactive connectivity monitoring across all KMP targets
 include(":cmp-network-monitor-compose") // Network Monitor Compose — Compose Multiplatform UI extensions

@@ -1,0 +1,128 @@
+public final class com/mobilebytelabs/kmptoolkit/appreview/AppReview {
+	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/appreview/AppReview;
+	public final fun configure (Lcom/mobilebytelabs/kmptoolkit/appreview/AppReviewManager;)V
+	public final fun configure (Lcom/mobilebytelabs/kmptoolkit/appreview/StoreListing;)V
+	public final fun getCapabilities ()Lcom/mobilebytelabs/kmptoolkit/appreview/AppReviewCapabilities;
+	public final fun getStoreListing ()Lcom/mobilebytelabs/kmptoolkit/appreview/StoreListing;
+	public final fun openStoreListing ()Lcom/mobilebytelabs/kmptoolkit/appreview/AppReviewResult;
+	public final fun requestReview (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun reset ()V
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appreview/AppReviewCapabilities {
+	public static final field Companion Lcom/mobilebytelabs/kmptoolkit/appreview/AppReviewCapabilities$Companion;
+	public fun <init> (ZZ)V
+	public final fun component1 ()Z
+	public final fun component2 ()Z
+	public final fun copy (ZZ)Lcom/mobilebytelabs/kmptoolkit/appreview/AppReviewCapabilities;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/appreview/AppReviewCapabilities;ZZILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/appreview/AppReviewCapabilities;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCanRequestReview ()Z
+	public final fun getNativeInAppReview ()Z
+	public final fun getStoreListing ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appreview/AppReviewCapabilities$Companion {
+	public final fun getNative ()Lcom/mobilebytelabs/kmptoolkit/appreview/AppReviewCapabilities;
+	public final fun getNone ()Lcom/mobilebytelabs/kmptoolkit/appreview/AppReviewCapabilities;
+	public final fun getStoreOnly ()Lcom/mobilebytelabs/kmptoolkit/appreview/AppReviewCapabilities;
+}
+
+public abstract interface class com/mobilebytelabs/kmptoolkit/appreview/AppReviewManager {
+	public abstract fun getCapabilities ()Lcom/mobilebytelabs/kmptoolkit/appreview/AppReviewCapabilities;
+	public abstract fun openStoreListing ()Lcom/mobilebytelabs/kmptoolkit/appreview/AppReviewResult;
+	public abstract fun requestReview (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appreview/AppReviewManagerImpl : com/mobilebytelabs/kmptoolkit/appreview/AppReviewManager {
+	public fun <init> ()V
+	public fun <init> (Lcom/mobilebytelabs/kmptoolkit/appreview/StoreListing;Lcom/mobilebytelabs/kmptoolkit/openurl/UrlLauncher;)V
+	public synthetic fun <init> (Lcom/mobilebytelabs/kmptoolkit/appreview/StoreListing;Lcom/mobilebytelabs/kmptoolkit/openurl/UrlLauncher;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getCapabilities ()Lcom/mobilebytelabs/kmptoolkit/appreview/AppReviewCapabilities;
+	public fun openStoreListing ()Lcom/mobilebytelabs/kmptoolkit/appreview/AppReviewResult;
+	public fun requestReview (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract class com/mobilebytelabs/kmptoolkit/appreview/AppReviewResult {
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appreview/AppReviewResult$Failed : com/mobilebytelabs/kmptoolkit/appreview/AppReviewResult {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/appreview/AppReviewResult$Failed;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/appreview/AppReviewResult$Failed;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/appreview/AppReviewResult$Failed;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMessage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appreview/AppReviewResult$NativeFlowRequested : com/mobilebytelabs/kmptoolkit/appreview/AppReviewResult {
+	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/appreview/AppReviewResult$NativeFlowRequested;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appreview/AppReviewResult$NoStoreConfigured : com/mobilebytelabs/kmptoolkit/appreview/AppReviewResult {
+	public static final field INSTANCE Lcom/mobilebytelabs/kmptoolkit/appreview/AppReviewResult$NoStoreConfigured;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appreview/AppReviewResult$StoreOpened : com/mobilebytelabs/kmptoolkit/appreview/AppReviewResult {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/appreview/AppReviewResult$StoreOpened;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/appreview/AppReviewResult$StoreOpened;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/appreview/AppReviewResult$StoreOpened;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getUrl ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appreview/AppReview_webFallbackKt {
+	public static final fun getPlatformAppReviewCapabilities ()Lcom/mobilebytelabs/kmptoolkit/appreview/AppReviewCapabilities;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appreview/StoreListing {
+	public static final field Companion Lcom/mobilebytelabs/kmptoolkit/appreview/StoreListing$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/mobilebytelabs/kmptoolkit/appreview/StoreListing;
+	public static synthetic fun copy$default (Lcom/mobilebytelabs/kmptoolkit/appreview/StoreListing;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/kmptoolkit/appreview/StoreListing;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAppStoreId ()Ljava/lang/String;
+	public final fun getMicrosoftStoreProductId ()Ljava/lang/String;
+	public final fun getPlayStorePackage ()Ljava/lang/String;
+	public final fun getWebUrl ()Ljava/lang/String;
+	public fun hashCode ()I
+	public final fun isEmpty ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appreview/StoreListing$Companion {
+	public final fun getNone ()Lcom/mobilebytelabs/kmptoolkit/appreview/StoreListing;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appreview/di/AppReviewModuleKt {
+	public static final fun getAppReviewModule ()Lorg/koin/core/module/Module;
+}
+
+public final class com/mobilebytelabs/kmptoolkit/appreview/testing/FakeAppReviewManager : com/mobilebytelabs/kmptoolkit/appreview/AppReviewManager {
+	public fun <init> ()V
+	public fun <init> (Lcom/mobilebytelabs/kmptoolkit/appreview/AppReviewCapabilities;Lcom/mobilebytelabs/kmptoolkit/appreview/AppReviewResult;)V
+	public synthetic fun <init> (Lcom/mobilebytelabs/kmptoolkit/appreview/AppReviewCapabilities;Lcom/mobilebytelabs/kmptoolkit/appreview/AppReviewResult;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun clear ()V
+	public final fun getCalls ()Ljava/util/List;
+	public fun getCapabilities ()Lcom/mobilebytelabs/kmptoolkit/appreview/AppReviewCapabilities;
+	public final fun getRequestCount ()I
+	public final fun getResult ()Lcom/mobilebytelabs/kmptoolkit/appreview/AppReviewResult;
+	public final fun getStoreOpenCount ()I
+	public fun openStoreListing ()Lcom/mobilebytelabs/kmptoolkit/appreview/AppReviewResult;
+	public fun requestReview (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun setResult (Lcom/mobilebytelabs/kmptoolkit/appreview/AppReviewResult;)V
+}
+
