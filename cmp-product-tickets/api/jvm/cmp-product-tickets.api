@@ -1,5 +1,4 @@
 public final class com/mobilebytelabs/producttickets/config/ProductTicketsConfig {
-	public static final field $stable I
 	public static final field INSTANCE Lcom/mobilebytelabs/producttickets/config/ProductTicketsConfig;
 	public final fun getBoardType ()Ljava/lang/String;
 	public final fun getSupabaseAnonKey ()Ljava/lang/String;
@@ -11,7 +10,6 @@ public final class com/mobilebytelabs/producttickets/config/ProductTicketsConfig
 }
 
 public final class com/mobilebytelabs/producttickets/data/remote/ProductTicketsRepository {
-	public static final field $stable I
 	public final fun addComment (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun getComments (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun getMyTickets (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -24,8 +22,8 @@ public final class com/mobilebytelabs/producttickets/data/remote/ProductTicketsR
 	public final fun upvoteTicket (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
-public final class com/mobilebytelabs/producttickets/di/ProductTicketsModuleKt {
-	public static final fun getProductTicketsModule ()Lorg/koin/core/module/Module;
+public final class com/mobilebytelabs/producttickets/di/ProductTicketsDataModuleKt {
+	public static final fun getProductTicketsDataModule ()Lorg/koin/core/module/Module;
 }
 
 public final class com/mobilebytelabs/producttickets/domain/model/TicketCategory : java/lang/Enum {
@@ -49,7 +47,6 @@ public final class com/mobilebytelabs/producttickets/domain/model/TicketCategory
 }
 
 public final class com/mobilebytelabs/producttickets/domain/model/TicketComment {
-	public static final field $stable I
 	public static final field Companion Lcom/mobilebytelabs/producttickets/domain/model/TicketComment$Companion;
 	public fun <init> ()V
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
@@ -74,7 +71,6 @@ public final class com/mobilebytelabs/producttickets/domain/model/TicketComment 
 }
 
 public final synthetic class com/mobilebytelabs/producttickets/domain/model/TicketComment$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
-	public static final field $stable I
 	public static final field INSTANCE Lcom/mobilebytelabs/producttickets/domain/model/TicketComment$$serializer;
 	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/mobilebytelabs/producttickets/domain/model/TicketComment;
@@ -132,7 +128,6 @@ public final class com/mobilebytelabs/producttickets/domain/model/TicketType : j
 }
 
 public final class com/mobilebytelabs/producttickets/domain/model/UserTicket {
-	public static final field $stable I
 	public static final field Companion Lcom/mobilebytelabs/producttickets/domain/model/UserTicket$Companion;
 	public fun <init> ()V
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/util/List;ZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
@@ -201,7 +196,6 @@ public final class com/mobilebytelabs/producttickets/domain/model/UserTicket {
 }
 
 public final synthetic class com/mobilebytelabs/producttickets/domain/model/UserTicket$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
-	public static final field $stable I
 	public static final field INSTANCE Lcom/mobilebytelabs/producttickets/domain/model/UserTicket$$serializer;
 	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/mobilebytelabs/producttickets/domain/model/UserTicket;
@@ -217,7 +211,6 @@ public final class com/mobilebytelabs/producttickets/domain/model/UserTicket$Com
 }
 
 public final class com/mobilebytelabs/producttickets/domain/model/UserTicketInsert {
-	public static final field $stable I
 	public static final field Companion Lcom/mobilebytelabs/producttickets/domain/model/UserTicketInsert$Companion;
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -257,7 +250,6 @@ public final class com/mobilebytelabs/producttickets/domain/model/UserTicketInse
 }
 
 public final synthetic class com/mobilebytelabs/producttickets/domain/model/UserTicketInsert$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
-	public static final field $stable I
 	public static final field INSTANCE Lcom/mobilebytelabs/producttickets/domain/model/UserTicketInsert$$serializer;
 	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/mobilebytelabs/producttickets/domain/model/UserTicketInsert;
@@ -270,198 +262,5 @@ public final synthetic class com/mobilebytelabs/producttickets/domain/model/User
 
 public final class com/mobilebytelabs/producttickets/domain/model/UserTicketInsert$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
-}
-
-public final class com/mobilebytelabs/producttickets/ui/ComposableSingletons$CreateTicketScreenKt {
-	public static final field INSTANCE Lcom/mobilebytelabs/producttickets/ui/ComposableSingletons$CreateTicketScreenKt;
-	public fun <init> ()V
-	public final fun getLambda$-1795128707$io_github_mobilebytelabs_cmp_product_tickets ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$-408356218$io_github_mobilebytelabs_cmp_product_tickets ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$-701584048$io_github_mobilebytelabs_cmp_product_tickets ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$1654463749$io_github_mobilebytelabs_cmp_product_tickets ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$2097331791$io_github_mobilebytelabs_cmp_product_tickets ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$2111439973$io_github_mobilebytelabs_cmp_product_tickets ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$370244052$io_github_mobilebytelabs_cmp_product_tickets ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$495855865$io_github_mobilebytelabs_cmp_product_tickets ()Lkotlin/jvm/functions/Function3;
-}
-
-public final class com/mobilebytelabs/producttickets/ui/ComposableSingletons$ProductTicketsScreenKt {
-	public static final field INSTANCE Lcom/mobilebytelabs/producttickets/ui/ComposableSingletons$ProductTicketsScreenKt;
-	public fun <init> ()V
-	public final fun getLambda$-1036276741$io_github_mobilebytelabs_cmp_product_tickets ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$-1074700114$io_github_mobilebytelabs_cmp_product_tickets ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$-187019954$io_github_mobilebytelabs_cmp_product_tickets ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$-68018867$io_github_mobilebytelabs_cmp_product_tickets ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$1324969134$io_github_mobilebytelabs_cmp_product_tickets ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$561632529$io_github_mobilebytelabs_cmp_product_tickets ()Lkotlin/jvm/functions/Function2;
-}
-
-public final class com/mobilebytelabs/producttickets/ui/ComposableSingletons$TicketDetailScreenKt {
-	public static final field INSTANCE Lcom/mobilebytelabs/producttickets/ui/ComposableSingletons$TicketDetailScreenKt;
-	public fun <init> ()V
-	public final fun getLambda$-1015628824$io_github_mobilebytelabs_cmp_product_tickets ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$-116691832$io_github_mobilebytelabs_cmp_product_tickets ()Lkotlin/jvm/functions/Function2;
-}
-
-public final class com/mobilebytelabs/producttickets/ui/CreateTicketRoute {
-	public static final field $stable I
-	public static final field Companion Lcom/mobilebytelabs/producttickets/ui/CreateTicketRoute$Companion;
-	public fun <init> ()V
-	public fun <init> (Ljava/lang/String;)V
-	public synthetic fun <init> (Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun component1 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/String;)Lcom/mobilebytelabs/producttickets/ui/CreateTicketRoute;
-	public static synthetic fun copy$default (Lcom/mobilebytelabs/producttickets/ui/CreateTicketRoute;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/producttickets/ui/CreateTicketRoute;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getTicketType ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final synthetic class com/mobilebytelabs/producttickets/ui/CreateTicketRoute$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
-	public static final field $stable I
-	public static final field INSTANCE Lcom/mobilebytelabs/producttickets/ui/CreateTicketRoute$$serializer;
-	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
-	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/mobilebytelabs/producttickets/ui/CreateTicketRoute;
-	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
-	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/mobilebytelabs/producttickets/ui/CreateTicketRoute;)V
-	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
-}
-
-public final class com/mobilebytelabs/producttickets/ui/CreateTicketRoute$Companion {
-	public final fun serializer ()Lkotlinx/serialization/KSerializer;
-}
-
-public final class com/mobilebytelabs/producttickets/ui/ProductTicketsNavigationKt {
-	public static final fun createTicketDestination (Landroidx/navigation/NavGraphBuilder;Lkotlin/jvm/functions/Function0;)V
-	public static final fun navigateToCreateTicket (Landroidx/navigation/NavController;Lcom/mobilebytelabs/producttickets/domain/model/TicketType;)V
-	public static final fun navigateToProductTickets (Landroidx/navigation/NavController;Landroidx/navigation/NavOptions;)V
-	public static synthetic fun navigateToProductTickets$default (Landroidx/navigation/NavController;Landroidx/navigation/NavOptions;ILjava/lang/Object;)V
-	public static final fun navigateToTicketDetail (Landroidx/navigation/NavController;Ljava/lang/String;)V
-	public static final fun productTicketsDestination (Landroidx/navigation/NavGraphBuilder;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
-	public static final fun ticketDetailDestination (Landroidx/navigation/NavGraphBuilder;Lkotlin/jvm/functions/Function0;)V
-}
-
-public final class com/mobilebytelabs/producttickets/ui/ProductTicketsRoute {
-	public static final field $stable I
-	public static final field INSTANCE Lcom/mobilebytelabs/producttickets/ui/ProductTicketsRoute;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun hashCode ()I
-	public final fun serializer ()Lkotlinx/serialization/KSerializer;
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/mobilebytelabs/producttickets/ui/ProductTicketsScreenKt {
-	public static final fun ProductTicketsScreen (Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Lcom/mobilebytelabs/producttickets/ui/ProductTicketsViewModel;Landroidx/compose/runtime/Composer;II)V
-}
-
-public final class com/mobilebytelabs/producttickets/ui/ProductTicketsState {
-	public static final field $stable I
-	public fun <init> ()V
-	public fun <init> (Lcom/mobilebytelabs/producttickets/ui/TicketsTab;Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/lang/String;ZZLjava/lang/String;Ljava/lang/String;)V
-	public synthetic fun <init> (Lcom/mobilebytelabs/producttickets/ui/TicketsTab;Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/lang/String;ZZLjava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun component1 ()Lcom/mobilebytelabs/producttickets/ui/TicketsTab;
-	public final fun component10 ()Ljava/lang/String;
-	public final fun component2 ()Ljava/util/List;
-	public final fun component3 ()Ljava/util/List;
-	public final fun component4 ()Ljava/util/List;
-	public final fun component5 ()Ljava/util/List;
-	public final fun component6 ()Ljava/lang/String;
-	public final fun component7 ()Z
-	public final fun component8 ()Z
-	public final fun component9 ()Ljava/lang/String;
-	public final fun copy (Lcom/mobilebytelabs/producttickets/ui/TicketsTab;Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/lang/String;ZZLjava/lang/String;Ljava/lang/String;)Lcom/mobilebytelabs/producttickets/ui/ProductTicketsState;
-	public static synthetic fun copy$default (Lcom/mobilebytelabs/producttickets/ui/ProductTicketsState;Lcom/mobilebytelabs/producttickets/ui/TicketsTab;Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/lang/String;ZZLjava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/producttickets/ui/ProductTicketsState;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getError ()Ljava/lang/String;
-	public final fun getMyTickets ()Ljava/util/List;
-	public final fun getPublicTickets ()Ljava/util/List;
-	public final fun getResolvedTickets ()Ljava/util/List;
-	public final fun getRoadmapTickets ()Ljava/util/List;
-	public final fun getSearchQuery ()Ljava/lang/String;
-	public final fun getSelectedTab ()Lcom/mobilebytelabs/producttickets/ui/TicketsTab;
-	public final fun getSuccessMessage ()Ljava/lang/String;
-	public fun hashCode ()I
-	public final fun isLoading ()Z
-	public final fun isSubmitting ()Z
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/mobilebytelabs/producttickets/ui/ProductTicketsViewModel : androidx/lifecycle/ViewModel {
-	public static final field $stable I
-	public fun <init> (Lcom/mobilebytelabs/producttickets/data/remote/ProductTicketsRepository;)V
-	public final fun clearTicketDetail ()V
-	public final fun dismissError ()V
-	public final fun dismissSuccess ()V
-	public final fun fetchTicketById (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
-	public final fun getDetailState ()Lkotlinx/coroutines/flow/StateFlow;
-	public final fun getFilteredTickets (Ljava/util/List;)Ljava/util/List;
-	public final fun getState ()Lkotlinx/coroutines/flow/StateFlow;
-	public final fun getTicketById (Ljava/lang/String;)Lcom/mobilebytelabs/producttickets/domain/model/UserTicket;
-	public final fun loadTicketDetail (Ljava/lang/String;)V
-	public final fun selectTab (Lcom/mobilebytelabs/producttickets/ui/TicketsTab;)V
-	public final fun submitTicket (Lcom/mobilebytelabs/producttickets/domain/model/TicketType;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
-	public final fun updateSearch (Ljava/lang/String;)V
-	public final fun upvoteTicket (Ljava/lang/String;)V
-}
-
-public final class com/mobilebytelabs/producttickets/ui/TicketDetailRoute {
-	public static final field $stable I
-	public static final field Companion Lcom/mobilebytelabs/producttickets/ui/TicketDetailRoute$Companion;
-	public fun <init> (Ljava/lang/String;)V
-	public final fun component1 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/String;)Lcom/mobilebytelabs/producttickets/ui/TicketDetailRoute;
-	public static synthetic fun copy$default (Lcom/mobilebytelabs/producttickets/ui/TicketDetailRoute;Ljava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/producttickets/ui/TicketDetailRoute;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getTicketId ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final synthetic class com/mobilebytelabs/producttickets/ui/TicketDetailRoute$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
-	public static final field $stable I
-	public static final field INSTANCE Lcom/mobilebytelabs/producttickets/ui/TicketDetailRoute$$serializer;
-	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
-	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/mobilebytelabs/producttickets/ui/TicketDetailRoute;
-	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
-	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/mobilebytelabs/producttickets/ui/TicketDetailRoute;)V
-	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
-}
-
-public final class com/mobilebytelabs/producttickets/ui/TicketDetailRoute$Companion {
-	public final fun serializer ()Lkotlinx/serialization/KSerializer;
-}
-
-public final class com/mobilebytelabs/producttickets/ui/TicketDetailState {
-	public static final field $stable I
-	public fun <init> ()V
-	public fun <init> (Lcom/mobilebytelabs/producttickets/domain/model/UserTicket;ZLjava/lang/String;)V
-	public synthetic fun <init> (Lcom/mobilebytelabs/producttickets/domain/model/UserTicket;ZLjava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun component1 ()Lcom/mobilebytelabs/producttickets/domain/model/UserTicket;
-	public final fun component2 ()Z
-	public final fun component3 ()Ljava/lang/String;
-	public final fun copy (Lcom/mobilebytelabs/producttickets/domain/model/UserTicket;ZLjava/lang/String;)Lcom/mobilebytelabs/producttickets/ui/TicketDetailState;
-	public static synthetic fun copy$default (Lcom/mobilebytelabs/producttickets/ui/TicketDetailState;Lcom/mobilebytelabs/producttickets/domain/model/UserTicket;ZLjava/lang/String;ILjava/lang/Object;)Lcom/mobilebytelabs/producttickets/ui/TicketDetailState;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getError ()Ljava/lang/String;
-	public final fun getTicket ()Lcom/mobilebytelabs/producttickets/domain/model/UserTicket;
-	public fun hashCode ()I
-	public final fun isLoading ()Z
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/mobilebytelabs/producttickets/ui/TicketsTab : java/lang/Enum {
-	public static final field IMPLEMENTED Lcom/mobilebytelabs/producttickets/ui/TicketsTab;
-	public static final field MY_TICKETS Lcom/mobilebytelabs/producttickets/ui/TicketsTab;
-	public static final field REQUESTED Lcom/mobilebytelabs/producttickets/ui/TicketsTab;
-	public static final field ROADMAP Lcom/mobilebytelabs/producttickets/ui/TicketsTab;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public final fun getLabel ()Ljava/lang/String;
-	public static fun valueOf (Ljava/lang/String;)Lcom/mobilebytelabs/producttickets/ui/TicketsTab;
-	public static fun values ()[Lcom/mobilebytelabs/producttickets/ui/TicketsTab;
 }
 

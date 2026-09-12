@@ -7,8 +7,6 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.android.kotlin.multiplatform.library)
-    alias(libs.plugins.composeMultiplatform)
-    alias(libs.plugins.composeCompiler)
     alias(libs.plugins.vanniktech.mavenPublish)
     id("io.github.mobilebytelabs.kmptoolkit.dokka")
     id("io.github.mobilebytelabs.kmptoolkit.kover")
@@ -47,10 +45,32 @@ kotlin {
         androidResources.enable = true
     }
 
+    // iosX64 / macosX64 absent: Compose Multiplatform 1.12.0 publishes no artifact for either, and
+    // cmp-product-tickets-compose could not follow them.
     iosArm64()
     iosSimulatorArm64()
 
     macosArm64()
+
+    // Headless families, added by E4 (2026-09-12) once the Compose surface moved to
+    // cmp-product-tickets-compose — so a server, CLI or background worker can file and fetch tickets
+    // with no renderer on the class path.
+    //
+    // ABSENT, measured on the identical dependency set in E2:
+    //   watchosArm32 / watchosDeviceArm64 / linuxArm64 — `postgrest-kt` 3.2.6 publishes no artifact
+    //     for exactly those three (it DOES publish for linuxX64, mingwX64, tvOS and the remaining
+    //     watchOS archs, which is why they are all here).
+    //   wasmWasi — koin-core has no wasmWasi artifact.
+    watchosX64()
+    watchosArm64()
+    watchosSimulatorArm64()
+
+    tvosX64()
+    tvosArm64()
+    tvosSimulatorArm64()
+
+    linuxX64()
+    mingwX64()
 
     jvm()
 
@@ -71,11 +91,6 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             // Compose
-            implementation(compose.material3)
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.ui)
-            implementation(compose.materialIconsExtended)
             // Supabase
             implementation(libs.supabase.postgrest)
             implementation(libs.ktor.client.core)
@@ -85,14 +100,10 @@ kotlin {
 
             // DI
             implementation(libs.koin.core)
-            implementation(libs.koin.compose.viewmodel)
 
             // Navigation
-            implementation(libs.navigation.compose)
 
             // Lifecycle
-            implementation(libs.androidx.lifecycle.viewmodel.compose)
-            implementation(libs.androidx.lifecycle.runtime.compose)
 
             // Logging
             implementation(libs.kermit)

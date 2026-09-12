@@ -110,7 +110,10 @@ internal fun TicketDetailScreen(onBackClick: () -> Unit, ticket: UserTicket, onU
             )
 
             // Admin response section
-            if (ticket.adminResponse != null) {
+            // UserTicket lives in cmp-product-tickets now, so Kotlin will not smart-cast its
+            // public properties across the module boundary — bind once instead of re-reading.
+            val adminResponse = ticket.adminResponse
+            if (adminResponse != null) {
                 HorizontalDivider()
                 Text(
                     text = ProductTicketsStrings.DETAIL_ADMIN_RESPONSE,
@@ -125,7 +128,7 @@ internal fun TicketDetailScreen(onBackClick: () -> Unit, ticket: UserTicket, onU
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(
-                        text = ticket.adminResponse,
+                        text = adminResponse,
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.padding(12.dp),
                     )
@@ -140,7 +143,9 @@ internal fun TicketDetailScreen(onBackClick: () -> Unit, ticket: UserTicket, onU
             }
 
             // Resolution section
-            if (ticket.resolution != null) {
+            // Same module-boundary reason as adminResponse above.
+            val resolution = ticket.resolution
+            if (resolution != null) {
                 HorizontalDivider()
                 Text(
                     text = ProductTicketsStrings.DETAIL_RESOLUTION,
@@ -149,7 +154,7 @@ internal fun TicketDetailScreen(onBackClick: () -> Unit, ticket: UserTicket, onU
                     color = colorScheme.primary,
                 )
                 Text(
-                    text = ticket.resolution,
+                    text = resolution,
                     style = MaterialTheme.typography.bodyMedium,
                     color = colorScheme.onSurface,
                 )

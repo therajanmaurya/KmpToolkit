@@ -67,6 +67,7 @@ extra["cmp_remote_config_compose_artifact"] = "io.github.mobilebytelabs:cmp-remo
 
 extra["cmp_product_tickets_version"] = kmpToolkitVersion
 extra["cmp_product_tickets_artifact"] = "io.github.mobilebytelabs:cmp-product-tickets"
+extra["cmp_product_tickets_compose_artifact"] = "io.github.mobilebytelabs:cmp-product-tickets-compose"
 
 extra["cmp_firebase_version"] = kmpToolkitVersion
 extra["cmp_firebase_artifact"] = "io.github.mobilebytelabs:cmp-firebase"
