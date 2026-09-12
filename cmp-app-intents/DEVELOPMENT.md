@@ -3,7 +3,7 @@ module: cmp-app-intents
 artifact: io.github.mobilebytelabs:cmp-app-intents
 version: UNKNOWN
 package: com.mobilebytelabs.kmptoolkit.app.intents
-api_tier: experimental
+api_tier: stable  # @ExperimentalAppIntentsApi retained as a deprecated no-op for source compat
 last_reviewed: 2026-05-30
 goal_plan_ref: plan-layer/project-plans/mbs/kmp-toolkit/active/consumer-library-ai-bridge/GOAL.md
 adr_refs: []
@@ -20,7 +20,7 @@ adr_refs: []
 
 | Artifact | Package | Current version | Maven | Since | API tier |
 |----------|---------|-----------------|-------|-------|----------|
-| `io.github.mobilebytelabs:cmp-app-intents` | `com.mobilebytelabs.kmptoolkit.app.intents` | `UNKNOWN` | [Central](https://central.sonatype.com/artifact/io.github.mobilebytelabs/cmp-app-intents) | 2026-05-30 | experimental |
+| `io.github.mobilebytelabs:cmp-app-intents` | `com.mobilebytelabs.kmptoolkit.app.intents` | `UNKNOWN` | [Central](https://central.sonatype.com/artifact/io.github.mobilebytelabs/cmp-app-intents) | 2026-05-30 | stable |
 
 **Module purpose (one paragraph):** <!-- AUTHOR: WIP — initial draft from 2026-05-30. One-paragraph module purpose (≤200 words). Seed from idea-layer/cmp-app-intents/SPEC.md if present. -->
 

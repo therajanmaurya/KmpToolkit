@@ -3,7 +3,9 @@
 Typed Android-Intent builder with cross-platform `ActivityResult` contracts for
 Kotlin Multiplatform.
 
-> **Status:** Experimental. All public APIs marked `@ExperimentalIntentLauncherApi`.
+> **Stable API.** `@ExperimentalIntentLauncherApi` is retained as a deprecated no-op so existing
+> `@OptIn(...)` call sites keep compiling; both it and the `-opt-in` compiler flag are now
+> redundant and can be deleted.
 > Ships alongside the other `cmp-*` modules at the shared `kmptoolkit.version`.
 
 ## Features
@@ -84,7 +86,6 @@ dependencies {
 ### Pick an image (cross-platform)
 
 ```kotlin
-@OptIn(ExperimentalIntentLauncherApi::class)
 @Composable
 fun PickImageButton(onPicked: (String) -> Unit) {
     val launcher = rememberIntentLauncher()
@@ -109,7 +110,6 @@ fun PickImageButton(onPicked: (String) -> Unit) {
 ### Pick a PDF
 
 ```kotlin
-@OptIn(ExperimentalIntentLauncherApi::class)
 @Composable
 fun PickPdfButton(onPicked: (String) -> Unit) {
     val launcher = rememberIntentLauncher()
@@ -130,7 +130,6 @@ fun PickPdfButton(onPicked: (String) -> Unit) {
 ### Custom Android action with extras
 
 ```kotlin
-@OptIn(ExperimentalIntentLauncherApi::class)
 @Composable
 fun VendorBarcodeScanButton(onScanned: (String) -> Unit) {
     val launcher = rememberIntentLauncher()
@@ -154,7 +153,6 @@ fun VendorBarcodeScanButton(onScanned: (String) -> Unit) {
 ### Non-Compose Android (escape hatch)
 
 ```kotlin
-@OptIn(ExperimentalIntentLauncherApi::class)
 class LegacyFragment : Fragment() {
     private lateinit var launcher: IntentLauncher
     override fun onCreate(savedInstanceState: Bundle?) {

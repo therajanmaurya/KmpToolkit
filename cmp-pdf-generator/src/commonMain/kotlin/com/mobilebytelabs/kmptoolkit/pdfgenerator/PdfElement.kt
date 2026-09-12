@@ -12,7 +12,6 @@ package com.mobilebytelabs.kmptoolkit.pdfgenerator
 /**
  * Source of an image. Different platforms accept different forms — bytes work everywhere.
  */
-@ExperimentalPdfGeneratorApi
 public sealed class ImageSource {
     public data class Bytes(public val bytes: ByteArray) : ImageSource() {
         override fun equals(other: Any?): Boolean = other is Bytes && bytes.contentEquals(other.bytes)
@@ -28,7 +27,6 @@ public sealed class ImageSource {
 }
 
 /** Text alignment. */
-@ExperimentalPdfGeneratorApi
 public enum class Alignment { LEFT, CENTER, RIGHT, JUSTIFY }
 
 /**
@@ -37,7 +35,6 @@ public enum class Alignment { LEFT, CENTER, RIGHT, JUSTIFY }
  * @param size Font size in points. Default 8pt to match mifos-x reference.
  * @param colorHex Optional override; null = theme default.
  */
-@ExperimentalPdfGeneratorApi
 public data class TextStyle(
     public val bold: Boolean = false,
     public val italic: Boolean = false,
@@ -47,7 +44,6 @@ public data class TextStyle(
 )
 
 /** A cell in a [PdfElement.Table] row. */
-@ExperimentalPdfGeneratorApi
 public data class TableCell(
     public val content: String,
     public val style: TextStyle = TextStyle(),
@@ -59,13 +55,11 @@ public data class TableCell(
 }
 
 /** A row of cells. */
-@ExperimentalPdfGeneratorApi
 public data class TableRow(public val cells: List<TableCell>)
 
 /**
  * One element on a [PdfPage]. Composed via the [PdfDocumentBuilder] DSL or hand-built.
  */
-@ExperimentalPdfGeneratorApi
 public sealed class PdfElement {
     /** Plain text paragraph. */
     public data class Text(public val content: String, public val style: TextStyle = TextStyle()) : PdfElement()
@@ -105,13 +99,11 @@ public sealed class PdfElement {
 }
 
 /** One page worth of elements. */
-@ExperimentalPdfGeneratorApi
 public data class PdfPage(public val elements: List<PdfElement>)
 
 /**
  * The DSL output — a fully-described PDF document. Pass to [PdfGenerator.generate] for rendering.
  */
-@ExperimentalPdfGeneratorApi
 public data class PdfDocument(
     public val pages: List<PdfPage>,
     public val config: PageConfig,

@@ -3,7 +3,6 @@
 Bundle a sequence of images (photos, scans) into a single PDF — each image on its own page.
 
 ```kotlin
-@OptIn(ExperimentalPdfGeneratorApi::class)
 suspend fun imagesToPdf(generator: PdfGenerator, images: List<ByteArray>): ByteArray? {
     val doc = pdf {
         pageConfig(PageConfig(size = PageSize.A4, margins = EdgeMargins.uniform(10)))

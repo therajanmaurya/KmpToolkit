@@ -1,7 +1,6 @@
 /*
  * Copyright 2026 MobileByteLabs · Apache 2.0
  */
-@file:OptIn(ExperimentalPdfGeneratorApi::class)
 
 package com.mobilebytelabs.kmptoolkit.pdfgenerator
 
@@ -30,7 +29,6 @@ import kotlin.time.Duration
  *    Yields a real Uint8Array of PDF bytes. Consumers must have `pdf-lib` resolvable in npm
  *    (Kotlin Gradle plugin handles this when `kotlin.js` plugin is configured).
  */
-@ExperimentalPdfGeneratorApi
 public actual class PdfGenerator public actual constructor() {
     private val progress = MutableSharedFlow<PdfProgressEvent>(extraBufferCapacity = 32)
 
@@ -217,12 +215,10 @@ public actual class PdfGenerator public actual constructor() {
     }
 }
 
-@ExperimentalPdfGeneratorApi
 public fun createPdfGenerator(): PdfGenerator = PdfGenerator()
 
 // injectPageConfigCss moved to commonMain (PageConfigCssInjection.kt)
 
-@ExperimentalPdfGeneratorApi
 internal fun byteArrayToUint8Array(bytes: ByteArray): Uint8Array {
     val u8 = Uint8Array(bytes.size)
     for (i in bytes.indices) u8.asDynamic()[i] = bytes[i]

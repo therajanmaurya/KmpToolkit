@@ -58,7 +58,6 @@ public object PdfHost {
  * text rather than pretending to lay it out — a caller needing real layout wants a Tier-1 target,
  * and should be able to tell which they got.
  */
-@ExperimentalPdfGeneratorApi
 public actual class PdfGenerator public actual constructor() {
 
     private val progress = MutableSharedFlow<PdfProgressEvent>(extraBufferCapacity = 16)

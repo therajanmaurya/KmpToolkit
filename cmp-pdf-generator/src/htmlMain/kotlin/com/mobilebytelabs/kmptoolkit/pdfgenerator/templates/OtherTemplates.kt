@@ -4,11 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  */
-@file:OptIn(com.mobilebytelabs.kmptoolkit.pdfgenerator.ExperimentalPdfGeneratorApi::class)
 
 package com.mobilebytelabs.kmptoolkit.pdfgenerator.templates
 
-import com.mobilebytelabs.kmptoolkit.pdfgenerator.ExperimentalPdfGeneratorApi
 import com.mobilebytelabs.kmptoolkit.pdfgenerator.HtmlTemplateGenerator
 import com.mobilebytelabs.kmptoolkit.pdfgenerator.PdfBranding
 import kotlinx.datetime.LocalDate
@@ -30,14 +28,12 @@ import kotlinx.html.tr
 // =========================================================================================
 
 /** A section in a [ReportData]. Supports nested subsections via `subsections`. */
-@ExperimentalPdfGeneratorApi
 public data class ReportSection(
     public val heading: String,
     public val body: String,
     public val subsections: List<ReportSection> = emptyList(),
 )
 
-@ExperimentalPdfGeneratorApi
 public data class ReportData(
     public val title: String,
     public val subtitle: String? = null,
@@ -47,7 +43,6 @@ public data class ReportData(
     public val appendix: String? = null,
 )
 
-@ExperimentalPdfGeneratorApi
 public class ReportTemplate(branding: PdfBranding, public val report: ReportData) : HtmlTemplateGenerator(branding) {
     override fun getTitle(): String = report.title
 
@@ -83,10 +78,8 @@ public class ReportTemplate(branding: PdfBranding, public val report: ReportData
 // ReceiptTemplate (thermal-printer-style narrow layout)
 // =========================================================================================
 
-@ExperimentalPdfGeneratorApi
 public data class ReceiptLineItem(public val description: String, public val amount: String)
 
-@ExperimentalPdfGeneratorApi
 public data class ReceiptData(
     public val merchantName: String,
     public val merchantAddress: String? = null,
@@ -100,7 +93,6 @@ public data class ReceiptData(
     public val footer: String? = null,
 )
 
-@ExperimentalPdfGeneratorApi
 public class ReceiptTemplate(branding: PdfBranding, public val receipt: ReceiptData) :
     HtmlTemplateGenerator(branding) {
     override fun getTitle(): String = "Receipt ${receipt.receiptNumber}"
@@ -173,7 +165,6 @@ public class ReceiptTemplate(branding: PdfBranding, public val receipt: ReceiptD
 // StatementTemplate (periodic financial statement)
 // =========================================================================================
 
-@ExperimentalPdfGeneratorApi
 public data class StatementTransaction(
     public val date: LocalDate,
     public val description: String,
@@ -182,7 +173,6 @@ public data class StatementTransaction(
     public val balance: String,
 )
 
-@ExperimentalPdfGeneratorApi
 public data class StatementData(
     public val accountHolder: PartyInfo,
     public val accountNumber: String,
@@ -193,7 +183,6 @@ public data class StatementData(
     public val transactions: List<StatementTransaction>,
 )
 
-@ExperimentalPdfGeneratorApi
 public class StatementTemplate(branding: PdfBranding, public val statement: StatementData) :
     HtmlTemplateGenerator(branding) {
     override fun getTitle(): String = "Account Statement"
@@ -257,7 +246,6 @@ public class StatementTemplate(branding: PdfBranding, public val statement: Stat
 // LetterTemplate (formal letter layout)
 // =========================================================================================
 
-@ExperimentalPdfGeneratorApi
 public data class LetterData(
     public val sender: PartyInfo,
     public val recipient: PartyInfo,
@@ -270,7 +258,6 @@ public data class LetterData(
     public val signatureTitle: String? = null,
 )
 
-@ExperimentalPdfGeneratorApi
 public class LetterTemplate(branding: PdfBranding, public val letter: LetterData) : HtmlTemplateGenerator(branding) {
     override fun getTitle(): String = letter.subject ?: "Letter"
 

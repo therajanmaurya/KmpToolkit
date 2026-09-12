@@ -4,7 +4,6 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  */
-@file:OptIn(ExperimentalPdfGeneratorApi::class)
 
 package com.mobilebytelabs.kmptoolkit.pdfgenerator
 
@@ -29,7 +28,6 @@ import org.intellij.markdown.parser.MarkdownParser
  *
  * The output is wrapped in a [HtmlTemplateGenerator] for chrome (logo / footer).
  */
-@ExperimentalPdfGeneratorApi
 public object MarkdownPdfAdapter {
     /**
      * Compile Markdown to a complete HTML document, ready for `PdfGenerator.generateFromHtml`.
@@ -48,7 +46,6 @@ public object MarkdownPdfAdapter {
 /**
  * `HtmlTemplateGenerator` that wraps a Markdown-compiled HTML fragment in the standard chrome.
  */
-@ExperimentalPdfGeneratorApi
 private class MarkdownTemplate(branding: PdfBranding, private val innerHtml: String) :
     HtmlTemplateGenerator(branding) {
     override fun getTitle(): String = "Markdown document"

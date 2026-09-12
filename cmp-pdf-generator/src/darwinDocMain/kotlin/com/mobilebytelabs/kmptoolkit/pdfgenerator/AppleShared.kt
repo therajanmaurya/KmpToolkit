@@ -2,7 +2,6 @@
  * Copyright 2026 MobileByteLabs · Apache 2.0
  */
 @file:OptIn(
-    ExperimentalPdfGeneratorApi::class,
     kotlinx.cinterop.ExperimentalForeignApi::class,
     kotlinx.cinterop.BetaInteropApi::class,
 )
@@ -17,7 +16,6 @@ import platform.Foundation.NSData
 import platform.Foundation.create
 
 /** Convert NSData → ByteArray. */
-@ExperimentalPdfGeneratorApi
 @OptIn(ExperimentalForeignApi::class, kotlinx.cinterop.BetaInteropApi::class)
 internal fun NSData.toByteArray(): ByteArray {
     val size = length.toInt()
@@ -33,7 +31,6 @@ internal fun NSData.toByteArray(): ByteArray {
 }
 
 /** Convert ByteArray → NSData. */
-@ExperimentalPdfGeneratorApi
 @OptIn(ExperimentalForeignApi::class, kotlinx.cinterop.BetaInteropApi::class)
 internal fun ByteArray.toNSData(): NSData = usePinned { pinned ->
     NSData.create(bytes = pinned.addressOf(0), length = size.convert())

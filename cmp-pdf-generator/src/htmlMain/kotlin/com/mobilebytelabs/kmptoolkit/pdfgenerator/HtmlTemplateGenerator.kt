@@ -8,7 +8,6 @@
  *     https://www.apache.org/licenses/LICENSE-2.0
  */
 @file:OptIn(
-    ExperimentalPdfGeneratorApi::class,
     kotlin.io.encoding.ExperimentalEncodingApi::class,
 )
 
@@ -36,7 +35,6 @@ import kotlin.time.Clock
  *
  * @param branding Injected branding bundle. Use [PdfBranding.none] to omit logo + footer.
  */
-@ExperimentalPdfGeneratorApi
 public abstract class HtmlTemplateGenerator(protected val branding: PdfBranding) {
     /**
      * Generate the complete XHTML 1.0-strict document, ready to feed the platform's

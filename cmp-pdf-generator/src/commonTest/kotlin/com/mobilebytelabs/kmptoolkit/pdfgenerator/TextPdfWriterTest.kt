@@ -19,7 +19,6 @@ import kotlin.test.assertTrue
  * that a reader refuses to open is worse than no PDF at all, and "it produced bytes" proves
  * nothing about that.
  */
-@OptIn(ExperimentalPdfGeneratorApi::class)
 class TextPdfWriterTest {
 
     private fun doc(vararg elements: PdfElement): PdfDocument = PdfDocument(

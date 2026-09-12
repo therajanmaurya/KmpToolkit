@@ -2,7 +2,6 @@
  * Copyright 2026 MobileByteLabs · Apache 2.0
  */
 @file:OptIn(
-    ExperimentalPdfGeneratorApi::class,
     kotlinx.cinterop.ExperimentalForeignApi::class,
     kotlinx.cinterop.BetaInteropApi::class,
 )
@@ -41,7 +40,6 @@ import kotlin.time.Duration
  * Cleanup: `WKWebView` is retained by an internal field for the duration of the suspend call,
  * released on completion (ARC).
  */
-@ExperimentalPdfGeneratorApi
 public actual class PdfGenerator public actual constructor() {
     private val progress = MutableSharedFlow<PdfProgressEvent>(extraBufferCapacity = 32)
     private var presentingRootViewController: platform.UIKit.UIViewController? = null
@@ -233,5 +231,4 @@ public actual class PdfGenerator public actual constructor() {
         presentingRootViewController ?: UIApplication.sharedApplication.keyWindow?.rootViewController
 }
 
-@ExperimentalPdfGeneratorApi
 public fun createPdfGenerator(): PdfGenerator = PdfGenerator()

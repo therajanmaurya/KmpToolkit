@@ -21,7 +21,6 @@ import java.io.File
  * device/emulator and asserts a genuine PDF comes out (valid `%PDF` header, non-empty). It is the
  * only layer that exercises Android's WebView/PdfDocument — JVM/common tests cannot.
  */
-@OptIn(ExperimentalPdfGeneratorApi::class)
 @RunWith(AndroidJUnit4::class)
 class GenerateFromHtmlAndroidTest {
 

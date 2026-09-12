@@ -90,4 +90,4 @@ Consumers who want zero-Material-3-dep usage should call core `cmp-share`'s `Sha
 
 ## Versioning + API stability
 
-Ships with the shared `kmptoolkit.version` (currently `3.3.2`; this module lands in the next bump). `@ExperimentalShareApi` marker is retained at first ship — marker drop is a future toolkit-release decision (separate from this module's introduction).
+Ships with the shared `kmptoolkit.version` (currently `3.3.2`; this module lands in the next bump). `@ExperimentalShareApi` is now a deprecated no-op — the API graduated to stable, so no opt-in is required; the marker class survives only for source compatibility and is scheduled for removal in the next major version.

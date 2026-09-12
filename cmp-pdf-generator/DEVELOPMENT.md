@@ -3,7 +3,7 @@ module: cmp-pdf-generator
 artifact: io.github.mobilebytelabs:cmp-pdf-generator
 version: UNKNOWN
 package: com.mobilebytelabs.kmptoolkit.pdf.generator
-api_tier: experimental
+api_tier: stable  # @ExperimentalPdfGeneratorApi retained as a deprecated no-op for source compat
 last_reviewed: 2026-05-30
 goal_plan_ref: plan-layer/project-plans/mbs/kmp-toolkit/active/consumer-library-ai-bridge/GOAL.md
 adr_refs: []
@@ -20,7 +20,7 @@ adr_refs: []
 
 | Artifact | Package | Current version | Maven | Since | API tier |
 |----------|---------|-----------------|-------|-------|----------|
-| `io.github.mobilebytelabs:cmp-pdf-generator` | `com.mobilebytelabs.kmptoolkit.pdf.generator` | `UNKNOWN` | [Central](https://central.sonatype.com/artifact/io.github.mobilebytelabs/cmp-pdf-generator) | 2026-05-30 | experimental |
+| `io.github.mobilebytelabs:cmp-pdf-generator` | `com.mobilebytelabs.kmptoolkit.pdf.generator` | `UNKNOWN` | [Central](https://central.sonatype.com/artifact/io.github.mobilebytelabs/cmp-pdf-generator) | 2026-05-30 | stable |
 
 **Module purpose (one paragraph):** <!-- AUTHOR: WIP — initial draft from 2026-05-30. One-paragraph module purpose (≤200 words). Seed from idea-layer/cmp-pdf-generator/SPEC.md if present. -->
 

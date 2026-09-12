@@ -2,7 +2,6 @@
  * Copyright 2026 MobileByteLabs · Apache 2.0
  */
 @file:OptIn(
-    com.mobilebytelabs.kmptoolkit.pdfgenerator.ExperimentalPdfGeneratorApi::class,
     androidx.compose.ui.ExperimentalComposeUiApi::class,
 )
 

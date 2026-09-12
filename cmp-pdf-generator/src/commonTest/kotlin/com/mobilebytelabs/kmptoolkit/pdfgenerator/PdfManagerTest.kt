@@ -19,7 +19,6 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 /** Contract for the injectable facade and its test double. */
-@OptIn(ExperimentalPdfGeneratorApi::class)
 class PdfManagerTest {
 
     private fun doc() = PdfDocument(

@@ -9,7 +9,6 @@
  */
 package com.mobilebytelabs.kmptoolkit.pdfgenerator.testing
 
-import com.mobilebytelabs.kmptoolkit.pdfgenerator.ExperimentalPdfGeneratorApi
 import com.mobilebytelabs.kmptoolkit.pdfgenerator.PageConfig
 import com.mobilebytelabs.kmptoolkit.pdfgenerator.PdfBranding
 import com.mobilebytelabs.kmptoolkit.pdfgenerator.PdfDocument
@@ -22,7 +21,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
 /** One recorded generation request. */
-@ExperimentalPdfGeneratorApi
 public data class GeneratedPdf(
     public val document: PdfDocument?,
     public val html: String?,
@@ -53,7 +51,6 @@ public data class GeneratedPdf(
  * val textOnly = FakePdfManager(supportsHtmlLayout = false)   // tvOS / watchOS / Linux / Win / WASI
  * ```
  */
-@ExperimentalPdfGeneratorApi
 public class FakePdfManager(
     /** Returned by every generate call. Defaults to success with a token byte payload. */
     public var result: PdfResult = PdfResult.Success(bytes = ByteArray(1), byteCount = 1),

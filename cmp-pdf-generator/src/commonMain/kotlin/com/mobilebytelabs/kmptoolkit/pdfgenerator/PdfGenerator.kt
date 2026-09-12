@@ -45,7 +45,6 @@ private val DEFAULT_RENDER_TIMEOUT: Duration = 60.seconds
  *   render surfaces as an error rather than a hang. Pure-Kotlin routes (`TextPdfWriter`) never
  *   await a callback and so are unaffected by this value.
  */
-@ExperimentalPdfGeneratorApi
 public data class PdfGeneratorOptions(
     public val deterministic: Boolean = false,
     public val fixedDate: LocalDate? = null,
@@ -99,7 +98,6 @@ public data class PdfGeneratorOptions(
 /**
  * Where the rendered PDF should land.
  */
-@ExperimentalPdfGeneratorApi
 public sealed class PdfOutput {
     /** Write to a specific filesystem path. */
     public data class File(public val path: String) : PdfOutput()
@@ -123,7 +121,6 @@ public sealed class PdfOutput {
 /**
  * Result of a [PdfGenerator.generate] call.
  */
-@ExperimentalPdfGeneratorApi
 public sealed class PdfResult {
     /**
      * @param bytes Non-null when [PdfOutput.ByteArrayOutput] was used; null otherwise.
@@ -166,7 +163,6 @@ public sealed class PdfResult {
  * Android, iOS (3 archs), macOS (2 archs), JVM, JS, wasmJs. Adding more targets
  * requires verifying upstream library compatibility first.
  */
-@ExperimentalPdfGeneratorApi
 public expect class PdfGenerator() {
     /**
      * mifos-x back-compat — HTML in, share/print/save out. Behavior is platform-defined.
@@ -213,5 +209,4 @@ public expect class PdfGenerator() {
 /**
  * Default no-op progress flow — referenced by platform impls that don't yet emit events.
  */
-@ExperimentalPdfGeneratorApi
 internal fun emptyProgressFlow(): Flow<PdfProgressEvent> = emptyFlow()

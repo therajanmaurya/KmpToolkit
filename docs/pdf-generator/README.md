@@ -4,6 +4,10 @@ Cross-platform PDF generation library — published as part of `kmp-toolkit`.
 
 > Module README + cookbook + ADRs live at [`/cmp-pdf-generator/`](../../cmp-pdf-generator/).
 
+> **Stable API.** `@ExperimentalPdfGeneratorApi` is retained as a deprecated no-op so existing
+> `@OptIn(...)` call sites keep compiling; both it and the `-opt-in` compiler flag are now
+> redundant and can be deleted.
+
 ## In a nutshell
 
 ```kotlin

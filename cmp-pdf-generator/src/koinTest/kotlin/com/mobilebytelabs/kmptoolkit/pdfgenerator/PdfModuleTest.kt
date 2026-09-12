@@ -18,7 +18,6 @@ import kotlin.test.assertIs
 import kotlin.test.assertSame
 
 /** A module that compiles but cannot produce its binding fails at the consumer's first injection. */
-@OptIn(ExperimentalPdfGeneratorApi::class)
 class PdfModuleTest {
 
     @AfterTest

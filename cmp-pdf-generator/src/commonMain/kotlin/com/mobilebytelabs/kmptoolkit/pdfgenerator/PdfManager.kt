@@ -35,7 +35,6 @@ import kotlinx.coroutines.flow.Flow
  * }
  * ```
  */
-@ExperimentalPdfGeneratorApi
 public interface PdfManager {
 
     /** Render [document] to [output]. */
@@ -86,7 +85,6 @@ public interface PdfManager {
  *
  * Wraps a [PdfGenerator]; all per-target behaviour lives there.
  */
-@ExperimentalPdfGeneratorApi
 public class PdfManagerImpl(private val generator: PdfGenerator = PdfGenerator()) : PdfManager {
 
     override val supportsHtmlLayout: Boolean get() = platformSupportsHtmlLayout

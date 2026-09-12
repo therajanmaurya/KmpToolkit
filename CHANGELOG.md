@@ -9,6 +9,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed — API graduation: all four opt-in markers are now stable
+
+`cmp-share`, `cmp-app-intents`, `cmp-intent-launcher` and **`cmp-pdf-generator`** no longer require
+an opt-in. Every `@Experimental*Api` annotation has been removed from the public surface.
+
+- **Nothing to do, but you can delete things.** Any `@OptIn(Experimental…Api::class)` and any
+  `-opt-in=…Experimental…Api` compiler flag is now redundant. Both still compile — see below — so
+  this is not a breaking change, and there is no rush.
+- **The marker classes are RETAINED as deprecated no-ops**, not deleted. Each keeps
+  `@Retention(BINARY)` and drops `@RequiresOptIn`, so source written during the experimental era
+  keeps compiling (with a deprecation warning pointing at the now-redundant annotation). They are
+  scheduled for removal in the next major version. `cmp-pdf-generator`'s marker additionally keeps its
+  `@Target` list, because its experimental surface permitted `TYPEALIAS` — a target the default set
+  omits.
+- **Zero binary change.** Annotations are not part of the Binary Compatibility Validator's dumped API,
+  so `apiCheck` passes on all four modules with no baseline movement whatsoever. A published consumer
+  cannot break on this.
+- Each module gains a `GraduatedApiCompatTest` pinning both halves of the promise — that the stable
+  surface is reachable with no opt-in, and that the legacy `@OptIn` form still compiles.
+
+This closes the condition recorded in the v0.4 Phase 11 notes below, which deferred the marker
+decision "pending Windows CI verification … before locking BCV baselines + dropping markers". Both
+now hold: BCV baselines are committed for every publishable module, and the Windows Native CI job
+executes `mingwX64Test` (previously the Windows paths were only ever compile- and link-verified).
+One correction to that note's premise: the Windows file-dialog surface shipped via PowerShell over
+`_popen`, not Win32 `GetSaveFileNameW` cinterop, so what CI now verifies is the PowerShell route.
+
 ### Changed — cmp-firebase: GitLive `3.0.0-alpha02` + wasmJs on the native tier
 
 - **GitLive bumped `3.0.0-alpha01` → `3.0.0-alpha02`**, Firebase BoM `34.17.0` → `34.18.0`.

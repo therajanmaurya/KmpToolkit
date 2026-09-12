@@ -26,7 +26,6 @@ import kotlin.time.Duration
  * }
  * ```
  */
-@ExperimentalPdfGeneratorApi
 public sealed class PdfError(message: String, cause: Throwable? = null) : Throwable(message, cause) {
     /** Underlying engine (WebView, PDFBox, pdf-lib, …) failed. */
     public class EngineFailure(cause: Throwable) :
@@ -64,7 +63,6 @@ public sealed class PdfError(message: String, cause: Throwable? = null) : Throwa
 /**
  * Wrap an arbitrary throwable as a [PdfError]. Cancellation is preserved.
  */
-@ExperimentalPdfGeneratorApi
 public fun Throwable.toPdfError(): PdfError = when (this) {
     is PdfError -> this
     is CancellationException -> PdfError.CancellationError

@@ -5,7 +5,6 @@ Render a Compose UI to a bitmap and embed it as an image in a PDF page. Useful f
 ## Android
 
 ```kotlin
-@OptIn(ExperimentalPdfGeneratorApi::class)
 @Composable
 fun ChartSnapshotButton() {
     val context = LocalContext.current

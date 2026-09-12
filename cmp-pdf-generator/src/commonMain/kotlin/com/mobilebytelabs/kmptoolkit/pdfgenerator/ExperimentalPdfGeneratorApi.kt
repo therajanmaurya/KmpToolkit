@@ -10,12 +10,23 @@
 package com.mobilebytelabs.kmptoolkit.pdfgenerator
 
 /**
- * Opt-in marker for cmp-pdf-generator v0.x APIs.
- * The public surface may change before v1.0.
+ * Retained no-op marker. **cmp-pdf-generator graduated to a stable API — no opt-in is required.**
+ *
+ * This annotation no longer carries [RequiresOptIn], so it neither warns nor demands
+ * `@OptIn`. It is kept only so that source written against the experimental era —
+ * `@OptIn(ExperimentalPdfGeneratorApi::class)` or `-opt-in=...ExperimentalPdfGeneratorApi` — keeps
+ * compiling. Both are now redundant and can be deleted.
+ *
+ * Unlike the sibling graduated markers this one keeps its [Target] list, because the experimental
+ * surface allowed `TYPEALIAS` — a target the default set does NOT include, so dropping the list
+ * would stop a consumer's `@ExperimentalPdfGeneratorApi typealias …` from compiling. Retaining it
+ * costs nothing and is the whole point of keeping the class.
+ *
+ * Scheduled for removal in the next major version.
  */
-@RequiresOptIn(
-    level = RequiresOptIn.Level.WARNING,
-    message = "cmp-pdf-generator is experimental; opt in via @OptIn(ExperimentalPdfGeneratorApi::class).",
+@Deprecated(
+    message = "cmp-pdf-generator is stable; the opt-in is no longer required. Remove the @OptIn / annotation.",
+    level = DeprecationLevel.WARNING,
 )
 @Retention(AnnotationRetention.BINARY)
 @Target(

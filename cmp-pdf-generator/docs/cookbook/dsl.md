@@ -6,7 +6,6 @@ The DSL route produces PDFs programmatically without an HTML round-trip. Useful 
 - HTML is overkill (a receipt, a label, a checklist)
 
 ```kotlin
-@OptIn(ExperimentalPdfGeneratorApi::class)
 suspend fun generateReport(): ByteArray? {
     val doc = pdf {
         pageConfig(PageConfig(size = PageSize.A4, margins = EdgeMargins.uniform(20)))

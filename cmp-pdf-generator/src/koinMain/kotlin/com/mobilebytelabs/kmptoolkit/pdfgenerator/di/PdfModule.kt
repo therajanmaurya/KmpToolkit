@@ -9,7 +9,6 @@
  */
 package com.mobilebytelabs.kmptoolkit.pdfgenerator.di
 
-import com.mobilebytelabs.kmptoolkit.pdfgenerator.ExperimentalPdfGeneratorApi
 import com.mobilebytelabs.kmptoolkit.pdfgenerator.PdfManager
 import com.mobilebytelabs.kmptoolkit.pdfgenerator.PdfManagerImpl
 import org.koin.core.module.Module
@@ -28,7 +27,6 @@ import org.koin.dsl.module
  * **Not using Koin?** Construct `PdfManagerImpl()` and register it against [PdfManager] in
  * whatever container you use. Nothing else in cmp-pdf-generator requires Koin.
  */
-@OptIn(ExperimentalPdfGeneratorApi::class)
 public val pdfModule: Module = module {
     single<PdfManager> { PdfManagerImpl() }
 }

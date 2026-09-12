@@ -62,4 +62,4 @@ Transitively pulls Material 3 + materialIconsExtended (same as cmp-share-compose
 
 ## Versioning + API stability
 
-Ships with the shared `kmptoolkit.version` (currently `3.3.2`; this module lands in the next bump). `@ExperimentalAppIntentsApi` marker is retained at first ship — marker drop is a future toolkit-release decision.
+Ships with the shared `kmptoolkit.version` (currently `3.3.2`; this module lands in the next bump). `@ExperimentalAppIntentsApi` is now a deprecated no-op — the API graduated to stable, so no opt-in is required; the marker class survives only for source compatibility and is scheduled for removal in the next major version.

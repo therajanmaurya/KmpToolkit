@@ -5,7 +5,6 @@ Compile Markdown source to a styled PDF using `MarkdownPdfAdapter`. Uses GFM (Gi
 ## Quick start
 
 ```kotlin
-@OptIn(ExperimentalPdfGeneratorApi::class)
 suspend fun markdownToPdf(generator: PdfGenerator, source: String): ByteArray? {
     val html = MarkdownPdfAdapter.markdownToHtml(
         markdown = source,

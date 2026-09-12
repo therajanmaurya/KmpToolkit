@@ -4,11 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  */
-@file:OptIn(com.mobilebytelabs.kmptoolkit.pdfgenerator.ExperimentalPdfGeneratorApi::class)
 
 package com.mobilebytelabs.kmptoolkit.pdfgenerator.templates
 
-import com.mobilebytelabs.kmptoolkit.pdfgenerator.ExperimentalPdfGeneratorApi
 import com.mobilebytelabs.kmptoolkit.pdfgenerator.HtmlTemplateGenerator
 import com.mobilebytelabs.kmptoolkit.pdfgenerator.PdfBranding
 import kotlinx.datetime.LocalDate
@@ -27,7 +25,6 @@ import kotlinx.html.thead
 import kotlinx.html.tr
 
 /** Generic party (bill-from / bill-to) — name, address lines, optional tax id. */
-@ExperimentalPdfGeneratorApi
 public data class PartyInfo(
     public val name: String,
     public val addressLines: List<String> = emptyList(),
@@ -37,7 +34,6 @@ public data class PartyInfo(
 )
 
 /** One line on the invoice. */
-@ExperimentalPdfGeneratorApi
 public data class InvoiceLineItem(
     public val description: String,
     public val quantity: String,
@@ -46,7 +42,6 @@ public data class InvoiceLineItem(
 )
 
 /** All the data the invoice template needs. Currency formatting is consumer's responsibility. */
-@ExperimentalPdfGeneratorApi
 public data class InvoiceData(
     public val invoiceNumber: String,
     public val invoiceDate: LocalDate,
@@ -65,7 +60,6 @@ public data class InvoiceData(
  * Standard invoice HTML template — header with invoice #, bill-from / bill-to blocks,
  * line item table, totals, and optional notes / terms.
  */
-@ExperimentalPdfGeneratorApi
 public class InvoiceTemplate(branding: PdfBranding, public val invoice: InvoiceData) :
     HtmlTemplateGenerator(branding) {
     override fun getTitle(): String = "Invoice ${invoice.invoiceNumber}"

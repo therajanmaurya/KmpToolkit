@@ -7,7 +7,7 @@
  *
  *     https://www.apache.org/licenses/LICENSE-2.0
  */
-@file:OptIn(ExperimentalPdfGeneratorApi::class, kotlin.io.encoding.ExperimentalEncodingApi::class)
+@file:OptIn(kotlin.io.encoding.ExperimentalEncodingApi::class)
 
 package com.mobilebytelabs.kmptoolkit.pdfgenerator
 
@@ -39,14 +39,12 @@ import kotlin.io.encoding.Base64
  * Branding (logo, theme, footer) is handled by [PdfDocumentHtmlTemplate] which delegates to
  * [HtmlTemplateGenerator].
  */
-@ExperimentalPdfGeneratorApi
 public suspend fun PdfDocument.toHtml(): String = PdfDocumentHtmlTemplate(this).generateHtml()
 
 /**
  * `HtmlTemplateGenerator` that renders a [PdfDocument]'s DSL elements as HTML body content.
  * Public so consumers can subclass / inspect the output.
  */
-@ExperimentalPdfGeneratorApi
 public open class PdfDocumentHtmlTemplate(protected val document: PdfDocument) :
     HtmlTemplateGenerator(document.branding) {
     override fun getTitle(): String = "PDF Document"

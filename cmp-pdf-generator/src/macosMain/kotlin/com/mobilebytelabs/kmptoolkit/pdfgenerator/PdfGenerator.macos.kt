@@ -2,7 +2,6 @@
  * Copyright 2026 MobileByteLabs · Apache 2.0
  */
 @file:OptIn(
-    ExperimentalPdfGeneratorApi::class,
     kotlinx.cinterop.ExperimentalForeignApi::class,
     kotlinx.cinterop.BetaInteropApi::class,
 )
@@ -36,7 +35,6 @@ import kotlin.time.Duration
  * macOS implementation. HTML route: `WKWebView` + `didFinishNavigation` → `createPDF` (macOS 11+).
  * Output flows: NSSavePanel (B1/B6), NSSharingServicePicker (B4), file URL (B3).
  */
-@ExperimentalPdfGeneratorApi
 public actual class PdfGenerator public actual constructor() {
     private val progress = MutableSharedFlow<PdfProgressEvent>(extraBufferCapacity = 32)
 
@@ -211,5 +209,4 @@ public actual class PdfGenerator public actual constructor() {
     }
 }
 
-@ExperimentalPdfGeneratorApi
 public fun createPdfGenerator(): PdfGenerator = PdfGenerator()

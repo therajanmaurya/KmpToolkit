@@ -1,7 +1,6 @@
 /*
  * Copyright 2026 MobileByteLabs · Apache 2.0
  */
-@file:OptIn(ExperimentalPdfGeneratorApi::class)
 
 package com.mobilebytelabs.kmptoolkit.pdfgenerator
 
@@ -24,7 +23,6 @@ import kotlin.time.Duration
  * dialog, so the `fileName` argument is accepted for cross-platform API parity but is ignored
  * here — the user picks the name in the browser's own dialog.
  */
-@ExperimentalPdfGeneratorApi
 public actual class PdfGenerator public actual constructor() {
     private val progress = MutableSharedFlow<PdfProgressEvent>(extraBufferCapacity = 32)
 
@@ -137,5 +135,4 @@ public actual class PdfGenerator public actual constructor() {
     }
 }
 
-@ExperimentalPdfGeneratorApi
 public fun createPdfGenerator(): PdfGenerator = PdfGenerator()
