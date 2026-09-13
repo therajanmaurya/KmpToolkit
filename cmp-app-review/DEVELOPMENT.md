@@ -55,39 +55,74 @@ public object AppReview {
 
 ## §4 Spec Snapshot (authored — LLM-seeded)
 
-<!-- AUTHOR: WIP — initial draft from 2026-09-12 -->
+**What it does.** Asks the user to review the app, from `commonMain`, on 21 targets. One call routes
+to the platform's native in-app review API where one exists, and to the configured store listing —
+opened through `cmp-open-url` — where none does.
 
-**Problem this module solves:** _TBD by author._
+**Invariants**
+- Never throws. Every outcome is an `AppReviewResult`; a failing native flow falls through to the
+  store rather than surfacing an error, because the user's intent is satisfied either way.
+- `NativeFlowRequested` means only that the request reached the OS. Neither Play nor StoreKit reports
+  whether a prompt rendered or what the user did, and both silently no-op on quota. Nothing may be
+  gated on it.
+- The listing is resolved at CALL time, never captured at construction, so a DI graph built before
+  configuration still works.
+- No platform is a silent no-op. `wasmWasi` is the sole `AppReviewCapabilities.None`, and only because
+  a WASI sandbox has no user, no store and no browser.
 
-**Core invariants:**
-- _TBD by author._
-
-**Out of scope (by design):**
-- _TBD by author._
-
----
+**Dependencies.** `cmp-open-url` (`api` — the fallback IS URL opening; the first cmp-to-cmp dependency
+in the toolkit), `koin-core` on 20 targets via `koinMain`, `kotlinx-coroutines-core`, and
+`com.google.android.play:review` on Android only.
 
 ## §5 Extension Recipes (authored — LLM-seeded)
 
-<!-- AUTHOR: WIP — initial draft from 2026-09-12 -->
+### Recipe: consume this module (DI setup)
 
-### Recipe: Add a new platform actual
+1. Add the dependency — `cmp-open-url` arrives with it, since the fallback is built on it.
+   ```kotlin
+   commonMain.dependencies { implementation(libs.cmp.app.review) }
+   ```
+2. Register the module where you set up DI, passing the stores you publish to. This is the only
+   configuration step.
+   ```kotlin
+   startKoin {
+       modules(
+           platformModule,
+           appReviewModule(
+               StoreListing(
+                   appStoreId = BuildKonfig.APP_STORE_ID,
+                   webUrl = BuildKonfig.APP_WEB_URL,
+               ),
+           ),
+       )
+   }
+   ```
+3. Inject `AppReviewManager`, or call `AppReview.requestReview()` from shared code. Both read the
+   same listing.
+4. Android needs nothing further: a `ContentProvider` captures the application context and an
+   `ActivityLifecycleCallbacks` tracks the Activity Play's flow launches into.
 
-1. _TBD by author._
-2. _TBD by author._
-3. _TBD by author._
+### Recipe: add a new platform actual
 
-### Recipe: Extend the public API
+1. Decide which of the three shapes the target has, and put the actual in the matching source set —
+   do NOT create a new one if an existing set already describes the behaviour:
+   - native review API → its own set (`iosMain`, `macosMain`, `androidMain`)
+   - no API but a store/browser → `appleStoreOnlyMain` (tvOS/watchOS) or `webFallbackMain`
+     (JVM/Linux/JS/wasmJs), or its own set if the URL scheme differs (`mingwMain`)
+   - no surface at all → `wasmWasiMain`
+2. Implement all three actuals: `platformAppReviewCapabilities`, `requestNativeReview()`,
+   `resolveStoreUrl()`.
+3. `requestNativeReview()` returns `AppReviewResult.Failed` where no API exists — that is what makes
+   `AppReviewManagerImpl` fall through to the store listing. Never throw.
+4. Declare the target in `build.gradle.kts` and wire it into the intermediate source set if it shares
+   one.
+5. Run `./gradlew :cmp-app-review:assemble` — a missing actual fails there, not at publish.
 
-1. _TBD by author._
-2. _TBD by author._
+### Recipe: extend the public API
 
-### Recipe: Add a new variant under an existing platform (e.g. tvosArm64)
-
-1. _TBD by author._
-2. _TBD by author._
-
----
+1. Add to `commonMain`; keep platform knowledge behind the existing `expect` functions.
+2. `./gradlew :cmp-app-review:apiDump` and review the baseline diff — removals are breaking.
+3. Extend `FakeAppReviewManager` in step, or a consumer cannot test against the new surface.
 
 ## §6 Active Development Log (auto-gen)
 
@@ -112,6 +147,9 @@ public object AppReview {
 ---
 
 ## §8 Related
+
+- [CONSUMPTION.md](CONSUMPTION.md) — consumer integration guide (DI setup, store ids, migration
+  from a hand-written review wrapper).
 
 | Type | Reference |
 |------|-----------|

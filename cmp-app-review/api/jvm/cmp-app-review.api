@@ -108,7 +108,8 @@ public final class com/mobilebytelabs/kmptoolkit/appreview/StoreListing$Companio
 }
 
 public final class com/mobilebytelabs/kmptoolkit/appreview/di/AppReviewModuleKt {
-	public static final fun getAppReviewModule ()Lorg/koin/core/module/Module;
+	public static final fun appReviewModule (Lcom/mobilebytelabs/kmptoolkit/appreview/StoreListing;)Lorg/koin/core/module/Module;
+	public static synthetic fun appReviewModule$default (Lcom/mobilebytelabs/kmptoolkit/appreview/StoreListing;ILjava/lang/Object;)Lorg/koin/core/module/Module;
 }
 
 public final class com/mobilebytelabs/kmptoolkit/appreview/testing/FakeAppReviewManager : com/mobilebytelabs/kmptoolkit/appreview/AppReviewManager {

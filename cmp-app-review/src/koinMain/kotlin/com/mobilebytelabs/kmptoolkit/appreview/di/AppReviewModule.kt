@@ -17,45 +17,62 @@ import org.koin.core.module.Module
 import org.koin.dsl.module
 
 /**
- * Binds [AppReviewManager]. No parameters — register it and go.
+ * Binds [AppReviewManager] **and** applies the store listing — DI setup is the single place this is
+ * configured.
  *
  * ```kotlin
- * startKoin { modules(appReviewModule) }
- * ```
- *
- * Or drop the binding straight into an existing platform module, which is the shape a consumer
- * already has for the other capability managers:
- *
- * ```kotlin
- * val platformModule = module {
- *     single<UrlLauncher> { UrlLauncherImpl() }
- *     single<ShareManager> { ShareManagerImpl() }
- *     single<AppReviewManager> { AppReviewManagerImpl() }   // no Activity, no config, no arguments
+ * startKoin {
+ *     modules(
+ *         platformModule,
+ *         appReviewModule(
+ *             StoreListing(
+ *                 appStoreId = BuildKonfig.APP_STORE_ID,
+ *                 webUrl = BuildKonfig.APP_WEB_URL,
+ *             ),
+ *         ),
+ *     )
  * }
  * ```
  *
- * ## Where the store ids go
- * NOT here. Configure them once at startup and every injected manager picks them up, because
- * [AppReviewManagerImpl] resolves the listing at CALL time rather than capturing it:
+ * Nothing else to call at startup: registering the module IS the configuration step. The ids come
+ * from wherever the build already keeps app identity — a generated BuildKonfig constant, an
+ * app-profile YAML — so a white-label fork changes one value in its profile and nothing in code.
+ *
+ * ## Binding it inside your own platform module
+ * If you would rather keep every capability in one module, do both there — `module { }` bodies run
+ * eagerly, so the listing is applied as the module is built:
  *
  * ```kotlin
- * AppReview.configure(
- *     StoreListing(appStoreId = BuildKonfig.APP_STORE_ID, webUrl = BuildKonfig.APP_WEB_URL),
- * )
+ * val platformModule = module {
+ *     AppReview.configure(StoreListing(appStoreId = BuildKonfig.APP_STORE_ID))
+ *
+ *     single<UrlLauncher> { UrlLauncherImpl() }
+ *     single<ShareManager> { ShareManagerImpl() }
+ *     single<AppReviewManager> { AppReviewManagerImpl() }
+ * }
  * ```
  *
- * Keeping ids out of the DI module is deliberate. They are deployment data — they belong wherever
- * your build already keeps app identity (a generated BuildKonfig constant, an app-profile YAML) and
- * they differ per flavour and per white-label fork, while the binding does not. Threading them
- * through the module would force every consumer to plumb build config into DI just to register a
- * capability, and a fork that forgot would get a silently empty listing.
+ * Binding `AppReviewManagerImpl()` without configuring a listing is still valid — it is exactly what
+ * a purely Android/iOS/macOS app wants, since those have a native prompt and never reach the
+ * fallback. Every other target would report [com.mobilebytelabs.kmptoolkit.appreview.AppReviewResult.NoStoreConfigured].
+ *
+ * ## Why the listing is applied here rather than captured
+ * [AppReviewManagerImpl] resolves the listing at CALL time, so the order of `configure` and the
+ * binding does not matter and no consumer has to think about it. Capturing it in the constructor
+ * would make a graph built before configuration silently hold an empty listing.
  *
  * `single<AppReviewManager> { AppReviewManagerImpl() }` rather than
  * `singleOf(::AppReviewManagerImpl)`: Koin resolves every constructor parameter from the graph and
  * ignores Kotlin defaults, so the constructor-reference form would demand `StoreListing` and
  * `UrlLauncher` bindings the consumer never registered — the mistake that cost a debugging session
  * on `cmp-intent-launcher`.
+ *
+ * @param listing where the app is published. Omit only if every target you ship has a native review
+ *   API (Android, iOS, macOS); everything else needs it to have somewhere to go.
  */
-public val appReviewModule: Module = module {
-    single<AppReviewManager> { AppReviewManagerImpl() }
+public fun appReviewModule(listing: StoreListing = StoreListing.None): Module {
+    AppReview.configure(listing)
+    return module {
+        single<AppReviewManager> { AppReviewManagerImpl() }
+    }
 }

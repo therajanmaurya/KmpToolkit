@@ -7,6 +7,9 @@ Ask the user to review your app, from `commonMain`, on every Kotlin Multiplatfor
 One call in shared code resolves to the right thing per platform — a native in-app prompt where the
 OS has one, your store listing everywhere else, opened through [`cmp-open-url`](../cmp-open-url).
 
+> **Integrating into an existing app?** See [CONSUMPTION.md](CONSUMPTION.md) —
+> dependency, where store ids live, DI setup, and replacing a hand-written wrapper.
+
 ## Install
 
 ```toml
@@ -44,30 +47,52 @@ when (val result = AppReview.requestReview()) {
 
 ## Dependency injection
 
-Binds like every other platform capability — no Activity, no arguments:
+Configure it where you set up DI — registering the module *is* the configuration step:
 
 ```kotlin
-val platformModule = module {
-    single<UrlLauncher> { UrlLauncherImpl() }
-    single<ShareManager> { ShareManagerImpl() }
-    single<AppReviewManager> { AppReviewManagerImpl() }   // ← here
+startKoin {
+    modules(
+        platformModule,
+        appReviewModule(
+            StoreListing(
+                appStoreId = BuildKonfig.APP_STORE_ID,
+                webUrl = BuildKonfig.APP_WEB_URL,
+            ),
+        ),
+    )
 }
 ```
 
-or register the module directly: `startKoin { modules(appReviewModule) }`.
-
-Store ids do **not** go through DI. They are deployment data that differ per flavour and per
-white-label fork, so they live wherever your build already keeps app identity — a generated
-BuildKonfig constant, an app-profile YAML — and are applied once:
+Then inject it like any other capability:
 
 ```kotlin
-AppReview.configure(
-    StoreListing(appStoreId = BuildKonfig.APP_STORE_ID, webUrl = BuildKonfig.APP_WEB_URL),
-)
+class SettingsViewModel(private val review: AppReviewManager) {
+    fun onRateTapped() = viewModelScope.launch { review.requestReview() }
+}
 ```
 
-Order does not matter: the manager resolves the listing when a review is requested, not when it is
-constructed, so registering the module before `configure()` is fine.
+Prefer everything in one module? `module { }` bodies run eagerly, so this is equivalent:
+
+```kotlin
+val platformModule = module {
+    AppReview.configure(StoreListing(appStoreId = BuildKonfig.APP_STORE_ID))
+
+    single<UrlLauncher> { UrlLauncherImpl() }
+    single<ShareManager> { ShareManagerImpl() }
+    single<AppReviewManager> { AppReviewManagerImpl() }
+}
+```
+
+`AppReviewManagerImpl()` takes no arguments — no Activity, no listing — because the listing is
+resolved when a review is requested, not when the manager is built. Registration order therefore
+does not matter.
+
+> **`appReviewModule()` with no listing resets a previously configured one to `None`.** DI setup is
+> the source of truth, so the module applies whatever it was given. Pass the listing to the module,
+> or configure inside your own module — don't do both in the other order.
+
+Store ids are deployment data: keep them where your build already keeps app identity (a generated
+BuildKonfig constant, an app-profile YAML), so a white-label fork changes a profile value and no code.
 
 ## What each target does
 

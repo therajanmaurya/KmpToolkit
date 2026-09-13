@@ -24,7 +24,7 @@ class AppReviewModuleTest {
 
     @Test
     fun manager_resolves_from_the_module_and_is_a_singleton() {
-        val koin = startKoin { modules(appReviewModule) }.koin
+        val koin = startKoin { modules(appReviewModule()) }.koin
         assertIs<AppReviewManagerImpl>(koin.get<AppReviewManager>())
         assertSame(koin.get<AppReviewManager>(), koin.get<AppReviewManager>())
     }
@@ -34,8 +34,9 @@ class AppReviewModuleTest {
         // They are deliberately NOT the same instance any more: the module builds its own, and both
         // read the one globally configured listing at call time. That is what removes the drift —
         // there is a single listing, not two copies to keep in step.
-        AppReview.configure(StoreListing(webUrl = "https://example.com/app"))
-        val koin = startKoin { modules(appReviewModule) }.koin
+        val koin = startKoin {
+            modules(appReviewModule(StoreListing(webUrl = "https://example.com/app")))
+        }.koin
 
         val injected = koin.get<AppReviewManager>()
 
@@ -47,8 +48,8 @@ class AppReviewModuleTest {
     fun the_listing_passed_to_the_module_reaches_the_shared_entry_point() = runTest {
         // Without the configure() call this would be NoStoreConfigured: the global object would still
         // be holding its unconfigured default while the graph had the real listing.
-        AppReview.configure(StoreListing(webUrl = "https://example.com/app"))
-        startKoin { modules(appReviewModule) }
+        // The module itself applies the listing — no separate startup call.
+        startKoin { modules(appReviewModule(StoreListing(webUrl = "https://example.com/app"))) }
 
         val result = AppReview.requestReview()
 
@@ -62,14 +63,26 @@ class AppReviewModuleTest {
     @Test
     fun an_injected_launcher_is_used_by_both_paths() {
         val launcher = FakeUrlLauncher()
-        AppReview.configure(StoreListing(webUrl = "https://example.com/app"))
-        // A consumer wanting their own launcher installs a manager rather than parameterising the
-        // module — the module stays argument-free for the common case.
+        // Module first: it is what applies the listing. Installing a custom manager afterwards keeps
+        // that listing — the manager reads it at call time rather than holding its own.
+        startKoin { modules(appReviewModule(StoreListing(webUrl = "https://example.com/app"))) }
         AppReview.configure(AppReviewManagerImpl(urlLauncher = launcher))
-        startKoin { modules(appReviewModule) }
 
         AppReview.openStoreListing()
 
         assertEquals(1, launcher.opened.size, "the store listing went through the injected launcher")
+    }
+
+    @Test
+    fun registering_the_module_with_no_listing_clears_a_previously_configured_one() {
+        // Worth pinning because it can surprise: the module APPLIES its listing, so the no-argument
+        // form resets to None. DI setup is the source of truth by design — but a consumer who
+        // configured separately and then registered `appReviewModule()` would lose it, and this test
+        // is where that shows up rather than in their store button doing nothing.
+        AppReview.configure(StoreListing(webUrl = "https://example.com/app"))
+
+        startKoin { modules(appReviewModule()) }
+
+        assertIs<AppReviewResult.NoStoreConfigured>(AppReview.openStoreListing())
     }
 }
