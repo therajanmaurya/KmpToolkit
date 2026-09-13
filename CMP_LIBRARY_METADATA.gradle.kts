@@ -54,6 +54,7 @@ extra["cmp_bubble_artifact"] = "io.github.mobilebytelabs:cmp-bubble"
 
 extra["cmp_open_url_version"] = kmpToolkitVersion
 extra["cmp_open_url_artifact"] = "io.github.mobilebytelabs:cmp-open-url"
+extra["cmp_app_review_artifact"] = "io.github.mobilebytelabs:cmp-app-review"
 
 extra["cmp_deep_link_version"] = kmpToolkitVersion
 extra["cmp_deep_link_artifact"] = "io.github.mobilebytelabs:cmp-deep-link"

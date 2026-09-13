@@ -56,6 +56,7 @@ androidx-lifecycle = "2.9.6"
 androidx-test-runner = "1.6.2"
 androidx-test-junit = "1.2.1"
 playAppUpdate = "2.1.0"
+playReview = "2.0.2"
 
 # v0.4 — kover for coverage verification (Phase 9)
 kover = "0.9.9"
@@ -108,6 +109,8 @@ compose-components-resources = { module = "org.jetbrains.compose.components:comp
 # Play Services
 play-app-update = { module = "com.google.android.play:app-update", version.ref = "playAppUpdate" }
 play-app-update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "playAppUpdate" }
+play-review = { module = "com.google.android.play:review", version.ref = "playReview" }
+play-review-ktx = { module = "com.google.android.play:review-ktx", version.ref = "playReview" }
 
 # Supabase
 supabase-postgrest = { module = "io.github.jan-tennert.supabase:postgrest-kt", version.ref = "supabase" }

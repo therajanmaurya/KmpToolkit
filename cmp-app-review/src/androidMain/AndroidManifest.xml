@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <!--
+          Captures the application Context and registers the activity tracker before
+          Application.onCreate, so a consumer needs no init call. Mirrors cmp-share and
+          cmp-intent-launcher. exported=false: nothing outside the app may query it.
+        -->
+        <provider
+            android:name="com.mobilebytelabs.kmptoolkit.appreview.AppReviewInitProvider"
+            android:authorities="${applicationId}.cmp-app-review-init"
+            android:exported="false"
+            android:initOrder="100" />
+    </application>
+</manifest>

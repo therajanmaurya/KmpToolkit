@@ -9,6 +9,60 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added — `cmp-app-review`: one commonMain call, the right review route on every target
+
+New module. Call it from shared code; it resolves per platform with no `expect`/`actual` and no
+branching in consumer code.
+
+```kotlin
+// once at startup, in commonMain
+AppReview.configure(
+    StoreListing(appStoreId = "1234567890", webUrl = "https://example.com/app"),
+)
+
+// anywhere
+AppReview.requestReview()
+```
+
+| Target | Route |
+|---|---|
+| Android | Play In-App Review → `market://details?id=…` |
+| iOS / macOS | `SKStoreReviewController` → store review composer |
+| tvOS / watchOS | store listing (watchOS hands it to the paired iPhone) |
+| Windows | `ms-windows-store://review/` → web listing |
+| JVM · Linux · JS · wasmJs | web listing in the browser |
+| wasmWasi | `NoStoreConfigured` |
+
+**Where no API exists, the fallback is real, not a no-op.** Supply the stores you publish to via
+`StoreListing` and the listing opens through `cmp-open-url`. `playStorePackage` is optional — Android
+reads the running app's package.
+
+**`NativeFlowRequested` promises only that the ask reached the OS.** Neither Play nor StoreKit reports
+whether a prompt rendered or what the user did, and both silently no-op once their quota is spent.
+Never gate a reward on it. `openStoreListing()` is the route that always navigates.
+
+**21 targets**, matching `cmp-open-url`. Ships `FakeAppReviewManager` in the main artifact, a
+parameterless `appReviewModule` Koin binding, and an `AppReviewCapabilities` descriptor so a caller can
+branch before asking.
+
+Notes:
+- **Binds like every other platform manager** — `single<AppReviewManager> { AppReviewManagerImpl() }`.
+  No Activity, no configuration, no arguments, so it drops straight into an existing platform module
+  next to `UrlLauncherImpl()` / `ShareManagerImpl()`. The Android Activity that Play's flow needs is
+  tracked by the module itself.
+- **Store ids are configured once, not injected.** `AppReview.configure(StoreListing(...))` at startup;
+  every injected manager resolves the listing at CALL time, so the DI graph may legitimately be built
+  before configuration runs. Capturing it in the constructor would leave a fork that registers the
+  module early with a silently empty listing.
+- **First cmp-to-cmp dependency in the toolkit** — `api(project(":cmp-open-url"))`, because the
+  fallback *is* URL opening. The `UrlLauncher` is injectable, so a test need not open anything.
+- Android needs no setup: a `ContentProvider` captures the application context and an
+  `ActivityLifecycleCallbacks` tracks the Activity Play's flow launches into (the two patterns
+  already used by `cmp-share`/`cmp-intent-launcher` and `cmp-deep-link`). The Activity is held weakly
+  and cleared on pause.
+- Play In-App Review only works in Play-installed builds; sideloaded and debug builds fail and fall
+  through to `market://`.
+
 ### Changed — ⚠️ BREAKING: cmp-product-tickets split into headless core + `-compose`
 
 The same split E2 applied to `cmp-remote-config`, for the same reason. `cmp-product-tickets` is now
